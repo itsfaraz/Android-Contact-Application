@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:background="#6745A2"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="25dp"
+        android:src="@drawable/home"
+        android:id="@+id/phoneSpinnerImage"
+        android:layout_height="25dp"></ImageView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:text="Mobile"
+        android:id="@+id/phoneSpinnerText"
+        android:textColor="#35F43D"
+        android:layout_weight="1"
+        android:layout_height="25dp"></com.google.android.material.textview.MaterialTextView>
+
+</LinearLayout>

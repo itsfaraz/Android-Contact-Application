@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:icon="@drawable/ic_baseline_more_vert_24"
+        app:showAsAction="always"
+        android:title="Option">
+        <menu>
+            <item android:icon="@drawable/ic_baseline_import_export_24"
+                app:showAsAction="collapseActionView"
+                android:id="@+id/contactImportMenu"
+                android:title="Import"/>
+
+            <item android:icon="@drawable/user_info_24"
+                app:showAsAction="collapseActionView"
+                android:id="@+id/contactUserMenu"
+                android:title="User"/>
+
+            <item android:icon="@drawable/delete_all_24"
+                app:showAsAction="collapseActionView"
+                android:id="@+id/contactDeleteMenu"
+                android:title="Delete All Contact"/>
+
+            <item
+                android:id="@+id/userLogoutMenu"
+                android:title="Logout"
+                android:icon="@drawable/ic_baseline_exit_to_app_24"
+                app:showAsAction="never"/>
+
+
+
+
+        </menu>
+    </item>
+
+</menu>

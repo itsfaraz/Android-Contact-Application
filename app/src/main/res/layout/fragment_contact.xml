@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="3dp"
+    android:background="@color/white"
+    tools:context=".fragments.ContactFragment">
+
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/contactToolBar"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_below="@id/contactToolBar"
+        android:id="@+id/myContactRecyclerView"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addNewContact"
+        android:layout_width="56dp"
+        app:elevation="4dp"
+        app:tint="@color/white"
+        app:rippleColor="#FFFFFF"
+        android:layout_height="56dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#2196F3"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_add_circle_outline_24"
+        android:contentDescription="TODO" />
+
+    <View
+        android:layout_width="64dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/circleMotionView"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible"
+        android:background="@drawable/fab_circle_motion"
+        android:layout_height="64dp" />
+
+
+</RelativeLayout>

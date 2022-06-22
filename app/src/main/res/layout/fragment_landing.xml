@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#000"
+    android:elevation="3dp"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LandingFragment">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:drawableLeft="@drawable/ic_baseline_backspace_24"
+        android:text="Back"
+        android:id="@+id/back"
+        android:backgroundTint="@color/black"
+        android:layout_height="wrap_content"></Button>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#00C708"
+        android:gravity="right"
+        android:id="@+id/username"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:textColor="#00C708"
+        android:gravity="right"
+        android:layout_below="@id/username"
+        android:id="@+id/loggedInDate"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:layout_margin="25dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#00C708"
+        android:gravity="right"
+        android:layout_below="@id/loggedInDate"
+        android:id="@+id/loggedStatus"
+        android:layout_height="wrap_content">
+    </TextView>
+
+</RelativeLayout>

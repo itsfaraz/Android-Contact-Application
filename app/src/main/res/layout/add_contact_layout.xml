@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    android:background="#6745A2"
+    android:elevation="3dp"
+    android:layout_height="match_parent">
+
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/personContactImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:strokeColor="#90F51B"
+            app:strokeWidth="3dp"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_baseline_account_circle_24"
+            android:scaleType="fitXY"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.DifferentCornerSize.CornerSize50Percent"></com.google.android.material.imageview.ShapeableImageView>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:id="@+id/personNameLayout"
+                android:layout_below="@+id/personContactImage"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Person Name"
+                android:textColorHint="#35F43D">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:inputType="textPersonName"
+                    android:textColor="@color/app_color_secondary">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/personPhoneNumberLayout"
+            android:layout_below="@+id/personNameLayout"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/phoneTypeSpinner"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/phone_spinner_item_layout"
+                android:layout_weight="1"
+                android:outlineSpotShadowColor="#35F43D"
+                android:layout_marginVertical="6dp">
+
+            </Spinner>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Phone"
+                android:textColorHint="#35F43D">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/app_color_secondary">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/personAddressLayout"
+        android:layout_below="@+id/personPhoneNumberLayout"
+        android:hint="Address"
+        android:textColorHint="#35F43D">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/personAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
+            android:textColor="@color/app_color_secondary">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/personEmailAddressLayout"
+            android:layout_below="@+id/personAddressLayout"
+            android:hint="Email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:textColorHint="#35F43D">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/personEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/app_color_secondary">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addNewContactButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personEmailAddressLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/permission_button_layout"
+        android:text="Add"
+        app:rippleColor="#35F43D"
+        android:textColor="#35F43D"
+        app:strokeColor="#35F43D">
+
+    </com.google.android.material.button.MaterialButton>
+
+
+</RelativeLayout>

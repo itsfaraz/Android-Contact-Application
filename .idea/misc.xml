@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_button_layout.xml" value="0.134" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_input_layout.xml" value="0.1825" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/cicular_imageview_holder.xml" value="0.1395" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/delete_all_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/fab_circle_motion.xml" value="0.128" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/floating_action_button_layout.xml" value="0.1295" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/home.xml" value="0.1455" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.1345" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.1345" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1345" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.116" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_import_export_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.134" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_mail_24.xml" value="0.1835" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_select_all_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/ic_baseline_vpn_key_24.xml" value="0.1835" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/other.xml" value="0.1455" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/permission_button_layout.xml" value="0.137" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/smartphone.xml" value="0.1455" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/user_info_24.xml" value="0.131" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/work.xml" value="0.1455" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/add_contact_layout.xml" value="0.18" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/contact_list_item.xml" value="0.16" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact.xml" value="0.18" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact2.xml" value="0.15260416666666668" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact_detail.xml" value="0.25" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact_import.xml" value="0.2" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_landing.xml" value="0.18" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_login.xml" value="0.33" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/phone_spinner_item_layout.xml" value="0.14" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/spinner_item_layout.xml" value="0.16979166666666667" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/menu/contact_item_menu.xml" value="0.17083333333333334" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/menu/item_menu.xml" value="0.18" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
