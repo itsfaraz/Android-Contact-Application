@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="3dp"
     android:background="@color/white"
-    tools:context=".fragments.ContactFragment">
+    tools:context=".ui.views.fragments.ContactFragment">
 
 
 

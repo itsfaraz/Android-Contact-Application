@@ -1,4 +1,4 @@
-package com.itsfrz.authentication
+package com.itsfrz.authentication.ui.views.activity
 
 import android.Manifest
 import android.graphics.Color
@@ -6,13 +6,12 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.itsfrz.authentication.R
 import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.data.indatabase.model.Contact
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
-import com.itsfrz.authentication.ui.views.activity.BaseActivity
 import com.itsfrz.authentication.ui.views.fragments.*
 
-class MainActivity : BaseActivity() , AuthenticationCommunicator {
+class MainActivity : BaseActivity() ,AuthenticationCommunicator {
     private val preferenceRespository by lazy {
         PreferenceRespository(this)
     }
@@ -113,7 +112,7 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val addContactFragment = AddContactFragment()
         fragmentTransaction.add(R.id.fragmentContainer,addContactFragment)
-        fragmentTransaction.addToBackStack("BACKSTACK")
+        fragmentTransaction.addToBackStack("Add Contact Fragment")
         fragmentTransaction.commit()
 
 
@@ -123,7 +122,7 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val contactDetailFragment = ContactDetailFragment()
         fragmentTransaction.add(R.id.fragmentContainer,contactDetailFragment)
-        fragmentTransaction.addToBackStack("BACKSTACK1")
+        fragmentTransaction.addToBackStack("Add Contact Fragment")
         val bundle = Bundle()
         bundle.putString("ContactName",contact.contactName)
         bundle.putString("ContactImage",contact.contactImage)
@@ -140,7 +139,7 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val fragmentImport = ContactImportFragment()
         fragmentTransaction.add(R.id.fragmentContainer,fragmentImport)
-        fragmentTransaction.addToBackStack("BACKSTACK")
+        fragmentTransaction.addToBackStack("Import Contact Fragment")
         fragmentTransaction.commit()
 
     }

@@ -5,7 +5,7 @@
     android:background="#000"
     android:elevation="3dp"
     android:layout_height="match_parent"
-    tools:context=".fragments.LandingFragment">
+    tools:context=".ui.views.fragments.LandingFragment">
 
     <Button
         android:layout_width="wrap_content"
