@@ -15,10 +15,17 @@ public const val PREFERENCE_EMAIL = "PREF_USER_EMAIL"
 
 class PreferenceRespository(val context: Context){
 
-    private var sharedPreferences : SharedPreferences = context.getSharedPreferences(
-        PREFERENCE_NAME,
-        PREFERENCE_PRIVATE_MODE
-    )
+    private val sharedPreferences : SharedPreferences
+
+    init {
+            sharedPreferences  = context.getSharedPreferences(
+            PREFERENCE_NAME,
+            PREFERENCE_PRIVATE_MODE
+        )
+
+    }
+
+
     private val editor = sharedPreferences.edit()
 
     private fun String.put(long : Long){

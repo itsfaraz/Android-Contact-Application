@@ -1,7 +1,5 @@
 package com.itsfrz.authentication.ui.views.fragments
 
-import android.app.Application
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,20 +8,15 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.ui.views.adapters.ContactAdapter
+import com.itsfrz.authentication.adapters.ContactAdapter
 import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.data.indatabase.model.Contact
-import com.itsfrz.authentication.ui.viewmodel.ContactProviderViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 
 class ContactImportFragment : Fragment() {
     private val CONTACTIMPORT : String = "CONTACTIMPORT"
@@ -37,12 +30,9 @@ class ContactImportFragment : Fragment() {
     private lateinit var progressBar1: ProgressBar
     private lateinit var progressBar2: ProgressBar
 
-    private val preferenceRespository by lazy {
-        PreferenceRespository(requireContext())
-    }
 
     private val contactProviderViewModel by lazy {
-        ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ContactProviderViewModel::class.java)
+        ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ContactImportViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -72,8 +62,6 @@ class ContactImportFragment : Fragment() {
 
     private fun setContactList(){
         val contactList = ArrayList<Contact>()
-//        contactList.addAll(contactProviderViewModel.getContactList())
-//        Inside Fragment
         contactProviderViewModel.getContactList().observe(requireActivity()){
             contactList.addAll(it)
             contactAdapter.updateContacts(it)

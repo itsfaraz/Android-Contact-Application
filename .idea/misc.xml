@@ -26,15 +26,15 @@
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/smartphone.xml" value="0.1455" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/user_info_24.xml" value="0.131" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/work.xml" value="0.1455" />
-        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/add_contact_layout.xml" value="0.18" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/contact_list_item.xml" value="0.16" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact.xml" value="0.18" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact2.xml" value="0.15260416666666668" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact_detail.xml" value="0.25" />
-        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact_import.xml" value="0.2" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_contact_import.xml" value="0.22" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_landing.xml" value="0.18" />
-        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_login.xml" value="0.33" />
+        <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_login.xml" value="0.18" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/phone_spinner_item_layout.xml" value="0.14" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/layout/spinner_item_layout.xml" value="0.16979166666666667" />

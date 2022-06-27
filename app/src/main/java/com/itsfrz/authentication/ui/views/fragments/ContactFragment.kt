@@ -3,6 +3,7 @@ package com.itsfrz.authentication.ui.views.fragments
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
@@ -20,6 +21,8 @@ import com.itsfrz.authentication.model.database.PreferenceRespository
 
 class ContactFragment : Fragment() {
 
+    private val CONTACT_FRAGMENT = "CONTACT_FRAGMENT"
+
     private lateinit var communicator : AuthenticationCommunicator
     private val preferenceResository by lazy {
         PreferenceRespository(requireContext())
@@ -36,7 +39,7 @@ class ContactFragment : Fragment() {
         setHasOptionsMenu(true);
         setupNewContact(view);
         communicator = activity as AuthenticationCommunicator
-
+        Log.d(CONTACT_FRAGMENT, "onCreateView: ")
         return view
     }
 

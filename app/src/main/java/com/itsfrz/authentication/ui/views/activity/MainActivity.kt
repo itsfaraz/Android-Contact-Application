@@ -4,11 +4,14 @@ import android.Manifest
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.databinding.ActivityMainBinding
 import com.itsfrz.authentication.ui.views.fragments.*
 
 class MainActivity : BaseActivity() ,AuthenticationCommunicator {
@@ -16,27 +19,27 @@ class MainActivity : BaseActivity() ,AuthenticationCommunicator {
         PreferenceRespository(this)
     }
 
-
+    private val MAINACTIVITY = "MAIN_ACTIVITY"
+    private lateinit var mainActivityBinding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mainActivityBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        Log.d(MAINACTIVITY, "onCreate: Method Called After Layout Rendered")
         val actionBar = supportActionBar
-        actionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF70C0FF")))
+        actionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("C10041")))
         actionBar?.hide()
 
-
-        val permission = requestRunTimePermission(this, arrayOf(Manifest.permission.READ_CONTACTS),READ_CONTACT_RQ)
-        if(permission){
-            initFragment()
-        }
-
-        val permissionButton = findViewById<Button>(R.id.permissionButton)
-        permissionButton.setOnClickListener {
+        mainActivityBinding.permissionButton.setOnClickListener {
             if(requestRunTimePermission(this, arrayOf(Manifest.permission.READ_CONTACTS),READ_CONTACT_RQ))
                 initFragment()
         }
 
-
+        Log.d(MAINACTIVITY, "onCreate: Before Persmission Check")
+        val permission = requestRunTimePermission(this, arrayOf(Manifest.permission.READ_CONTACTS),READ_CONTACT_RQ)
+        if(permission){
+            Log.d(MAINACTIVITY, "onCreate: After Persmission Check")
+            initFragment()
+        }
 
     }
 
@@ -46,12 +49,11 @@ class MainActivity : BaseActivity() ,AuthenticationCommunicator {
         lateinit var initFragment : Fragment
         if (preferenceRespository.getLoggedIn()){
             initFragment = ContactFragment()
-//            initFragment = ContactImportFragment()
         }else{
             initFragment = LoginFragment()
         }
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainer,initFragment)
+        fragmentTransaction.add(R.id.fragmentContainer,initFragment)
         fragmentTransaction.commit()
     }
 

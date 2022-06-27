@@ -11,7 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.ui.views.adapters.PhoneTypeArrayAdapter
+import com.itsfrz.authentication.adapters.PhoneTypeArrayAdapter
 import com.itsfrz.authentication.data.PhoneTypes
 
 class AddContactFragment : Fragment() {

@@ -1,105 +1,81 @@
 package com.itsfrz.authentication.ui.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.databinding.FragmentSignUpBinding
 import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.model.database.room.model.UserModel
-import kotlinx.coroutines.*
+import com.itsfrz.authentication.ui.viewmodel.SignUpViewModel
+import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 
 
 class SignUpFragment : Fragment() {
 
+    private val SIGNUP_FRAG = "SIGNUP_FRAG"
     private lateinit var communicator: AuthenticationCommunicator
-    private val db by lazy{
-        AppDatabase.getDatabase(requireContext())
+
+
+    private val signUpViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        ).get(SignUpViewModel::class.java)
     }
+
+    private lateinit var signUpFragmentBinding: FragmentSignUpBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
-
-        // View Initilization
-        val usernameInput = view.findViewById<EditText>(R.id.registerUsernameInput)
-        val passwordInput = view.findViewById<EditText>(R.id.registerPasswordInput)
-        val passwordReInput = view.findViewById<EditText>(R.id.registerAgainPasswordInput)
-        val emailInput = view.findViewById<EditText>(R.id.registerEmailInput)
-        val registerButton = view.findViewById<Button>(R.id.registerButton)
-
+        signUpFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false);
+        val view = signUpFragmentBinding.root;
 
         // Communicator Interface set
         communicator = activity as AuthenticationCommunicator
-        registerButton.setOnClickListener {
-            if(checkValidate(usernameInput,passwordInput,passwordReInput,emailInput) && checkCrossPassword(passwordInput,passwordReInput))
-            {
-                runBlocking {
-                    val isSaveSuccessfull = saveToDatabase(usernameInput.text.toString(),passwordInput.text.toString(),emailInput.text.toString())
-                    if (isSaveSuccessfull){
-                        communicator.routeToLogin(usernameInput.text.toString())
-                    }else
-                        Toast.makeText(requireContext(), "Username And EmailId Already Exists", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
 
 
+        insertNewUser()
         return view
     }
 
-    private suspend fun saveToDatabase(username: String, password: String, email : String) : Boolean {
-
-        val isUserExistsJob = CoroutineScope(Dispatchers.IO).async {
-            db.userDao().isUserExists(username,email)
+    private fun insertNewUser() {
+        signUpFragmentBinding.registerButton.setOnClickListener {
+            val email : String = signUpFragmentBinding.registerEmailInput.text.toString()
+            val password : String = signUpFragmentBinding.registerPasswordInput.text.toString()
+            val againPassword : String = signUpFragmentBinding.registerAgainPasswordInput.text.toString()
+            val username : String = signUpFragmentBinding.registerUsernameInput.text.toString()
+            val isFieldEmpty: Boolean = signUpViewModel.checkIsFieldEmpty(email, password, againPassword, username)
+            val isPasswordEqual: Boolean = signUpViewModel.checkIsPasswordEqual(password,againPassword);
+            if (isFieldEmpty && isPasswordEqual) {
+                signUpFragmentBinding.also {
+                    signUpViewModel.signUpUser(
+                        UserModel(
+                            it.registerUsernameInput.text.toString(),
+                            it.registerEmailInput.text.toString(),
+                            it.registerPasswordInput.text.toString()
+                        )
+                    )
+                    Toast.makeText(
+                        requireContext(),
+                        "${it.registerUsernameInput.text.toString()} is inserted Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(SIGNUP_FRAG, "onCreateView: Inserted Successfully")
+                    communicator.routeToLogin(it.registerUsernameInput.text.toString())
+                }
+            }
         }
-        if (isUserExistsJob.await().size == 0){
-            db.userDao().insertUser(
-                UserModel(
-                    username,email,password
-                )
-            )
-            return true
-        }
-
-       return false
     }
-
-    private fun checkCrossPassword(passwordInput: EditText, passwordReInput: EditText): Boolean {
-        if (passwordInput.text.toString().equals(passwordReInput.text.toString()))
-            return true
-        passwordInput.setError("Password field should be same Re-Password")
-        passwordReInput.setError("Re-Password field should be same as Password")
-        return false
-    }
-
-    private fun checkValidate(usernameInput: EditText, passwordInput: EditText, passwordReInput: EditText,emailInput : EditText): Boolean {
-        if (emailInput.text.toString().length <= 0) {
-            emailInput.setError("Email field should not be empty")
-            return false
-        }
-        if (usernameInput.text.toString().length <= 0) {
-            usernameInput.setError("Username field should not be empty")
-            return false
-        }
-        if (passwordInput.text.toString().length <= 0) {
-            passwordInput.setError("Password field should not be empty")
-            return false
-        }
-        if (passwordReInput.text.toString().length <= 0) {
-            passwordReInput.setError("Re-Password field should not be empty")
-            return false
-        }
-        return true
-    }
-
 
 }

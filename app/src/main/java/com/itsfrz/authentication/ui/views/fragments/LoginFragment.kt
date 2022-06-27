@@ -1,6 +1,7 @@
 package com.itsfrz.authentication.ui.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,102 +9,72 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.databinding.FragmentLoginBinding
 import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
 import kotlinx.coroutines.*
 import java.util.*
 
 
 class LoginFragment : Fragment() {
 
+
+
     private lateinit var communicator: AuthenticationCommunicator
-    private val preferenceRespository by lazy {
-        PreferenceRespository(requireContext())
+
+
+    private val loginViewModel by lazy {
+        ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(LoginViewModel::class.java)
     }
 
-    private val db by lazy {
-        AppDatabase.getDatabase(requireContext())
-    }
 
+    private lateinit var loginBinding: FragmentLoginBinding
+
+    private val LOGIN_FRAGMENT = "LOGIN_FRAGMENT"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
-        val usernameInput : EditText = view.findViewById<EditText>(R.id.loginUsernameInput)
-        val passwordInput = view.findViewById<EditText>(R.id.loginPasswordInput)
-        val loginButton = view.findViewById<Button>(R.id.loginButton)
-        val signUpButton = view.findViewById<Button>(R.id.signUpButon)
+        loginBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false)
+
         communicator = activity as AuthenticationCommunicator
 
-        viaSignUp(usernameInput)
-        loginButton.setOnClickListener {
-            if(validateInputs(usernameInput,passwordInput))
-            {
-                runBlocking {
 
-                    val user : UserModel? = getUserInfoFromDatabase(usernameInput.text.toString(),passwordInput.text.toString())
-                    if (user!=null) {
-                        persistMyPreferences(usernameInput.text.toString(),user.emailId.toString());
-                        communicator.routerFromLoginToContactPage()
-                    }else{
-                        Toast.makeText(requireContext(), "Invalid Credentials!", Toast.LENGTH_SHORT).show()
-                    }
+        loginBinding.loginButton.setOnClickListener {
+            val username : String = loginBinding.loginUsernameInput.text.toString()
+            val password : String = loginBinding.loginPasswordInput.text.toString()
+
+            if(loginViewModel.validateInputs(username,password))
+            {
+
+                val user = loginViewModel.loginUser(username, password)
+
+                if (user.username.length > 0){
+                    persistMyPreferences(user.username,user.emailId);
+                    communicator.routerFromLoginToContactPage()
+                }else{
+                    Toast.makeText(requireContext(), "${username} not exists, Please register yourself", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        signUpButton.setOnClickListener {
+        loginBinding.signUpButon.setOnClickListener {
             communicator.routeToSignUp()
         }
 
-        return view
+        return loginBinding.root
     }
 
-    private fun persistMyPreferences(username: String,emailId : String) {
-        preferenceRespository.setCurrentUser(username)
-        preferenceRespository.setCurrentEmail(emailId)
-        preferenceRespository.setLoggedIn(true)
-        preferenceRespository.setLoggedInDate(Calendar.getInstance().time.toString())
-    }
-
-    private suspend fun getUserInfoFromDatabase(username: String, password: String): UserModel? {
-            val userJob = CoroutineScope(Dispatchers.IO).async {
-                db.userDao().loginUser(username, password)
-            }
-        if (userJob != null)
-            return userJob.await()
-        else
-            return null
-
-    }
-
-    private fun viaSignUp(usernameInput : EditText) {
-        val data : String? = arguments?.getString("username").toString() ?: ""
-        if (data.equals("null"))
-            usernameInput.setText("")
-        else
-            usernameInput.setText(data)
-
-    }
+    private fun persistMyPreferences(username: String,emailId : String) = loginViewModel.persistMyPreferences(username, emailId)
 
 
-    private fun validateInputs(usernameInput: EditText?, passwordInput: EditText?): Boolean {
-        if (usernameInput?.text.toString().length <= 0)
-        {
-            usernameInput?.setError("Username field should not be empty")
-            return false
-        }
 
-        if (passwordInput?.text.toString().length <= 0)
-        {
-            passwordInput?.setError("Passowrd field should not be empty")
-            return false
-        }
-        return true
-    }
 }

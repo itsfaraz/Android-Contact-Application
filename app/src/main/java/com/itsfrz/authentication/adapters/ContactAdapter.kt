@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.ui.views.adapters
+package com.itsfrz.authentication.adapters
 
 
 import android.content.Context

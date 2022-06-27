@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ContactProviderViewModel(application : Application) : AndroidViewModel(application){
+class ContactImportViewModel(application : Application) : AndroidViewModel(application){
 
 
     private val CPVM = "CPVM";
