@@ -9,9 +9,14 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_color_primary">#C10041</color>
     <color name="app_layout_color_primary">#FFF3F7</color>
+    <color name="app_layout_color_secondary">#FF528C</color>
     <color name="app_color_secondary">#CF0046</color>
     <color name="app_text_color_primary">#FFC107</color>
     <color name="button_ripple_color">#FF3D00</color>
+    <color name="global_green">#35F43D</color>
+    <color name="item_selected_background">#834CAF50</color>
+    <color name="item_deselected_background">#0035F43D</color>
+
 
 
 </resources>

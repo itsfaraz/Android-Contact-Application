@@ -45,4 +45,18 @@
         android:layout_below="@+id/contactImportToolBar"
         tools:listitem="@layout/contact_list_item" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="56dp"
+        android:layout_margin="20dp"
+        app:tint="@color/global_green"
+        android:id="@+id/importDbButton"
+        android:visibility="gone"
+        app:rippleColor="@color/global_green"
+        app:icon="@drawable/import_check"
+        app:backgroundTint="@color/app_color_secondary"
+        android:src="@drawable/import_check"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="56dp"/>
+
 </RelativeLayout>

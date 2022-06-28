@@ -11,24 +11,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.adapters.ContactAdapter
-import com.itsfrz.authentication.model.database.PreferenceRespository
+import com.itsfrz.authentication.adapters.ContactListener
+
 import com.itsfrz.authentication.data.indatabase.model.Contact
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 
-class ContactImportFragment : Fragment() {
+
+class ContactImportFragment : Fragment() , ContactListener{
     private val CONTACTIMPORT : String = "CONTACTIMPORT"
+
 
     private lateinit var communicator: AuthenticationCommunicator
     private lateinit var contactRecyclerView: RecyclerView
     private lateinit var contactAdapter: ContactAdapter
     private var contactList: ArrayList<Contact> = ArrayList()
+    private val selectedContactList : ArrayList<Contact> = ArrayList()
 
     private lateinit var contactImportToolBar: Toolbar
     private lateinit var progressBar1: ProgressBar
     private lateinit var progressBar2: ProgressBar
+    private lateinit var fabImportButton : FloatingActionButton
 
 
     private val contactProviderViewModel by lazy {
@@ -55,6 +61,8 @@ class ContactImportFragment : Fragment() {
         return view;
     }
 
+
+
     private fun setUpProgressBar() {
         progressBar1.visibility = View.VISIBLE
         progressBar2.visibility = View.VISIBLE
@@ -67,6 +75,9 @@ class ContactImportFragment : Fragment() {
             contactAdapter.updateContacts(it)
             Log.d(CONTACTIMPORT, "getContactList: ${it.size}")
             progresBarHide()
+            selectedContactList.clear()
+
+
         }
 
     }
@@ -85,6 +96,7 @@ class ContactImportFragment : Fragment() {
         contactImportToolBar = view.findViewById(R.id.contactImportToolBar)
         progressBar1 = view.findViewById(R.id.contactImportProgresBar1)
         progressBar2 = view.findViewById(R.id.contactImportProgresBar2)
+        fabImportButton = view.findViewById(R.id.importDbButton)
     }
 
 
@@ -116,10 +128,20 @@ class ContactImportFragment : Fragment() {
         contactRecyclerView = view.findViewById<RecyclerView>(R.id.contactRecyclerView)
         contactRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         contactRecyclerView.setHasFixedSize(true)
-        contactAdapter = ContactAdapter(requireContext(), contactList)
+        contactAdapter = ContactAdapter(requireContext(), contactList,this)
         contactRecyclerView.adapter = contactAdapter
         Log.d("RECYLER", "setupRecyclerView: ${contactRecyclerView} Adapter ${contactAdapter}")
 
+    }
+
+    override fun onContactChange(list: List<Contact>) {
+        selectedContactList.clear()
+        selectedContactList.addAll(list)
+        Log.d(CONTACTIMPORT, "onContactChange: ${selectedContactList.size}")
+        if (selectedContactList.size > 0){
+            fabImportButton.visibility = View.VISIBLE
+        }else
+            fabImportButton.visibility = View.GONE
     }
 
 

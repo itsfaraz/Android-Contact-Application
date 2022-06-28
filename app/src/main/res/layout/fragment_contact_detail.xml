@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#340980"
+    android:background="@color/app_color_secondary"
     android:elevation="3dp"
     android:padding="10dp"
     tools:context=".ui.views.fragments.ContactDetailFragment">
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="Person Name"
-        android:textColorHint="#35F43D">
+        android:textColorHint="@color/global_green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/personNameDetail"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:inputType="textPersonName"
-            android:textColor="@color/app_color_secondary">
+            android:textColor="@color/app_text_color_primary">
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -63,7 +63,7 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/phone_spinner_item_layout"
             android:layout_weight="1"
-            android:outlineSpotShadowColor="#35F43D"
+            android:outlineSpotShadowColor="@color/global_green"
             android:layout_marginVertical="6dp">
 
         </Spinner>
@@ -74,7 +74,7 @@
             android:layout_weight="1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Phone"
-            android:textColorHint="#35F43D">
+            android:textColorHint="@color/global_green">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/personPhoneNumberDetail"
@@ -83,7 +83,7 @@
                 android:inputType="number"
                 android:focusable="false"
 
-                android:textColor="@color/app_color_secondary">
+                android:textColor="@color/app_text_color_primary">
 
             </com.google.android.material.textfield.TextInputEditText>
 
@@ -101,7 +101,7 @@
         android:id="@+id/personAddressDetailLayout"
         android:layout_below="@+id/personPhoneNumberLayout"
         android:hint="Address"
-        android:textColorHint="#35F43D">
+        android:textColorHint="@color/global_green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/personAddressDetail"
@@ -115,7 +115,7 @@
 
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
-            android:textColor="@color/app_color_secondary">
+            android:textColor="@color/app_text_color_primary">
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -128,7 +128,7 @@
         android:layout_below="@+id/personAddressDetailLayout"
         android:hint="Email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:textColorHint="#35F43D">
+        android:textColorHint="@color/global_green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/personEmailAddressDetail"
@@ -137,7 +137,7 @@
 
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/app_color_secondary">
+            android:textColor="@color/app_text_color_primary">
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -168,8 +168,8 @@
             android:textColor="@color/app_text_color_primary"
             app:icon="@drawable/ic_baseline_create_24"
             app:iconTint="@color/app_text_color_primary"
-            app:rippleColor="#35F43D"
-            app:strokeColor="#35F43D">
+            app:rippleColor="@color/global_green"
+            app:strokeColor="@color/global_green">
 
         </com.google.android.material.button.MaterialButton>
 
@@ -183,11 +183,11 @@
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:text="Delete"
-            android:textColor="#FF1616"
+            android:textColor="#FF9800"
             app:icon="@drawable/ic_baseline_delete_outline_24"
-            app:iconTint="#FF1616"
-            app:rippleColor="#FF1616"
-            app:strokeColor="#FF1616">
+            app:iconTint="#FF9800"
+            app:rippleColor="#D60000"
+            app:strokeColor="@color/global_green">
 
         </com.google.android.material.button.MaterialButton>
 

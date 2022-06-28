@@ -12,6 +12,8 @@ import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.ui.views.activity.BaseActivity
 import com.itsfrz.authentication.ui.views.fragments.*
 
+
+
 class MainActivity : BaseActivity() , AuthenticationCommunicator {
     private val preferenceRespository by lazy {
         PreferenceRespository(this)
