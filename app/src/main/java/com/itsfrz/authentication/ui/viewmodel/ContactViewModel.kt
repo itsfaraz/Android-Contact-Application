@@ -3,6 +3,7 @@ package com.itsfrz.authentication.ui.viewmodel
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.model.database.room.AppDatabase
@@ -56,6 +57,15 @@ class ContactViewModel(application : Application) : AndroidViewModel(application
     }
 
     public fun getCurrentSession() : String = preferenceRespository.getCurrentUser() ?: ""
+    fun deleteMyContacts() {
+        try{
+            viewModelScope.launch(Dispatchers.IO) {
+                contactRepository.deleteAllContacts(preferenceRespository.getCurrentUser()!!)
+            }
+        }catch (e : Exception){
+            Log.d(CVM, "deleteMyContacts: Failed To Delete Contacts")
+        }
+    }
 
 
 }

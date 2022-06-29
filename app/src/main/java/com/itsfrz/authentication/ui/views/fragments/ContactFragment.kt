@@ -156,7 +156,7 @@ class ContactFragment : Fragment() , ContactListener {
     }
 
     private fun deleteMyContacts() {
-
+        contactViewModel.deleteMyContacts()
     }
 
     private fun userInfoMenu() {

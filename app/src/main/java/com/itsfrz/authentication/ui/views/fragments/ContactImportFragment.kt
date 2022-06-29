@@ -66,12 +66,17 @@ class ContactImportFragment : Fragment() , ContactListener{
         return view;
     }
 
+
+
     private fun importContact() {
         fabImportButton.setOnClickListener {
             contactProviderViewModel.insertContactsInDB(selectedContactList)
             communicator.routeFromContactImportToContact()
         }
     }
+
+
+
 
 
     private fun setUpProgressBar() {
@@ -122,6 +127,22 @@ class ContactImportFragment : Fragment() , ContactListener{
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.selectAllContactMenu -> {
+                selectAllContact()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun selectAllContact() {
+        selectedContactList.clear()
+        selectedContactList.addAll(contactList)
+        contactAdapter.selectAllContact()
+        fabButtonVisible()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -145,14 +166,22 @@ class ContactImportFragment : Fragment() , ContactListener{
 
     }
 
+    private fun fabButtonVisible(){
+        fabImportButton.visibility = View.VISIBLE
+    }
+
+    private fun fabButtonInVisible(){
+        fabImportButton.visibility = View.GONE
+    }
+
     override fun onContactChange(list: List<ContactModel>) {
         selectedContactList.clear()
         selectedContactList.addAll(list)
         Log.d(CONTACTIMPORT, "onContactChange: ${selectedContactList.size}")
         if (selectedContactList.size > 0){
-            fabImportButton.visibility = View.VISIBLE
+            fabButtonVisible()
         }else
-            fabImportButton.visibility = View.GONE
+            fabButtonInVisible()
     }
 
 

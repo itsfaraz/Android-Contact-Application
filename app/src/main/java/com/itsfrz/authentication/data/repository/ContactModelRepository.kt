@@ -16,4 +16,6 @@ class ContactModelRepository(val contactDao : ContactDao) {
 
     suspend fun insertAll(contactList : List<ContactModel>) = contactDao.insertAll(contactList)
 
+    suspend fun deleteAllContacts(username : String) = contactDao.deleteAllContacts(username)
+
 }

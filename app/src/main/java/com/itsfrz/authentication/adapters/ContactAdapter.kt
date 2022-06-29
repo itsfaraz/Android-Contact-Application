@@ -4,13 +4,15 @@ package com.itsfrz.authentication.adapters
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 
 
 /*
@@ -23,8 +25,12 @@ https://stackoverflow.com/questions/66237391/how-to-get-arraylist-from-recyclerv
 */
 
 
-class ContactAdapter(val context: Context, val contactList: ArrayList<ContactModel>, private val contactListener: ContactListener) :
-    RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(){
+class ContactAdapter(
+    val context: Context,
+    val contactList: ArrayList<ContactModel>,
+    private val contactListener: ContactListener
+) :
+    RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
 
     private val CONTACT_ADAPTER = "CONTACT_ADAPTER"
@@ -32,19 +38,20 @@ class ContactAdapter(val context: Context, val contactList: ArrayList<ContactMod
     private lateinit var communicator: AuthenticationCommunicator
 
 
-    private var isChoosen : Boolean = false
-    private var selectedItems : ArrayList<ContactModel> = ArrayList()
+    private var isChoosen: Boolean = false
+    private var selectedItems: ArrayList<ContactModel> = ArrayList()
 
+    private var doesAllSelected: Boolean = false
 
 
     class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val contactName : TextView = itemView.findViewById(R.id.contactName)
-        val contactImage : ImageView = itemView.findViewById(R.id.contactImage)
+        val contactName: TextView = itemView.findViewById(R.id.contactName)
+        val contactImage: ImageView = itemView.findViewById(R.id.contactImage)
 
 
     }
 
-    fun updateContacts(newContactList : List<ContactModel>){
+    fun updateContacts(newContactList: List<ContactModel>) {
         contactList.clear()
         contactList.addAll(newContactList)
         Log.d(CONTACT_ADAPTER, "updateContacts: ${newContactList}")
@@ -53,32 +60,47 @@ class ContactAdapter(val context: Context, val contactList: ArrayList<ContactMod
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.contact_list_item,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.contact_list_item, parent, false)
         val contactViewHolder = ContactViewHolder(view)
         communicator = context as AuthenticationCommunicator
+
         return contactViewHolder
     }
 
+    private fun highlightAllRow(holder: ContactViewHolder) {
+        if (doesAllSelected) {
+            holder.itemView.setBackgroundResource(R.color.item_selected_background)
+            isChoosen = true;
+        }
+        else {
+            holder.itemView.setBackgroundResource(R.color.item_deselected_background)
+            isChoosen = false
+        }
+        
+    }
+
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        val contact : ContactModel = contactList[position]
-        with(holder){
+        val contact: ContactModel = contactList[position]
+        with(holder) {
             contactName.text = contactList[position].contactName
             val hasImage = contactList[position].hasContactImage
-            if (hasImage){
+            if (hasImage) {
                 val imageString = contactList[position].contactImage
                 contactImage.setImageURI(Uri.parse(imageString))
-            }else{
+            } else {
                 contactImage.setImageResource(R.drawable.ic_baseline_account_box_24)
             }
 
             // post check view highlight
-            rowHighlight(holder,contact)
-
+            rowHighlight(holder, contact)
+            // highlight All View when select all clicked
+            highlightAllRow(holder)
 
         }
 
 
-          selectItem(holder.itemView,position,contact)
+        selectItem(holder.itemView, position, contact)
 //        Double Click Listener
 //        var doubleClick : Boolean? = false
 //        holder.itemView.setOnClickListener {
@@ -95,27 +117,26 @@ class ContactAdapter(val context: Context, val contactList: ArrayList<ContactMod
 //        }
 
 
-
     }
 
     private fun rowHighlight(holder: ContactAdapter.ContactViewHolder, contact: ContactModel) {
-        if (!selectedItems.contains(contact)){
+        if (!selectedItems.contains(contact)) {
             holder.itemView.setBackgroundResource(R.color.item_deselected_background)
-        }else{
+        } else {
             holder.itemView.setBackgroundResource(R.color.item_selected_background)
         }
     }
 
 
-    private fun selectItem(itemView: View,position: Int,selectedContact : ContactModel) {
+    private fun selectItem(itemView: View, position: Int, selectedContact: ContactModel) {
         itemView.setOnLongClickListener {
 
-            if (!isChoosen && selectedItems.isEmpty()){
+            if (!isChoosen && selectedItems.isEmpty()) {
 
                 itemView.setBackgroundResource(R.color.item_selected_background)
                 selectedItems.add(selectedContact)
                 isChoosen = true
-            }else{
+            } else {
                 itemView.setBackgroundResource(R.color.item_deselected_background)
                 selectedItems.remove(selectedContact)
                 isChoosen = false
@@ -126,13 +147,13 @@ class ContactAdapter(val context: Context, val contactList: ArrayList<ContactMod
         }
 
         itemView.setOnClickListener {
-            val selectedContact : ContactModel = contactList[position]
-            if (isChoosen){
-                if (!selectedItems.contains(selectedContact)){
+            val selectedContact: ContactModel = contactList[position]
+            if (isChoosen) {
+                if (!selectedItems.contains(selectedContact)) {
                     itemView.setBackgroundResource(R.color.item_selected_background)
                     selectedItems.add(selectedContact)
                 }
-            }else{
+            } else {
                 selectedItems.remove(selectedContact)
                 itemView.setBackgroundResource(R.color.item_deselected_background)
             }
@@ -144,8 +165,9 @@ class ContactAdapter(val context: Context, val contactList: ArrayList<ContactMod
 
 
     override fun getItemCount(): Int = contactList?.size ?: 0
-
-
+    fun selectAllContact() {
+        doesAllSelected = true;
+    }
 
 
 }

@@ -24,6 +24,9 @@ interface ContactDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertAll(contacts : List<ContactModel>)
 
+    @Transaction
+    @Query("DELETE FROM ContactModel WHERE username=:username")
+    suspend fun deleteAllContacts(username : String)
 
 
 }

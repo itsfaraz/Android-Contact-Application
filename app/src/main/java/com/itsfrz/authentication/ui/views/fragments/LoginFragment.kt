@@ -36,10 +36,22 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         loginBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false)
-
         communicator = activity as AuthenticationCommunicator
 
 
+        loginButtonInvoke()
+        signUpButtonInvoke()
+
+        return loginBinding.root
+    }
+
+    private fun signUpButtonInvoke() {
+        loginBinding.signUpButon.setOnClickListener {
+            communicator.routeToSignUp()
+        }
+    }
+
+    private fun loginButtonInvoke() {
         loginBinding.loginButton.setOnClickListener {
             val username : String = loginBinding.loginUsernameInput.text.toString()
             val password : String = loginBinding.loginPasswordInput.text.toString()
@@ -51,12 +63,6 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "${username} not exists, Please register yourself", Toast.LENGTH_SHORT).show()
             }
         }
-
-        loginBinding.signUpButon.setOnClickListener {
-            communicator.routeToSignUp()
-        }
-
-        return loginBinding.root
     }
 
     private fun saveUserSession(username : String) = loginViewModel.persistMyPreferences(username)
