@@ -67,5 +67,16 @@ class ContactViewModel(application : Application) : AndroidViewModel(application
         }
     }
 
+    public fun deleteMyContactItem(contact: ContactModel) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                contactRepository.deleteSpecificUserContact(preferenceRespository.getCurrentUser()!!,contact.contactNumber)
+            Log.d(CVM, "deleteMyContactItem: Deleted Contact")
+            }
+        }catch (e : Exception){
+            Log.d(CVM, "deleteMyContactItem:${e}")
+        }
+    }
+
 
 }

@@ -1,17 +1,22 @@
 package com.itsfrz.authentication.ui.views.fragments
 
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,6 +59,7 @@ class ContactFragment : Fragment() , ContactListener {
         val view = inflater.inflate(R.layout.fragment_contact, container, false)
         initView(view)
         setUpRecylerView()
+        initSwipe()
         communicator = activity as AuthenticationCommunicator
         setUpMyContacts()
         setupSession()
@@ -181,6 +187,51 @@ class ContactFragment : Fragment() , ContactListener {
 
     override fun onContactChange(list: List<ContactModel>) {
         /* To Get Selected Data */
+    }
+
+
+    fun initSwipe(){
+        val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                if (direction == ItemTouchHelper.LEFT){
+                    deleteSelectedContact(myContacts.get(position))
+                    Toast.makeText(requireContext(), "Delete Contact ${position}", Toast.LENGTH_SHORT).show()
+                }else if(direction == ItemTouchHelper.RIGHT){
+                    Toast.makeText(requireContext(), "Update Contact ${position}", Toast.LENGTH_SHORT).show()
+//                    invoke
+                }
+
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+    }
+
+    private fun deleteSelectedContact(contact: ContactModel) {
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setTitle("Are you sure to delete contact ${contact.contactName}")
+        dialog.setIcon(R.drawable.ic_baseline_delete_outline_24)
+        dialog.setCancelable(true)
+        dialog.setNegativeButton("No"){
+                dialog,which -> Toast.makeText(requireContext(), "Delete Operation Cancelled :)", Toast.LENGTH_SHORT).show()
+
+        }
+        dialog.setPositiveButton("Yes"){
+           dialog,which ->  contactViewModel.deleteMyContactItem(contact)
+
+        }
+        dialog.show()
+
+
     }
 
 

@@ -1,88 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/app_color_secondary"
-    android:elevation="3dp"
-    android:padding="10dp"
-    tools:context=".ui.views.fragments.ContactDetailFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/personImageDetail"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:background="@drawable/ic_baseline_account_circle_24"
-        android:padding="5dp"
-        android:scaleType="fitXY"
-        app:shapeAppearance="@style/ShapeAppearanceOverlay.DifferentCornerSize.CornerSize50Percent"
-        app:strokeColor="@color/app_text_color_primary"
-        app:strokeWidth="3dp" />
-
-
-
-
-    <com.google.android.material.textfield.TextInputLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:id="@+id/personNameDetailLayout"
-        android:layout_below="@+id/personImageDetail"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Person Name"
-        android:textColorHint="@color/global_green">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/personNameDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:inputType="textPersonName"
-            android:textColor="@color/app_text_color_primary">
-
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="match_parent"
+        android:background="@color/app_color_secondary"
+        android:elevation="3dp"
+        android:padding="10dp"
+        tools:context=".ui.views.fragments.ContactDetailFragment">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        android:id="@+id/personPhoneNumberLayout"
-        android:layout_below="@+id/personNameDetailLayout"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/personImageDetail"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_baseline_account_circle_24"
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.DifferentCornerSize.CornerSize50Percent"
+            app:strokeColor="@color/app_text_color_primary"
+            app:strokeWidth="3dp" />
 
-        <Spinner
-            android:id="@+id/phoneTypeSelectedSpinner"
-            android:layout_width="match_parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/phone_spinner_item_layout"
-            android:layout_weight="1"
-            android:outlineSpotShadowColor="@color/global_green"
-            android:layout_marginVertical="6dp">
-
-        </Spinner>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/personNameDetailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Phone"
+            android:layout_below="@+id/personImageDetail"
+            android:hint="Person Name"
             android:textColorHint="@color/global_green">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/personPhoneNumberDetail"
+                android:id="@+id/personNameDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:focusable="false"
-
+                android:inputType="textPersonName"
                 android:textColor="@color/app_text_color_primary">
 
             </com.google.android.material.textfield.TextInputEditText>
@@ -90,109 +49,149 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-    </LinearLayout>
-
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/personAddressDetailLayout"
-        android:layout_below="@+id/personPhoneNumberLayout"
-        android:hint="Address"
-        android:textColorHint="@color/global_green">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/personAddressDetail"
+        <LinearLayout
+            android:id="@+id/personPhoneNumberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"
-            android:maxLines="4"
-            android:minLines="1"
-            android:focusable="false"
+            android:layout_below="@+id/personNameDetailLayout"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="vertical"
-            android:textColor="@color/app_text_color_primary">
+            <Spinner
+                android:id="@+id/phoneTypeSelectedSpinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="6dp"
+                android:layout_weight="1"
+                android:outlineSpotShadowColor="@color/global_green"
+                tools:listitem="@layout/phone_spinner_item_layout">
 
-        </com.google.android.material.textfield.TextInputEditText>
+            </Spinner>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Phone"
+                android:textColorHint="@color/global_green">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/personEmailAddressDetailLayout"
-        android:layout_below="@+id/personAddressDetailLayout"
-        android:hint="Email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:textColorHint="@color/global_green">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personPhoneNumberDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="number"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/personEmailAddressDetail"
+                    android:textColor="@color/app_text_color_primary">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/personAddressDetailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:focusable="false"
-
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/app_text_color_primary">
+            android:layout_below="@+id/personPhoneNumberLayout"
+            android:hint="Address"
+            android:textColorHint="@color/global_green">
 
-        </com.google.android.material.textfield.TextInputEditText>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/personAddressDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:minLines="1"
 
-    </com.google.android.material.textfield.TextInputLayout>
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical"
+                android:textColor="@color/app_text_color_primary">
 
+            </com.google.android.material.textfield.TextInputEditText>
 
+        </com.google.android.material.textfield.TextInputLayout>
 
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/personEmailAddressDetailLayout"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/updateDetailContactButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/personEmailAddressDetailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:text="Update"
-            android:textColor="@color/app_text_color_primary"
-            app:icon="@drawable/ic_baseline_create_24"
-            app:iconTint="@color/app_text_color_primary"
-            app:rippleColor="@color/global_green"
-            app:strokeColor="@color/global_green">
+            android:layout_below="@+id/personAddressDetailLayout"
+            android:hint="Email"
+            android:textColorHint="@color/global_green">
 
-        </com.google.android.material.button.MaterialButton>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/personEmailAddressDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/deleteDetailContactButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+                android:focusable="false"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/app_text_color_primary">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:text="Delete"
-            android:textColor="#FF9800"
-            app:icon="@drawable/ic_baseline_delete_outline_24"
-            app:iconTint="#FF9800"
-            app:rippleColor="#D60000"
-            app:strokeColor="@color/global_green">
+            android:layout_below="@+id/personEmailAddressDetailLayout"
+            android:layout_margin="10dp"
+            android:padding="10dp">
 
-        </com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateDetailContactButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="Update"
+                android:textColor="@color/app_text_color_primary"
+                app:icon="@drawable/ic_baseline_create_24"
+                app:iconTint="@color/app_text_color_primary"
+                app:rippleColor="@color/global_green"
+                app:strokeColor="@color/global_green">
+
+            </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteDetailContactButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:textColor="#FF9800"
+                app:icon="@drawable/ic_baseline_delete_outline_24"
+                app:iconTint="#FF9800"
+                app:rippleColor="#D60000"
+                app:strokeColor="@color/global_green">
+
+            </com.google.android.material.button.MaterialButton>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+
+</layout>

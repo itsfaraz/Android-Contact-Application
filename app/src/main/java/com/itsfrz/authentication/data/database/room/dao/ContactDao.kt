@@ -28,5 +28,8 @@ interface ContactDao {
     @Query("DELETE FROM ContactModel WHERE username=:username")
     suspend fun deleteAllContacts(username : String)
 
+    @Query("DELETE FROM ContactModel WHERE (username=:currentUser) AND (contactNumber=:contactNumber)")
+    suspend fun deleteSpecificUserContact(currentUser: String, contactNumber: String)
+
 
 }

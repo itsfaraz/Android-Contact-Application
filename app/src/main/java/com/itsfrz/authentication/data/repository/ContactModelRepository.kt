@@ -18,4 +18,6 @@ class ContactModelRepository(val contactDao : ContactDao) {
 
     suspend fun deleteAllContacts(username : String) = contactDao.deleteAllContacts(username)
 
+    suspend fun deleteSpecificUserContact(currentUser: String, contact: String) = contactDao.deleteSpecificUserContact(currentUser,contact)
+
 }

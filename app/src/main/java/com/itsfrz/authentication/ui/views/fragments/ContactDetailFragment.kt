@@ -8,35 +8,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.databinding.FragmentContactDetailBinding
 
 class ContactDetailFragment : Fragment() {
 
+
+    private lateinit var contactDetailDataBinding : FragmentContactDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_contact_detail, container, false)
-        val textNameView = view.findViewById<EditText>(R.id.personNameDetail)
-        val imagePerson = view.findViewById<ImageView>(R.id.personImageDetail)
-        val textNumberView = view.findViewById<EditText>(R.id.personPhoneNumberDetail)
-        val textAddressView = view.findViewById<EditText>(R.id.personAddressDetail)
-        val textEmailAddressView = view.findViewById<EditText>(R.id.personEmailAddressDetail)
+        contactDetailDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_contact_detail,container,false)
         val personName : String = arguments?.getString("ContactName") ?: ""
         val personNumber : String = arguments?.getString("ContactNumber") ?: ""
         val personImage : String = arguments?.getString("ContactImage") ?: ""
         val personEmailID : String = arguments?.getString("ContactEmailId") ?: ""
         val personAddress : String = arguments?.getString("ContactAddress") ?: ""
 
-        textNameView.setText(personName)
-        imagePerson.setImageURI(Uri.parse(personImage))
-        textNumberView.setText(personNumber)
-        textAddressView.setText(personAddress)
-        textEmailAddressView.setText(personEmailID)
 
-        return view
+        contactDetailDataBinding.also {
+            it.personNameDetail.setText(personName)
+            it.personImageDetail.setImageURI(Uri.parse(personImage))
+            it.personPhoneNumberDetail.setText(personNumber)
+            it.personAddressDetail.setText(personAddress)
+            it.personEmailAddressDetail.setText(personEmailID)
+
+        }
+
+        return contactDetailDataBinding.root
     }
+
 
 
 }
