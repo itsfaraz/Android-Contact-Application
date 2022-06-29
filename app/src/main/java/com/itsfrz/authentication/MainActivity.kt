@@ -160,6 +160,26 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
         fragmentTransaction.commit()
     }
 
+    override fun routeFromContactFragmentToContactDetailFragment(contact : ContactModel) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val contactDetailFragment = ContactDetailFragment()
+        fragmentTransaction.add(R.id.fragmentContainer,contactDetailFragment)
+        fragmentTransaction.addToBackStack("BACKSTACK1")
+        val bundle = Bundle()
+
+        bundle.putString("ContactId",contact.contactId)
+        bundle.putString("ContactCountry",contact.contactCountry)
+        bundle.putString("ContactPostCode",contact.contactPostCode)
+        bundle.putString("ContactName",contact.contactName)
+        bundle.putString("ContactImage",contact.contactImage)
+        bundle.putString("ContactNumber",contact.contactNumber)
+        bundle.putBoolean("hasContactImage",contact.hasContactImage)
+        bundle.putString("ContactAddress",contact.contactAddress)
+        bundle.putString("ContactEmailId",contact.contactEmailId)
+        contactDetailFragment.arguments = bundle
+        fragmentTransaction.commit()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         initFragment()

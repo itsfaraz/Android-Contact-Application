@@ -202,10 +202,9 @@ class ContactFragment : Fragment() , ContactListener {
                 val position = viewHolder.adapterPosition
                 if (direction == ItemTouchHelper.LEFT){
                     deleteSelectedContact(myContacts.get(position))
-                    Toast.makeText(requireContext(), "Delete Contact ${position}", Toast.LENGTH_SHORT).show()
+
                 }else if(direction == ItemTouchHelper.RIGHT){
-                    Toast.makeText(requireContext(), "Update Contact ${position}", Toast.LENGTH_SHORT).show()
-//                    invoke
+                    invokeContactUpdatePage(myContacts.get(position))
                 }
 
             }
@@ -214,6 +213,10 @@ class ContactFragment : Fragment() , ContactListener {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
+    }
+
+    private fun invokeContactUpdatePage(contact: ContactModel) {
+        communicator.routeFromContactFragmentToContactDetailFragment(contact)
     }
 
     private fun deleteSelectedContact(contact: ContactModel) {

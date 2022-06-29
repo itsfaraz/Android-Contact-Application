@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_color_secondary"
+        android:background="@color/app_update_layout_color"
         android:elevation="3dp"
         android:padding="10dp"
         tools:context=".ui.views.fragments.ContactDetailFragment">
@@ -40,7 +40,6 @@
                 android:id="@+id/personNameDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
                 android:inputType="textPersonName"
                 android:textColor="@color/app_text_color_primary">
 
@@ -64,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginVertical="6dp"
                 android:layout_weight="1"
-                android:outlineSpotShadowColor="@color/global_green"
+                android:outlineSpotShadowColor="@color/global_green_one"
                 tools:listitem="@layout/phone_spinner_item_layout">
 
             </Spinner>
@@ -81,9 +80,7 @@
                     android:id="@+id/personPhoneNumberDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
                     android:inputType="number"
-
                     android:textColor="@color/app_text_color_primary">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -107,12 +104,11 @@
                 android:id="@+id/personAddressDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
+
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
                 android:minLines="1"
-
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="vertical"
                 android:textColor="@color/app_text_color_primary">
@@ -126,18 +122,17 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/personAddressDetailLayout"
             android:hint="Email"
-            android:textColorHint="@color/global_green">
+            android:textColorHint="@color/global_green_one">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/personEmailAddressDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:focusable="false"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/app_text_color_primary">
+                android:textColor="@color/global_green">
 
             </com.google.android.material.textfield.TextInputEditText>
 
@@ -179,11 +174,11 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:text="Delete"
-                android:textColor="#FF9800"
+                android:textColor="@color/app_color_secondary"
                 app:icon="@drawable/ic_baseline_delete_outline_24"
-                app:iconTint="#FF9800"
+                app:iconTint="@color/app_color_secondary"
                 app:rippleColor="#D60000"
-                app:strokeColor="@color/global_green">
+                app:strokeColor="@color/app_color_secondary">
 
             </com.google.android.material.button.MaterialButton>
 

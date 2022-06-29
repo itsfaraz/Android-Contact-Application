@@ -78,5 +78,16 @@ class ContactViewModel(application : Application) : AndroidViewModel(application
         }
     }
 
+    fun updateUserContact(contactModel: ContactModel) {
+        try {
+            contactModel.username = preferenceRespository.getCurrentUser()!!
+            viewModelScope.launch(Dispatchers.IO) {
+                contactRepository.updateContact(contactModel)
+            }
+        }catch (e : Exception){
+            Log.d(CVM, "updateUserContact: $e")
+        }
+    }
+
 
 }

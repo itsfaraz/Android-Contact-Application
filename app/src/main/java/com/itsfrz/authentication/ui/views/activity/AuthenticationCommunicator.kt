@@ -15,5 +15,6 @@ interface AuthenticationCommunicator {
     fun routeFromContactToContactDetail(contact: ContactModel)
     fun routeFromContactToImportContact()
     fun routeFromContactImportToContact()
+    fun routeFromContactFragmentToContactDetailFragment(contact : ContactModel)
 
 }
