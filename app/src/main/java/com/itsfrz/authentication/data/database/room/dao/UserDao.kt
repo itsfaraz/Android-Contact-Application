@@ -1,8 +1,7 @@
 package com.itsfrz.authentication.model.database.room.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.data.entities.UserModel
 
 @Dao
 interface UserDao {

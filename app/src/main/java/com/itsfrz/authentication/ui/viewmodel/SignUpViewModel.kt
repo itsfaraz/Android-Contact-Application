@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.itsfrz.authentication.data.repository.UserModelRepository
 import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.model.database.room.dao.UserDao
-import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.data.entities.UserModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.itsfrz.authentication.model.database.room.dao.ContactDao
 import com.itsfrz.authentication.model.database.room.dao.UserDao
-import com.itsfrz.authentication.model.database.room.model.ContactModel
-import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.data.entities.UserModel
 
 private const val DB_NAME = "Contact.db"
 

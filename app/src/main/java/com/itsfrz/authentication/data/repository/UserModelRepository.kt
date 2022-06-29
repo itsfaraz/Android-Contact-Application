@@ -1,8 +1,7 @@
 package com.itsfrz.authentication.data.repository
 
-import androidx.lifecycle.LiveData
 import com.itsfrz.authentication.model.database.room.dao.UserDao
-import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.data.entities.UserModel
 
 class UserModelRepository(private val userDao: UserDao) {
 

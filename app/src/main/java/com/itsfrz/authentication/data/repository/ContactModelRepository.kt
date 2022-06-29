@@ -2,7 +2,7 @@ package com.itsfrz.authentication.data.repository
 
 import androidx.lifecycle.LiveData
 import com.itsfrz.authentication.model.database.room.dao.ContactDao
-import com.itsfrz.authentication.model.database.room.model.ContactModel
+import com.itsfrz.authentication.data.entities.ContactModel
 
 class ContactModelRepository(val contactDao : ContactDao) {
 
@@ -14,5 +14,6 @@ class ContactModelRepository(val contactDao : ContactDao) {
 
     suspend fun updateContact(contactModel: ContactModel) = contactDao.updateContact(contactModel)
 
+    suspend fun insertAll(contactList : List<ContactModel>) = contactDao.insertAll(contactList)
 
 }

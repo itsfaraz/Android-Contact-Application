@@ -1,5 +1,6 @@
 package com.itsfrz.authentication.model.database
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -16,6 +17,7 @@ public const val PREFERENCE_EMAIL = "PREF_USER_EMAIL"
 class PreferenceRespository(val context: Context){
 
     private val sharedPreferences : SharedPreferences
+    private val editor : SharedPreferences.Editor
 
     init {
             sharedPreferences  = context.getSharedPreferences(
@@ -23,10 +25,11 @@ class PreferenceRespository(val context: Context){
             PREFERENCE_PRIVATE_MODE
         )
 
+        editor = sharedPreferences.edit()
     }
 
 
-    private val editor = sharedPreferences.edit()
+//    private val editor = sharedPreferences.edit()
 
     private fun String.put(long : Long){
         editor.putLong(this,long)

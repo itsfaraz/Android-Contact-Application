@@ -1,6 +1,6 @@
 package com.itsfrz.authentication.ui.views.activity
 
-import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.data.entities.ContactModel
 
 interface AuthenticationCommunicator {
 
@@ -12,7 +12,8 @@ interface AuthenticationCommunicator {
     fun routeFromContactToLandingPage();
     fun routerFromLandingToContactPage();
     fun routeFromContactToAddContact();
-    fun routeFromContactToContactDetail(contact: Contact)
+    fun routeFromContactToContactDetail(contact: ContactModel)
     fun routeFromContactToImportContact()
+    fun routeFromContactImportToContact()
 
 }

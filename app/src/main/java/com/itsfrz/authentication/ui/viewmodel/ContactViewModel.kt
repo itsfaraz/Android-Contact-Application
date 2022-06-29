@@ -1,51 +1,61 @@
 package com.itsfrz.authentication.ui.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.*
 import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.model.database.room.dao.ContactDao
-import com.itsfrz.authentication.model.database.room.model.ContactModel
+import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.model.database.PreferenceRespository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ContactViewModel(application : Application) : ViewModel(){
+class ContactViewModel(application : Application) : AndroidViewModel(application){
 
-    private val allContact = MutableLiveData<List<ContactModel>>()
+    private val CVM = "CVM"
+
+    private var allContact = MutableLiveData<List<ContactModel>>()
     private val contactRepository : ContactModelRepository
-    private val username : String= getLoggedUser()
-
-    private fun getLoggedUser(): String {
-        return "itsfrz" // make it dynamic
+    private val preferenceRespository by lazy {
+        PreferenceRespository(application.applicationContext)
     }
+
+
 
 
     init {
-
         val contacDao = AppDatabase.getDatabase(application.applicationContext).contactDao()
         contactRepository = ContactModelRepository(contacDao)
+        Log.d(CVM, "Constructor: ${preferenceRespository.getCurrentUser()}")
+        getAllContacts(preferenceRespository.getCurrentUser()!!)
 
 
     }
 
-    fun getContactListObserver() : MutableLiveData<List<ContactModel>> = allContact
+    fun getContactListObserver() : LiveData<List<ContactModel>> = allContact
 
-    fun getAllContacts(username : String) {
-       viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                contactRepository.allContacts(username)
+    private fun getAllContacts(username : String) {
+
+        viewModelScope.launch{
+            val response = liveData(Dispatchers.IO){
+                emitSource(contactRepository.allContacts(username))
             }
-            if (response != null){
-                allContact.postValue(response.value)
+            response?.let {
+                allContact = it as MutableLiveData<List<ContactModel>>
             }
-       }
+            Log.d(CVM, "getAllContacts: ${allContact.value}")
+        }
+
     }
 
 
+    public fun clearUser(){
+        preferenceRespository.clearUser()
+    }
+
+    public fun getCurrentSession() : String = preferenceRespository.getCurrentUser() ?: ""
 
 
 }

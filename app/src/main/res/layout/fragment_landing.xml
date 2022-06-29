@@ -2,18 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000"
     android:elevation="3dp"
     android:layout_height="match_parent"
     tools:context=".ui.views.fragments.LandingFragment">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:drawableLeft="@drawable/ic_baseline_backspace_24"
         android:text="Back"
         android:id="@+id/back"
+        app:rippleColor="@color/button_ripple_color"
         android:backgroundTint="@color/black"
-        android:layout_height="wrap_content"></Button>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:layout_width="wrap_content"

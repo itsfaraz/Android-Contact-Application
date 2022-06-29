@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.model.database.room.model
+package com.itsfrz.authentication.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

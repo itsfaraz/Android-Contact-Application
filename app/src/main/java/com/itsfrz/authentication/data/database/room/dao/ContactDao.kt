@@ -2,7 +2,8 @@ package com.itsfrz.authentication.model.database.room.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.itsfrz.authentication.model.database.room.model.ContactModel
+import androidx.room.OnConflictStrategy.REPLACE
+import com.itsfrz.authentication.data.entities.ContactModel
 
 @Dao
 interface ContactDao {
@@ -10,7 +11,7 @@ interface ContactDao {
     @Query("SELECT * FROM CONTACTMODEL WHERE username=:username")
     fun getContact(username : String) : LiveData<List<ContactModel>>
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     suspend fun insertContact(contact : ContactModel)
 
     @Update
@@ -20,7 +21,7 @@ interface ContactDao {
     suspend fun deleteContact(contactModel: ContactModel)
 
     @Transaction
-    @Insert
+    @Insert(onConflict = REPLACE)
     suspend fun insertAll(contacts : List<ContactModel>)
 
 

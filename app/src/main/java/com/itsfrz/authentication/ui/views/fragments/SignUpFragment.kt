@@ -11,8 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.databinding.FragmentSignUpBinding
-import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.model.database.room.model.UserModel
+import com.itsfrz.authentication.data.entities.UserModel
 import com.itsfrz.authentication.ui.viewmodel.SignUpViewModel
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 

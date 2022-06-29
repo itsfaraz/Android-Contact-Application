@@ -17,7 +17,8 @@ import com.itsfrz.authentication.R
 import com.itsfrz.authentication.adapters.ContactAdapter
 import com.itsfrz.authentication.adapters.ContactListener
 
-import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 
 
@@ -28,8 +29,11 @@ class ContactImportFragment : Fragment() , ContactListener{
     private lateinit var communicator: AuthenticationCommunicator
     private lateinit var contactRecyclerView: RecyclerView
     private lateinit var contactAdapter: ContactAdapter
-    private var contactList: ArrayList<Contact> = ArrayList()
-    private val selectedContactList : ArrayList<Contact> = ArrayList()
+    private var contactList: ArrayList<ContactModel> = ArrayList()
+    private val selectedContactList : ArrayList<ContactModel> = ArrayList()
+
+
+
 
     private lateinit var contactImportToolBar: Toolbar
     private lateinit var progressBar1: ProgressBar
@@ -40,6 +44,7 @@ class ContactImportFragment : Fragment() , ContactListener{
     private val contactProviderViewModel by lazy {
         ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ContactImportViewModel::class.java)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +57,7 @@ class ContactImportFragment : Fragment() , ContactListener{
         communicator = activity as AuthenticationCommunicator
         setupRecyclerView(contactList, view)
         setContactList()
-
+        importContact()
 
         Log.d(CONTACTIMPORT, "onCreateView: contactProviderViewModel View Model Instance Hash Value ${contactProviderViewModel.hashCode()}")
 
@@ -61,6 +66,12 @@ class ContactImportFragment : Fragment() , ContactListener{
         return view;
     }
 
+    private fun importContact() {
+        fabImportButton.setOnClickListener {
+            contactProviderViewModel.insertContactsInDB(selectedContactList)
+            communicator.routeFromContactImportToContact()
+        }
+    }
 
 
     private fun setUpProgressBar() {
@@ -69,7 +80,7 @@ class ContactImportFragment : Fragment() , ContactListener{
     }
 
     private fun setContactList(){
-        val contactList = ArrayList<Contact>()
+        val contactList = ArrayList<ContactModel>()
         contactProviderViewModel.getContactList().observe(requireActivity()){
             contactList.addAll(it)
             contactAdapter.updateContacts(it)
@@ -124,7 +135,7 @@ class ContactImportFragment : Fragment() , ContactListener{
     }
 
 
-    private fun setupRecyclerView(contactList: ArrayList<Contact>, view: View) {
+    private fun setupRecyclerView(contactList: ArrayList<ContactModel>, view: View) {
         contactRecyclerView = view.findViewById<RecyclerView>(R.id.contactRecyclerView)
         contactRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         contactRecyclerView.setHasFixedSize(true)
@@ -134,7 +145,7 @@ class ContactImportFragment : Fragment() , ContactListener{
 
     }
 
-    override fun onContactChange(list: List<Contact>) {
+    override fun onContactChange(list: List<ContactModel>) {
         selectedContactList.clear()
         selectedContactList.addAll(list)
         Log.d(CONTACTIMPORT, "onContactChange: ${selectedContactList.size}")

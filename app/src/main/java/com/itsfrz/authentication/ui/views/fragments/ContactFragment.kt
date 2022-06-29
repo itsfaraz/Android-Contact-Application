@@ -11,37 +11,80 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.MainActivity
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.adapters.ContactAdapter
+import com.itsfrz.authentication.adapters.ContactListener
+import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.ui.views.animation.startAnimation
 import com.itsfrz.authentication.model.database.PreferenceRespository
+import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
 
 
-class ContactFragment : Fragment() {
+class ContactFragment : Fragment() , ContactListener {
+
+
+    private var username : String = ""
 
     private val CONTACT_FRAGMENT = "CONTACT_FRAGMENT"
 
     private lateinit var communicator : AuthenticationCommunicator
-    private val preferenceResository by lazy {
-        PreferenceRespository(requireContext())
+
+    private val contactViewModel by lazy {
+        ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ContactViewModel::class.java)
     }
 
+
+
+
+    private val myContacts = ArrayList<ContactModel>()
     private lateinit var contactToolBar : Toolbar
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var contactAdapter: ContactAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_contact, container, false)
         initView(view)
+        setUpRecylerView()
+        communicator = activity as AuthenticationCommunicator
+        setUpMyContacts()
+        setupSession()
         setToolBar()
         setHasOptionsMenu(true);
         setupNewContact(view);
-        communicator = activity as AuthenticationCommunicator
         Log.d(CONTACT_FRAGMENT, "onCreateView: ")
         return view
     }
+
+    private fun setUpMyContacts() {
+        contactViewModel.getContactListObserver().observe(requireActivity()){
+            myContacts.clear()
+            myContacts.addAll(it)
+            Log.d(CONTACT_FRAGMENT, "setUpMyContacts: ${myContacts}")
+            contactAdapter.updateContacts(it)
+        }
+    }
+
+    private fun setupSession() {
+        username = contactViewModel.getCurrentSession()
+    }
+
+    private fun setUpRecylerView() {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.setHasFixedSize(true)
+        contactAdapter = ContactAdapter(requireContext(),myContacts,this)
+        recyclerView.adapter = contactAdapter
+
+    }
+
 
     private fun setToolBar() {
         contactToolBar.setTitle("My Contact")
@@ -52,6 +95,7 @@ class ContactFragment : Fragment() {
 
     private fun initView(view : View) {
         contactToolBar = view.findViewById(R.id.contactToolBar)
+        recyclerView = view.findViewById(R.id.myContactRecyclerView)
     }
 
 
@@ -101,7 +145,7 @@ class ContactFragment : Fragment() {
     }
 
     private fun logoutUser() {
-        preferenceResository.clearUser()
+        contactViewModel.clearUser()
         contactToActivity()
     }
 
@@ -133,6 +177,10 @@ class ContactFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+    }
+
+    override fun onContactChange(list: List<ContactModel>) {
+        /* To Get Selected Data */
     }
 
 

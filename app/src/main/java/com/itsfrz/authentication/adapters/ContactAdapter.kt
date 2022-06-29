@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.data.entities.ContactModel
 
 
 /*
@@ -23,7 +23,7 @@ https://stackoverflow.com/questions/66237391/how-to-get-arraylist-from-recyclerv
 */
 
 
-class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, private val contactListener: ContactListener) :
+class ContactAdapter(val context: Context, val contactList: ArrayList<ContactModel>, private val contactListener: ContactListener) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(){
 
 
@@ -33,7 +33,7 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
 
 
     private var isChoosen : Boolean = false
-    private var selectedItems : ArrayList<Contact> = ArrayList()
+    private var selectedItems : ArrayList<ContactModel> = ArrayList()
 
 
 
@@ -44,9 +44,10 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
 
     }
 
-    fun updateContacts(newContactList : List<Contact>){
+    fun updateContacts(newContactList : List<ContactModel>){
         contactList.clear()
         contactList.addAll(newContactList)
+        Log.d(CONTACT_ADAPTER, "updateContacts: ${newContactList}")
         notifyDataSetChanged()
     }
 
@@ -59,7 +60,7 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        val contact : Contact = contactList[position]
+        val contact : ContactModel = contactList[position]
         with(holder){
             contactName.text = contactList[position].contactName
             val hasImage = contactList[position].hasContactImage
@@ -97,7 +98,7 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
 
     }
 
-    private fun rowHighlight(holder: ContactAdapter.ContactViewHolder, contact: Contact) {
+    private fun rowHighlight(holder: ContactAdapter.ContactViewHolder, contact: ContactModel) {
         if (!selectedItems.contains(contact)){
             holder.itemView.setBackgroundResource(R.color.item_deselected_background)
         }else{
@@ -106,7 +107,7 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
     }
 
 
-    private fun selectItem(itemView: View,position: Int,selectedContact : Contact) {
+    private fun selectItem(itemView: View,position: Int,selectedContact : ContactModel) {
         itemView.setOnLongClickListener {
 
             if (!isChoosen && selectedItems.isEmpty()){
@@ -125,7 +126,7 @@ class ContactAdapter(val context: Context,val contactList: ArrayList<Contact>, p
         }
 
         itemView.setOnClickListener {
-            val selectedContact : Contact = contactList[position]
+            val selectedContact : ContactModel = contactList[position]
             if (isChoosen){
                 if (!selectedItems.contains(selectedContact)){
                     itemView.setBackgroundResource(R.color.item_selected_background)

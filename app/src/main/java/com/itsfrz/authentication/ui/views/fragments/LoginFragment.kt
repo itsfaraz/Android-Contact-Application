@@ -6,21 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
-import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.databinding.FragmentLoginBinding
-import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.model.database.room.model.UserModel
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
-import kotlinx.coroutines.*
-import java.util.*
 
 
 class LoginFragment : Fragment() {
@@ -51,18 +43,12 @@ class LoginFragment : Fragment() {
         loginBinding.loginButton.setOnClickListener {
             val username : String = loginBinding.loginUsernameInput.text.toString()
             val password : String = loginBinding.loginPasswordInput.text.toString()
-
-            if(loginViewModel.validateInputs(username,password))
+            if(loginViewModel.loginUser(username,password))
             {
-
-                val user = loginViewModel.loginUser(username, password)
-
-                if (user.username.length > 0){
-                    persistMyPreferences(user.username,user.emailId);
-                    communicator.routerFromLoginToContactPage()
-                }else{
-                    Toast.makeText(requireContext(), "${username} not exists, Please register yourself", Toast.LENGTH_SHORT).show()
-                }
+                saveUserSession(username)
+                communicator.routerFromLoginToContactPage()
+            }else{
+                Toast.makeText(requireContext(), "${username} not exists, Please register yourself", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -73,7 +59,7 @@ class LoginFragment : Fragment() {
         return loginBinding.root
     }
 
-    private fun persistMyPreferences(username: String,emailId : String) = loginViewModel.persistMyPreferences(username, emailId)
+    private fun saveUserSession(username : String) = loginViewModel.persistMyPreferences(username)
 
 
 

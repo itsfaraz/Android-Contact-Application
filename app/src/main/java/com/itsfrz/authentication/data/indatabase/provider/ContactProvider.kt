@@ -5,13 +5,24 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
 import android.util.Log
-import androidx.lifecycle.LiveData
-import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.indatabase.repository.ContactProviderI
+import com.itsfrz.authentication.model.database.PreferenceRespository
 
 
 object ContactProvider : ContactProviderI {
+
+
+
     private val EXCEPTION : String = "EXCEPTION"
+    private val DEBUG : String = "DEBUG"
+
+    private val mColumnProjectionsForPostal = arrayOf<String>(
+        ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS,
+        ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE,
+        ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY
+    )
+
     private val mColumnProjections = arrayOf<String>(
         ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
@@ -20,19 +31,18 @@ object ContactProvider : ContactProviderI {
         ContactsContract.CommonDataKinds.Email.ADDRESS,
 
         )
-    private val mColumnProjectionsForPostal = arrayOf<String>(
-        ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS,
-        ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE,
-        ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY
-    )
 
 
 
-    override public suspend fun getContactListFromProvider(context : Context) : List<Contact>{
+    override public suspend fun getContactListFromProvider(context : Context,username : String) : List<ContactModel>{
 
+        Log.d(DEBUG, "getContactListFromProvider: ${username}")
         val contentResolver: ContentResolver = context.contentResolver
 
-        val contactList = ArrayList<Contact>();
+        val contactList = ArrayList<ContactModel>();
+
+
+
         val cursor : Cursor? = contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             mColumnProjections,
@@ -45,7 +55,7 @@ object ContactProvider : ContactProviderI {
             cursor?.let {
                 if (it.count > 0){
                     while (it.moveToNext()){
-                        val contact : Contact = Contact("","","",false,"","","","","")
+                        val contact : ContactModel = ContactModel("","","",false,"","","","","",username)
                         val contactId : String = it.getString(0)
                         val contactName = it.getString(1)
                         val contactNumber = it.getString(2)
@@ -73,12 +83,12 @@ object ContactProvider : ContactProviderI {
 
                         }
 
-                        val emailContact  : Contact= getEmailId(context,contact,contactId,contactName)
+                        val emailContact  : ContactModel = getEmailId(context,contact,contactId,contactName)
 
                         if(emailContact != null){
                             contact.contactEmailId = emailContact.contactEmailId
                         }
-                        val addressContact : Contact = getAddress(context,contact,contactId,contactName)
+                        val addressContact : ContactModel = getAddress(context,contact,contactId,contactName)
                         if(addressContact != null){
                             contact.contactAddress = addressContact.contactAddress
                             contact.contactCountry = addressContact.contactCountry
@@ -101,10 +111,10 @@ object ContactProvider : ContactProviderI {
 
 
 
-        return contactList as List<Contact>
+        return contactList as List<ContactModel>
     }
 
-    private fun getAddress(context: Context, contact: Contact, contactId: String, contactName: String): Contact {
+    private fun getAddress(context: Context, contact: ContactModel, contactId: String, contactName: String): ContactModel {
         val whereClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+"=? and "+ContactsContract.CommonDataKinds.Phone.CONTACT_ID+"=?"
         val contentResolver = context.contentResolver
         val cursor = contentResolver.query(
@@ -140,7 +150,7 @@ object ContactProvider : ContactProviderI {
         return contact
     }
 
-    private fun getEmailId(context: Context, contact: Contact, contactId: String, contactName: String): Contact {
+    private fun getEmailId(context: Context, contact: ContactModel, contactId: String, contactName: String): ContactModel {
         val whereClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+"=? and "+ContactsContract.CommonDataKinds.Phone.CONTACT_ID+"=?"
 
         val contentResolver = context.contentResolver
@@ -173,15 +183,15 @@ object ContactProvider : ContactProviderI {
 
 
 
-    override suspend fun insertContactInProvider(context: Context, contact: Contact) {
+    override suspend fun insertContactInProvider(context: Context, contact: ContactModel) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateContactInProvider(context: Context, contact: Contact) {
+    override suspend fun updateContactInProvider(context: Context, contact: ContactModel) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteContactInProvider(context: Context, contact: Contact) {
+    override suspend fun deleteContactInProvider(context: Context, contact: ContactModel) {
         TODO("Not yet implemented")
     }
 

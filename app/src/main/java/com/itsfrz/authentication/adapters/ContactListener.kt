@@ -1,7 +1,7 @@
 package com.itsfrz.authentication.adapters
 
-import com.itsfrz.authentication.data.indatabase.model.Contact
+import com.itsfrz.authentication.data.entities.ContactModel
 
 interface ContactListener {
-    public fun onContactChange(list : List<Contact>) : Unit
+    public fun onContactChange(list : List<ContactModel>) : Unit
 }

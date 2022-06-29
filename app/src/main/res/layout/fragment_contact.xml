@@ -17,6 +17,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
+        tools:listitem="@layout/contact_list_item"
         android:layout_below="@id/contactToolBar"
         android:id="@+id/myContactRecyclerView"
         android:layout_height="match_parent">

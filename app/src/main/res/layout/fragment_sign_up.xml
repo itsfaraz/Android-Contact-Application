@@ -45,7 +45,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/loginUsernameLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"

@@ -4,10 +4,11 @@ import android.Manifest
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.model.database.PreferenceRespository
-import com.itsfrz.authentication.data.indatabase.model.Contact
 import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.ui.views.activity.BaseActivity
 import com.itsfrz.authentication.ui.views.fragments.*
@@ -19,6 +20,7 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
         PreferenceRespository(this)
     }
 
+    private val TAG = "TAG"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,9 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
     private fun initFragment() {
 
         lateinit var initFragment : Fragment
-        if (preferenceRespository.getLoggedIn()){
+        val status : Boolean? = preferenceRespository.getLoggedIn()
+        Log.d(TAG, "initFragment: ${preferenceRespository.getCurrentUser()}")
+        if (status == true && status != null){
             initFragment = ContactFragment()
 //            initFragment = ContactImportFragment()
         }else{
@@ -121,7 +125,7 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
 
     }
 
-    override fun routeFromContactToContactDetail(contact: Contact) {
+    override fun routeFromContactToContactDetail(contact: ContactModel) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val contactDetailFragment = ContactDetailFragment()
         fragmentTransaction.add(R.id.fragmentContainer,contactDetailFragment)
@@ -138,13 +142,22 @@ class MainActivity : BaseActivity() , AuthenticationCommunicator {
 
     }
 
+
+
     override fun routeFromContactToImportContact() {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val fragmentImport = ContactImportFragment()
         fragmentTransaction.add(R.id.fragmentContainer,fragmentImport)
-        fragmentTransaction.addToBackStack("BACKSTACK")
+        fragmentTransaction.addToBackStack("Import Contact Fragment")
         fragmentTransaction.commit()
 
+    }
+
+    override fun routeFromContactImportToContact() {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val fragmentContact = ContactFragment()
+        fragmentTransaction.replace(R.id.fragmentContainer,fragmentContact)
+        fragmentTransaction.commit()
     }
 
     override fun onBackPressed() {
