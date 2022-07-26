@@ -9,6 +9,4 @@ data class UserModel(
     val username : String,
     val emailId : String,
     val password : String,
-
-
 )

@@ -2,8 +2,13 @@ package com.itsfrz.authentication.ui.views.compose.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,17 +16,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.viewmodel.SignUpViewModel
+import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    navController: NavController,
+    signUpEvent : (username : String,email : String,password : String) -> Unit ,
+    tosEvent : () -> Unit,
+    privacyEvent : () -> Unit
+) {
+
+    val signupViewModel = SignUpViewModel()
+
+    var username by remember {
+        mutableStateOf("")
+    }
+    var email by remember {
+        mutableStateOf("")
+    }
+    var password by remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -35,40 +62,52 @@ fun SignUpScreen() {
             tint = Blue100
         )
         Spacer(modifier = Modifier.height(30.dp))
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
-            value = "",
-            onValueChange = {},
-            label = { "Full Name" }
+        InputField(
+            modifier = Modifier.padding(horizontal = 40.dp),
+            placeHolder = "Username ...",
+            label = "username",
+            hasError = signupViewModel.validateUsername(username),
+            hasTrailingIcon = true,
+            trailingIcon = R.drawable.ui_login_icon,
+            errorMessage = "Only alphanumeric character allowed",
+            inputText = username,
+            generatedText = {username = it}
         )
         Spacer(modifier = Modifier.height(20.dp))
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
-            value = "",
-            onValueChange = {},
-            label = { "Email" },
-            placeholder = { "Email" }
+        InputField(
+            modifier = Modifier.padding(horizontal = 40.dp),
+            placeHolder = "Email ...",
+            label = "email",
+            hasError = signupViewModel.validateEmailId(email),
+            hasTrailingIcon = true,
+            trailingIcon = R.drawable.ui_login_icon,
+            errorMessage = "Email is not valid",
+            inputText = email,
+            generatedText = {email = it},
+            keyboardType = KeyboardType.Email
         )
         Spacer(modifier = Modifier.height(20.dp))
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
-            value = "",
-            onValueChange = {},
-            label = { "Password" },
-            placeholder = { "Password" }
+        InputField(
+            modifier = Modifier.padding(horizontal = 40.dp),
+            placeHolder = "Password ...",
+            label = "password",
+            hasError = signupViewModel.validatePassword(password),
+            hasTrailingIcon = true,
+            trailingIcon = R.drawable.ui_login_icon,
+            errorMessage = "Password is not valid",
+            inputText = password,
+            generatedText = {password = it},
+            keyboardType = KeyboardType.NumberPassword
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { /*TODO*/ },
+            onClick = {
+                signUpEvent(username,email, password)
+                navController.navigate(Screen.LoginScreen.route)
+                      },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(
@@ -128,5 +167,11 @@ fun PrivacyPolicy() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpScreenPreview() {
-    SignUpScreen()
+    val navController = rememberNavController()
+    SignUpScreen(
+        signUpEvent = {username, email, password ->  },
+        navController = navController,
+        privacyEvent = {},
+        tosEvent = {}
+    )
 }

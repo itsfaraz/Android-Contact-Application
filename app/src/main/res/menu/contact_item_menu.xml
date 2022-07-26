@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:icon="@drawable/ic_baseline_more_vert_24"
+    <item android:icon="@drawable/ui_option_menu_button_icon"
         app:showAsAction="always"
         android:title="Option">
         <menu>
-            <item android:icon="@drawable/ic_baseline_import_export_24"
+            <item android:icon="@drawable/ui_import_icon"
                 app:showAsAction="collapseActionView"
                 android:id="@+id/contactImportMenu"
                 android:title="Import"/>
 
-            <item android:icon="@drawable/user_info_24"
+            <item android:icon="@drawable/ui_userinfo_icon"
                 app:showAsAction="collapseActionView"
                 android:id="@+id/contactUserMenu"
                 android:title="User"/>
 
-            <item android:icon="@drawable/delete_all_24"
+            <item android:icon="@drawable/ui_deleteall_icon"
                 app:showAsAction="collapseActionView"
                 android:id="@+id/contactDeleteMenu"
                 android:title="Delete All Contact"/>
@@ -24,7 +24,7 @@
             <item
                 android:id="@+id/userLogoutMenu"
                 android:title="Logout"
-                android:icon="@drawable/ic_baseline_exit_to_app_24"
+                android:icon="@drawable/ui_logout_icon"
                 app:showAsAction="never"/>
 
 

@@ -13,11 +13,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
 @Composable
-fun AuthenticationScreen() {
+fun AuthenticationScreen(
+    navController: NavController
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -36,7 +40,7 @@ fun AuthenticationScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Screen.SignupScreen.route) },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(
@@ -52,7 +56,7 @@ fun AuthenticationScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Screen.LoginScreen.route) },
             border = BorderStroke(width = 1.dp, color = Blue100)
         ) {
             Text(
@@ -93,7 +97,7 @@ fun ApplicationLogo() {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun AuthenticationScreenPreview() {
-    AuthenticationScreen()
+    AuthenticationScreen(null!!)
 //    ApplicationLogo()
 
 }

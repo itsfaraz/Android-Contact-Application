@@ -9,17 +9,26 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.*
 
 @Composable
-fun PermissionScreen() {
+fun PermissionScreen(
+    navController: NavController
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -36,7 +45,7 @@ fun PermissionScreen() {
                     permissionCardIcon = R.drawable.permission_lock_icon,
                     permissionCardBackgroundColor = Color.White,
                     permissionIconColor = Blue100,
-                    lowerCardColor = Blue100Trans,
+                    lowerCardColor = Blue100UltraTrans,
                     lowerCardShapeSize = 100.dp
                 )
             }
@@ -52,7 +61,7 @@ fun PermissionScreen() {
         )
         Button(
             colors = ButtonDefaults.buttonColors(Blue100),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Screen.AuthenticationScreen.route) },
             shape = RoundedCornerShape(20.dp),
         ) {
             Text(
@@ -112,13 +121,13 @@ fun IconCircle(
         backgroundColor = permissionCardBackgroundColor,
         modifier = modifier
             .padding(end = 30.dp)
-            .size(120.dp)
+            .size(80.dp)
     ) {
         Icon(
             painter = painterResource(id = permissionCardIcon),
             contentDescription = "Lock Icon",
             tint = permissionIconColor,
-            modifier = Modifier.padding(35.dp)
+            modifier = Modifier.padding(20.dp)
         )
     }
 }
@@ -133,11 +142,13 @@ fun StylishCard(
     Card(
         modifier = modifier
             .height(200.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .blur( radius = 4.dp),
         backgroundColor = backgroudColor,
         shape = Shapes.cardTopRightCornerShape(cardTopRightCornerShapeSize)
     ) {
     }
+
 }
 
 @Composable
@@ -164,5 +175,6 @@ fun PermissionInfo() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PermissionScreenPreview() {
-    PermissionScreen()
+    val navController = rememberNavController()
+    PermissionScreen(navController = navController)
 }
