@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F4F4F4"
     android:elevation="3dp"
-    tools:context=".ui.views.fragments.ContactImportFragment">
+    tools:context=".ui.fragments.ContactImportFragment">
 
     <ProgressBar
         android:layout_width="wrap_content"

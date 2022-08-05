@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.ui.viewmodel.utils
+package com.itsfrz.authentication.ui.utils
 
 class RegexValidation {
 

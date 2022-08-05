@@ -21,6 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
+import com.itsfrz.authentication.ui.views.Screen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -37,12 +39,20 @@ fun HomeScreen(
                 isDeleteAllMenuItem = true,
                 isLogoutMenuItem = true,
                 isSearchMenuItem = true,
-                isUserInfoMenuItem = true
+                isUserInfoMenuItem = true,
+                isSelectAllMenuItem = false,
+                iconClickEvent = {},
+                searchClickEvent = {},
+                importClickEvent = { navController.navigate(Screen.ImportContactScreen.route) },
+                userInfoClickEvent = {},
+                deleteAllClickEvent = {},
+                logoutClickEvent = {},
+                selectAllClickEvent = {}
             )
         },
     ){
         Column(modifier = Modifier.fillMaxSize()) {
-
+            ContactListLayout()
         }
     }
 }
@@ -69,8 +79,8 @@ fun SearchBar() {
     }
 }
 
-@Preview
-@Composable
-fun SearchBarPreview() {
-    SearchBar()
-}
+//@Preview
+//@Composable
+//fun SearchBarPreview() {
+//    SearchBar()
+//}

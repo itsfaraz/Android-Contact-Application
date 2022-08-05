@@ -1,21 +1,9 @@
 package com.itsfrz.authentication.ui.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.itsfrz.authentication.data.repository.UserModelRepository
-import com.itsfrz.authentication.model.database.PreferenceRespository
-import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.data.entities.UserModel
-import com.itsfrz.authentication.ui.viewmodel.utils.RegexValidation
-import kotlinx.coroutines.*
-import java.util.*
+import com.itsfrz.authentication.ui.utils.RegexValidation
 
 //class LoginViewModel(application: Application) : AndroidViewModel(application) {
 

@@ -45,7 +45,16 @@ fun NavBarLayout(
     isUserInfoMenuItem : Boolean = false,
     isDeleteAllMenuItem : Boolean = false,
     isLogoutMenuItem : Boolean = false,
-    isSearchMenuItem : Boolean = false
+    isSearchMenuItem : Boolean = false,
+    isSelectAllMenuItem : Boolean = false,
+    iconClickEvent : () -> Unit,
+    importClickEvent : () -> Unit,
+    userInfoClickEvent : () -> Unit,
+    deleteAllClickEvent : () -> Unit,
+    logoutClickEvent : () -> Unit,
+    searchClickEvent : () -> Unit,
+    selectAllClickEvent : () -> Unit
+
 ) {
     var showMenu by remember {
         mutableStateOf(false)
@@ -60,7 +69,7 @@ fun NavBarLayout(
         horizontalArrangement = Arrangement.Center
     ) {
 
-        IconButton(onClick = { }) {
+        IconButton(onClick = { iconClickEvent.invoke() }) {
             Icon(
                 imageVector = icon,
                 contentDescription = "Nav Icon",
@@ -96,32 +105,36 @@ fun NavBarLayout(
                     onDismissRequest = { showMenu = false },
                 ) {
                     if (isSearchMenuItem){
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                        DropdownMenuItem(onClick = { searchClickEvent.invoke() }) {
                             DropDownMenuItem(menuOptionIcon = R.drawable.ui_search_icon, menuOptionText = "Search")
                         }
                     }
                     if (isImportMenuItem){
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                        DropdownMenuItem(onClick = { importClickEvent.invoke() }) {
                             DropDownMenuItem(menuOptionIcon = R.drawable.ui_import_icon, menuOptionText = "Import")
                         }
                     }
                     if (isUserInfoMenuItem)
                     {
-                        DropdownMenuItem(onClick = { navController.navigate(Screen.UserInfoScreen.route)}) {
+                        DropdownMenuItem(onClick = { userInfoClickEvent.invoke() }) {
                             DropDownMenuItem(menuOptionIcon = R.drawable.ui_userinfo_icon, menuOptionText = "User Info")
                         }
                     }
                     if(isDeleteAllMenuItem){
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                        DropdownMenuItem(onClick = { deleteAllClickEvent.invoke() }) {
                             DropDownMenuItem(menuOptionIcon = R.drawable.ui_deleteall_icon, menuOptionText = "Delete All")
                         }
                     }
                    if (isLogoutMenuItem){
-                       DropdownMenuItem(onClick = { /*TODO*/ }) {
+                       DropdownMenuItem(onClick = { logoutClickEvent.invoke() }) {
                            DropDownMenuItem(menuOptionIcon = R.drawable.ui_logout_icon, menuOptionText = "Logout")
                        }
                    }
-
+                    if (isSelectAllMenuItem){
+                        DropdownMenuItem(onClick = { selectAllClickEvent.invoke() }) {
+                            DropDownMenuItem(menuOptionIcon = R.drawable.ui_select_all_icon, menuOptionText = "Select All")
+                        }
+                    }
                 }
             }
         }
@@ -151,7 +164,7 @@ fun DropDownMenuItem(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun HeaderLayoutPreview() {
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun HeaderLayoutPreview() {
+//}

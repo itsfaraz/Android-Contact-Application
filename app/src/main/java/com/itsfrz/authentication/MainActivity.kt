@@ -1,84 +1,22 @@
 package com.itsfrz.authentication
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.itsfrz.authentication.ui.views.Screen
-import com.itsfrz.authentication.ui.views.compose.components.*
-
-//package com.itsfrz.authentication
-//
-//import android.Manifest
-//import android.graphics.Color
-//import android.graphics.drawable.ColorDrawable
-//import android.os.Bundle
-//import android.util.Log
-//import android.widget.Button
-//import androidx.fragment.app.Fragment
-//import com.itsfrz.authentication.data.entities.ContactModel
-//import com.itsfrz.authentication.model.database.PreferenceRespository
-//import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
-//import com.itsfrz.authentication.ui.views.activity.BaseActivity
-//import com.itsfrz.authentication.ui.views.fragments.*
-//
-//
-//
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 
 
-class MainActivity : ComponentActivity(){
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            Log.d("MAIN", "onCreate: Hello")
-            ContactNavigation()
+        setContentView(R.layout.activity_main)
 
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navController = navHostFragment.navController
+
     }
 }
 
-@Composable
-fun ContactNavigation() {
-    Log.d("NAV", "ContactNavigation: Entered Nav")
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.PermissionScreen.route){
-        composable(route = Screen.PermissionScreen.route){
-            PermissionScreen(navController)
-        }
-
-        composable(route = Screen.AuthenticationScreen.route){
-            AuthenticationScreen(navController)
-        }
-
-        composable(route = Screen.SignupScreen.route){
-            SignUpScreen(navController,signUpEvent = {username, email, password ->  }, tosEvent = { /*TODO*/ }) {
-
-            }
-        }
-
-        composable(route = Screen.LoginScreen.route){
-            LoginScreen(navController)
-        }
-
-        composable(route = Screen.HomeScreen.route){
-            HomeScreen(navController)
-        }
-
-        composable(route = Screen.UserInfoScreen.route){
-            UserInfo(navController)
-        }
-
-
-    }
-
-}
 
 //class MainActivity : BaseActivity() , AuthenticationCommunicator {
 //    private val preferenceRespository by lazy {

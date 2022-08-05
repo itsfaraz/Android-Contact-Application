@@ -10,7 +10,7 @@
             <item
                 android:id="@+id/selectAllContactMenu"
                 android:title="Select All"
-                android:icon="@drawable/ic_baseline_select_all_24"
+                android:icon="@drawable/ui_select_all_icon"
                 app:showAsAction="never"/>
 
         </menu>

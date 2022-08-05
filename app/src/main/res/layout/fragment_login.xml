@@ -11,7 +11,7 @@
         android:background="@color/app_color_secondary"
 
         android:orientation="vertical"
-        tools:context=".ui.views.fragments.LoginFragment">
+        tools:context=".ui.fragments.LoginFragment">
 
         <TextView
             android:id="@+id/textLogin"

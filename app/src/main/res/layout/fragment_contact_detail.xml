@@ -10,7 +10,7 @@
         android:background="@color/app_update_layout_color"
         android:elevation="3dp"
         android:padding="10dp"
-        tools:context=".ui.views.fragments.ContactDetailFragment">
+        tools:context=".ui.fragments.ContactDetailFragment">
 
 
         <com.google.android.material.imageview.ShapeableImageView

@@ -2,28 +2,24 @@ package com.itsfrz.authentication.ui.views.compose.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
 import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
-
 
 
 @Composable
@@ -60,7 +56,7 @@ fun LoginScreen(
             trailingIcon = R.drawable.ui_login_icon,
             errorMessage = "Only alphanumeric character allowed",
             inputText = username,
-            generatedText = {username = it}
+            generatedText = { username = it }
         )
         Spacer(modifier = Modifier.height(20.dp))
         InputField(
@@ -72,7 +68,7 @@ fun LoginScreen(
             trailingIcon = R.drawable.ui_password_icon,
             errorMessage = "Only numbers are allowed",
             inputText = password,
-            generatedText = {password = it},
+            generatedText = { password = it },
             keyboardType = KeyboardType.NumberPassword
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -80,7 +76,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(Screen.HomeScreen.route) },
+            onClick = { navController.navigate(R.id.contactFragment) },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(
@@ -107,7 +103,7 @@ fun SignUpText() {
         Text(text = "Don't have an account ? ")
         Text(
             modifier = Modifier
-                .clickable{},
+                .clickable {},
             color = Blue100,
             text = "Sign Up",
             fontWeight = FontWeight.SemiBold
@@ -115,9 +111,9 @@ fun SignUpText() {
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    val navController = rememberNavController()
-    LoginScreen(navController)
-}
+//@Preview(showSystemUi = true, showBackground = true)
+//@Composable
+//fun LoginScreenPreview() {
+//    val navController = rememberNavController()
+//    LoginScreen(navController)
+//}

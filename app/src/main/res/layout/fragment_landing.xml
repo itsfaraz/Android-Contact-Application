@@ -6,7 +6,7 @@
     android:background="#000"
     android:elevation="3dp"
     android:layout_height="match_parent"
-    tools:context=".ui.views.fragments.LandingFragment">
+    tools:context=".ui.fragments.PermissionFragment">
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"

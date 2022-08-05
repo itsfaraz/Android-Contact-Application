@@ -1,4 +1,4 @@
-//package com.itsfrz.authentication.ui.views.fragments
+//package com.itsfrz.authentication.ui.fragments
 //
 //import android.net.Uri
 //import android.os.Bundle

@@ -4,18 +4,15 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
-import android.util.Log
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.indatabase.repository.ContactProviderI
-import com.itsfrz.authentication.model.database.PreferenceRespository
-
+import com.itsfrz.authentication.data.utils.ContactLog
 
 object ContactProvider : ContactProviderI {
 
 
-
-    private val EXCEPTION : String = "EXCEPTION"
-    private val DEBUG : String = "DEBUG"
+    private val EXCEPTION: String = "EXCEPTION"
+    private val DEBUG: String = "DEBUG"
 
     private val mColumnProjectionsForPostal = arrayOf<String>(
         ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS,
@@ -33,37 +30,36 @@ object ContactProvider : ContactProviderI {
         )
 
 
+    override suspend fun getContactListFromProvider(
+        context: Context,
+        username: String
+    ): List<ContactModel> {
 
-    override public suspend fun getContactListFromProvider(context : Context,username : String) : List<ContactModel>{
-
-        Log.d(DEBUG, "getContactListFromProvider: ${username}")
         val contentResolver: ContentResolver = context.contentResolver
-
-        val contactList = ArrayList<ContactModel>();
-
+        val contactList = ArrayList<ContactModel>()
 
 
-        val cursor : Cursor? = contentResolver.query(
+        val cursor: Cursor? = contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             mColumnProjections,
             null,
             null,
             null
-        );
+        )
 
-        try{
+        try {
             cursor?.let {
-                if (it.count > 0){
-                    while (it.moveToNext()){
-                        val contact : ContactModel = ContactModel("","","",false,"","","","","",username)
-                        val contactId : String = it.getString(0)
+                if (it.count > 0) {
+                    while (it.moveToNext()) {
+                        val contact: ContactModel =
+                            ContactModel("", "", "", false, "", "", "", "", "", username)
+                        val contactId: String = it.getString(0)
                         val contactName = it.getString(1)
                         val contactNumber = it.getString(2)
                         val contactPhotoUri = it.getString(3)
 
 
-                        if (contactPhotoUri == null)
-                        {
+                        if (contactPhotoUri == null) {
                             contact.apply {
                                 this.contactId = contactId
                                 this.contactImage = ""
@@ -72,10 +68,11 @@ object ContactProvider : ContactProviderI {
                                 this.contactName = contactName
                             }
 
-                        } else{
+                        } else {
                             contact.apply {
                                 this.contactId = contactId
-                                this.contactImage = contactPhotoUri
+                                this.contactImage = ""
+//                                this.contactImage = contactPhotoUri
                                 this.contactNumber = contactNumber
                                 this.hasContactImage = true
                                 this.contactName = contactName
@@ -83,13 +80,15 @@ object ContactProvider : ContactProviderI {
 
                         }
 
-                        val emailContact  : ContactModel = getEmailId(context,contact,contactId,contactName)
+                        val emailContact: ContactModel =
+                            getEmailId(context, contact, contactId, contactName)
 
-                        if(emailContact != null){
+                        if (emailContact != null) {
                             contact.contactEmailId = emailContact.contactEmailId
                         }
-                        val addressContact : ContactModel = getAddress(context,contact,contactId,contactName)
-                        if(addressContact != null){
+                        val addressContact: ContactModel =
+                            getAddress(context, contact, contactId, contactName)
+                        if (addressContact != null) {
                             contact.contactAddress = addressContact.contactAddress
                             contact.contactCountry = addressContact.contactCountry
                             contact.contactPostCode = addressContact.contactPostCode
@@ -100,45 +99,50 @@ object ContactProvider : ContactProviderI {
                     it.close()
                 }
             }
-        }catch (e : Exception){
-            Log.d(EXCEPTION, "getContactList: $e")
-        }finally {
-            if (cursor!=null)
-            {
+        } catch (e: Exception) {
+            ContactLog.errorLog(EXCEPTION, "getContactList: $e")
+        } finally {
+            if (cursor != null) {
                 cursor.close()
             }
         }
 
 
 
-        return contactList as List<ContactModel>
+        return contactList
     }
 
-    private fun getAddress(context: Context, contact: ContactModel, contactId: String, contactName: String): ContactModel {
-        val whereClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+"=? and "+ContactsContract.CommonDataKinds.Phone.CONTACT_ID+"=?"
+    private fun getAddress(
+        context: Context,
+        contact: ContactModel,
+        contactId: String,
+        contactName: String
+    ): ContactModel {
+        val whereClause =
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + "=? and " + ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?"
         val contentResolver = context.contentResolver
         val cursor = contentResolver.query(
             ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
             mColumnProjectionsForPostal,
             whereClause,
-            arrayOf<String>(contactName,contactId),
+            arrayOf<String>(contactName, contactId),
             null
         )
 
-        var address : String = ""
-        var pincode : String = ""
-        var country : String = ""
-        if (cursor != null && cursor.count > 0){
+        var address: String = ""
+        var pincode: String = ""
+        var country: String = ""
+        if (cursor != null && cursor.count > 0) {
             try {
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     address = cursor.getString(0)
-                    pincode = cursor?.getString(1) ?: ""
+                    pincode = cursor.getString(1) ?: ""
                     country = cursor.getString(2)
                 }
-            }catch (e : Exception){
-                Log.d(EXCEPTION, "getAddress: ${e}")
-            }finally {
-                if (cursor!=null)
+            } catch (e: Exception) {
+                ContactLog.errorLog(EXCEPTION, "getAddress: ${e}")
+            } finally {
+                if (cursor != null)
                     cursor.close()
             }
         }
@@ -150,28 +154,34 @@ object ContactProvider : ContactProviderI {
         return contact
     }
 
-    private fun getEmailId(context: Context, contact: ContactModel, contactId: String, contactName: String): ContactModel {
-        val whereClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+"=? and "+ContactsContract.CommonDataKinds.Phone.CONTACT_ID+"=?"
+    private fun getEmailId(
+        context: Context,
+        contact: ContactModel,
+        contactId: String,
+        contactName: String
+    ): ContactModel {
+        val whereClause =
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + "=? and " + ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?"
 
         val contentResolver = context.contentResolver
         val cursor = contentResolver.query(
             ContactsContract.CommonDataKinds.Email.CONTENT_URI,
             arrayOf<String>(ContactsContract.CommonDataKinds.Email.ADDRESS),
             whereClause,
-            arrayOf<String>(contactName,contactId),
+            arrayOf<String>(contactName, contactId),
             null
-        );
+        )
 
-        var emailId : String = ""
-        if (cursor != null && cursor.count > 0){
+        var emailId: String = ""
+        if (cursor != null && cursor.count > 0) {
             try {
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     emailId = cursor.getString(0)
                 }
-            }catch (e : Exception){
-                Log.d(EXCEPTION, "getEmailId: $e")
-            }finally {
-                if (cursor!=null){
+            } catch (e: Exception) {
+                ContactLog.errorLog(EXCEPTION, "getEmailId: $e")
+            } finally {
+                if (cursor != null) {
                     cursor.close()
                 }
             }
@@ -180,7 +190,6 @@ object ContactProvider : ContactProviderI {
 
         return contact
     }
-
 
 
     override suspend fun insertContactInProvider(context: Context, contact: ContactModel) {

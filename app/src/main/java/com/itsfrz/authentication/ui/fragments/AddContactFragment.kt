@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.ui.views.fragments
+package com.itsfrz.authentication.ui.fragments
 
 import android.app.Activity
 import android.content.Intent

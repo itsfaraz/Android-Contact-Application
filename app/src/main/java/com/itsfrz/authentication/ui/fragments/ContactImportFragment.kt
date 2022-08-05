@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.ui.views.fragments
+package com.itsfrz.authentication.ui.fragments
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.view.*
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,8 +20,11 @@ import com.itsfrz.authentication.adapters.ContactAdapter
 import com.itsfrz.authentication.adapters.ContactListener
 
 import com.itsfrz.authentication.data.entities.ContactModel
-import com.itsfrz.authentication.model.database.PreferenceRespository
+import com.itsfrz.authentication.data.repository.ContactProviderRepository
+import com.itsfrz.authentication.provider.ContactProvider
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
+import com.itsfrz.authentication.ui.viewmodelfactory.ContactImportViewModelFactory
+import com.itsfrz.authentication.ui.views.compose.components.ImportContactScreen
 
 
 class ContactImportFragment : Fragment() , ContactListener{
@@ -41,38 +46,33 @@ class ContactImportFragment : Fragment() , ContactListener{
     private lateinit var fabImportButton : FloatingActionButton
 
 
-    private val contactProviderViewModel by lazy {
-        ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(ContactImportViewModel::class.java)
-    }
+    private lateinit var contactImportViewModel : ContactImportViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val contactProviderRepository = ContactProviderRepository(requireContext(), ContactProvider)
+        val viewModelProvider = ContactImportViewModelFactory(contactProviderRepository)
+        contactImportViewModel = ViewModelProvider(viewModelStore,viewModelProvider).get(ContactImportViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true)
-        val view = inflater.inflate(R.layout.fragment_contact_import, container, false)
-        initView(view)
-        setUpToolBar()
-        communicator = activity as AuthenticationCommunicator
-        setupRecyclerView(contactList, view)
-        setContactList()
-        importContact()
-
-        Log.d(CONTACTIMPORT, "onCreateView: contactProviderViewModel View Model Instance Hash Value ${contactProviderViewModel.hashCode()}")
-
-
-
-        return view;
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ImportContactScreen(navController = findNavController(), contactList = contactImportViewModel.getContactList())
+            }
+        }
     }
 
 
 
     private fun importContact() {
-        fabImportButton.setOnClickListener {
-            contactProviderViewModel.insertContactsInDB(selectedContactList)
-            communicator.routeFromContactImportToContact()
-        }
+//        fabImportButton.setOnClickListener {
+//            contactProviderViewModel.insertContactsInDB(selectedContactList)
+//            communicator.routeFromContactImportToContact()
+//        }
     }
 
 
@@ -84,19 +84,19 @@ class ContactImportFragment : Fragment() , ContactListener{
         progressBar2.visibility = View.VISIBLE
     }
 
-    private fun setContactList(){
-        val contactList = ArrayList<ContactModel>()
-        contactProviderViewModel.getContactList().observe(requireActivity()){
-            contactList.addAll(it)
-            contactAdapter.updateContacts(it)
-            Log.d(CONTACTIMPORT, "getContactList: ${it.size}")
-            progresBarHide()
-            selectedContactList.clear()
-
-
-        }
-
-    }
+//    private fun setContactList(){
+//        val contactList = ArrayList<ContactModel>()
+//        contactProviderViewModel.getContactList().observe(requireActivity()){
+//            contactList.addAll(it)
+//            contactAdapter.updateContacts(it)
+//            Log.d(CONTACTIMPORT, "getContactList: ${it.size}")
+//            progresBarHide()
+//            selectedContactList.clear()
+//
+//
+//        }
+//
+//    }
 
 
 

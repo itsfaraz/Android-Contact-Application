@@ -20,7 +20,7 @@ import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
 @Composable
 fun AuthenticationScreen(
-    navController: NavController
+    navController : NavController
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -40,7 +40,7 @@ fun AuthenticationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(Screen.SignupScreen.route) },
+            onClick = { navController.navigate(R.id.signUpFragment) },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(
@@ -56,7 +56,7 @@ fun AuthenticationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(Screen.LoginScreen.route) },
+            onClick = { navController.navigate(R.id.loginFragment) },
             border = BorderStroke(width = 1.dp, color = Blue100)
         ) {
             Text(
@@ -94,10 +94,10 @@ fun ApplicationLogo() {
    }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun AuthenticationScreenPreview() {
-    AuthenticationScreen(null!!)
-//    ApplicationLogo()
-
-}
+//@Preview(showSystemUi = true, showBackground = true)
+//@Composable
+//fun AuthenticationScreenPreview() {
+//    AuthenticationScreen(null!!)
+////    ApplicationLogo()
+//
+//}

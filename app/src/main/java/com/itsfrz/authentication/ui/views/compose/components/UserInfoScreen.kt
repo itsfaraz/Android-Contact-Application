@@ -1,8 +1,6 @@
 package com.itsfrz.authentication.ui.views.compose.components
 
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -14,17 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100Trans
 import com.itsfrz.authentication.ui.views.compose.ui.theme.WhiteDeem100
 
@@ -38,7 +33,7 @@ fun UserInfo(
     ) {
         ProfileImage()
         Spacer(modifier = Modifier.padding(vertical = 20.dp))
-        ContactInfo(12,32,522)
+        ContactInfo(12, 32, 522)
         Spacer(modifier = Modifier.padding(vertical = 20.dp))
         OutlinedTextField(
             modifier = Modifier
@@ -91,24 +86,24 @@ fun UserInfo(
 fun ProfileImage(
 //    bitmap: Bitmap
 ) {
-   Card(
-       modifier = Modifier.size(160.dp),
-       elevation = 16.dp,
-       shape = CircleShape,
-       border = BorderStroke(width = 1.dp, color = Blue100)
-   ) {
-       Image(
+    Card(
+        modifier = Modifier.size(160.dp),
+        elevation = 16.dp,
+        shape = CircleShape,
+        border = BorderStroke(width = 1.dp, color = Blue100)
+    ) {
+        Image(
 //           bitmap = bitmap.asImageBitmap(), contentDescription = "User Image"
-        painter = painterResource(id = R.drawable.profile) , contentDescription = "UserImage"
-       )
-   }
+            painter = painterResource(id = R.drawable.profile), contentDescription = "UserImage"
+        )
+    }
 }
 
 @Composable
 fun ContactInfo(
-    contactAdded : Int = 0,
-    contactDeleted : Int = 0,
-    totalContact : Int = 0,
+    contactAdded: Int = 0,
+    contactDeleted: Int = 0,
+    totalContact: Int = 0,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(.7F),
@@ -119,9 +114,21 @@ fun ContactInfo(
             horizontalArrangement = Arrangement.Center
         ) {
             item {
-                ContactInfoRowItem(imageIcon = R.drawable.ui_add_icon, actionTitle = "Added", actionData = contactAdded)
-                ContactInfoRowItem(imageIcon = R.drawable.ui_deleted_icon, actionTitle = "Deleted", actionData = contactDeleted)
-                ContactInfoRowItem(imageIcon = R.drawable.ui_total_icon, actionTitle = "Total", actionData = totalContact)
+                ContactInfoRowItem(
+                    imageIcon = R.drawable.ui_add_icon,
+                    actionTitle = "Added",
+                    actionData = contactAdded
+                )
+                ContactInfoRowItem(
+                    imageIcon = R.drawable.ui_deleted_icon,
+                    actionTitle = "Deleted",
+                    actionData = contactDeleted
+                )
+                ContactInfoRowItem(
+                    imageIcon = R.drawable.ui_total_icon,
+                    actionTitle = "Total",
+                    actionData = totalContact
+                )
             }
         }
     }
@@ -129,9 +136,9 @@ fun ContactInfo(
 
 @Composable
 fun ContactInfoRowItem(
-    @DrawableRes imageIcon : Int,
-    actionTitle : String,
-    actionData : Int
+    @DrawableRes imageIcon: Int,
+    actionTitle: String,
+    actionData: Int
 ) {
 
     Column(
@@ -142,8 +149,8 @@ fun ContactInfoRowItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier  = Modifier.size(15.dp),
-                painter = painterResource(id =  imageIcon),
+                modifier = Modifier.size(15.dp),
+                painter = painterResource(id = imageIcon),
                 contentDescription = "Add",
                 tint = WhiteDeem100
             )
@@ -167,10 +174,9 @@ fun ContactInfoRowItem(
 }
 
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun UserInfoPreview() {
-    val navController = rememberNavController()
-    UserInfo(navController)
+//    val navController = rememberNavController()
+//    UserInfo(navController)
 }

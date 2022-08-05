@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/permissionFragment">
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.PermissionFragment"
+        android:label="fragment_permission" >
+        <action
+            android:id="@+id/action_permissionFragment_to_authenticationFragment2"
+            app:destination="@id/authenticationFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.SignUpFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authenticationFragment2"
+        android:name="com.itsfrz.authentication.ui.fragments.AuthenticationFragment"
+        android:label="fragment_authentication" >
+        <action
+            android:id="@+id/action_authenticationFragment2_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_authenticationFragment2_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.ContactFragment"
+        android:label="fragment_contact"/>
+</navigation>

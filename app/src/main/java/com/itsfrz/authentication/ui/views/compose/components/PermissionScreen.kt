@@ -9,19 +9,16 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.fragments.AuthenticationFragment
 import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.*
 
@@ -61,7 +58,7 @@ fun PermissionScreen(
         )
         Button(
             colors = ButtonDefaults.buttonColors(Blue100),
-            onClick = { navController.navigate(Screen.AuthenticationScreen.route) },
+            onClick = { navController.navigate(R.id.authenticationFragment2) },
             shape = RoundedCornerShape(20.dp),
         ) {
             Text(
@@ -143,7 +140,7 @@ fun StylishCard(
         modifier = modifier
             .height(200.dp)
             .fillMaxWidth()
-            .blur( radius = 4.dp),
+            .blur(radius = 4.dp),
         backgroundColor = backgroudColor,
         shape = Shapes.cardTopRightCornerShape(cardTopRightCornerShapeSize)
     ) {
@@ -172,9 +169,9 @@ fun PermissionInfo() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PermissionScreenPreview() {
-    val navController = rememberNavController()
-    PermissionScreen(navController = navController)
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun PermissionScreenPreview() {
+//    val navController = rememberNavController()
+//    PermissionScreen(navController = navController)
+//}

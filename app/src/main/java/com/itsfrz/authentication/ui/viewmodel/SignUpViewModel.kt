@@ -1,18 +1,8 @@
 package com.itsfrz.authentication.ui.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.itsfrz.authentication.data.repository.UserModelRepository
-import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.model.database.room.dao.UserDao
-import com.itsfrz.authentication.data.entities.UserModel
-import com.itsfrz.authentication.ui.viewmodel.utils.RegexValidation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.math.sign
+import com.itsfrz.authentication.ui.utils.RegexValidation
 
 //
 //class SignUpViewModel(application: Application) : AndroidViewModel(application) {
