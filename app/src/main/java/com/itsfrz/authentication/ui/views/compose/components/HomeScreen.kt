@@ -43,7 +43,7 @@ fun HomeScreen(
                 isSelectAllMenuItem = false,
                 iconClickEvent = {},
                 searchClickEvent = {},
-                importClickEvent = { navController.navigate(Screen.ImportContactScreen.route) },
+                importClickEvent = { navController.navigate(R.id.contactImportFragment) },
                 userInfoClickEvent = {},
                 deleteAllClickEvent = {},
                 logoutClickEvent = {},

@@ -51,8 +51,8 @@ class ContactImportFragment : Fragment() , ContactListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contactProviderRepository = ContactProviderRepository(requireContext(), ContactProvider)
-        val viewModelProvider = ContactImportViewModelFactory(contactProviderRepository)
-        contactImportViewModel = ViewModelProvider(viewModelStore,viewModelProvider).get(ContactImportViewModel::class.java)
+        val  contactImportViewModelFactory = ContactImportViewModelFactory(contactProviderRepository)
+        contactImportViewModel = ViewModelProvider(this,contactImportViewModelFactory).get(ContactImportViewModel::class.java)
     }
 
     override fun onCreateView(

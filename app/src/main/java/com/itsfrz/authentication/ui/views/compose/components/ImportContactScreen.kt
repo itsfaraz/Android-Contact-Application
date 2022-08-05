@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100

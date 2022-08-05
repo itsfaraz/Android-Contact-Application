@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/permissionFragment">
     <fragment
@@ -41,5 +42,13 @@
     <fragment
         android:id="@+id/contactFragment"
         android:name="com.itsfrz.authentication.ui.fragments.ContactFragment"
-        android:label="fragment_contact"/>
+        android:label="fragment_contact">
+        <action
+            android:id="@+id/action_contactFragment_to_contactImportFragment"
+            app:destination="@id/contactImportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactImportFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.ContactImportFragment"
+        android:label="fragment_contact_import" />
 </navigation>

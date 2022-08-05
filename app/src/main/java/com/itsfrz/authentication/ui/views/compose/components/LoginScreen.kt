@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
-import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
 
@@ -111,9 +110,3 @@ fun SignUpText() {
     }
 }
 
-//@Preview(showSystemUi = true, showBackground = true)
-//@Composable
-//fun LoginScreenPreview() {
-//    val navController = rememberNavController()
-//    LoginScreen(navController)
-//}
