@@ -7,9 +7,11 @@ import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -48,7 +50,8 @@ import com.itsfrz.authentication.ui.views.compose.utils.Loader
 fun ImportContactScreen(
     navController: NavController,
     contactList : List<ContactModel>,
-    progressBar : Boolean
+    progressBar : Boolean,
+    addContact : (contactModel : ContactModel) -> Unit
 ) {
     Scaffold(topBar = {
         NavBarLayout(
@@ -77,7 +80,8 @@ fun ImportContactScreen(
 
         ImportContact(
             contactList,
-            progressBar
+            progressBar,
+            addContact
         )
     }
 }
@@ -86,7 +90,8 @@ fun ImportContactScreen(
 @Composable
 fun ImportContact(
     contactList : List<ContactModel>,
-    progressBar: Boolean
+    progressBar: Boolean,
+    addContact : (contactModel : ContactModel) -> Unit
 ) {
     if(!progressBar){
         LazyColumn(
@@ -94,9 +99,17 @@ fun ImportContact(
             verticalArrangement = Arrangement.Center
         ) {
             items(contactList.size) { index ->
-
+                var isItemSelected : Boolean = false
                 val contact = contactList.get(index)
-                ImportListItemRow(contact = contact, index = index)
+                ImportListItemRow(
+                    contact = contact,
+                    isSelected = isItemSelected,
+                    modifier = Modifier
+                        .clickable {
+                            isItemSelected = true
+                            addContact(contactList.get(index))
+                        }
+                    )
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth(.96F)
@@ -119,12 +132,13 @@ fun ImportContact(
 
 @Composable
 fun ImportListItemRow(
+    modifier: Modifier = Modifier,
     contact: ContactModel,
-    index: Int,
+    isSelected : Boolean,
 ) {
     val color : Color = ColorGenerator.getRandomColor()
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(10.dp)
             .pointerInput(Unit) {
@@ -139,11 +153,11 @@ fun ImportListItemRow(
     ) {
         ImportContactProfilePic(contactImage = contact.contactImage, isContactImage = contact.hasContactImage,color = color)
         ImportContactInfo(contactName = contact.contactName,contactNumber = contact.contactNumber,color = color)
-//        if (contactViewModel.checkIndexIsInList(index)) {
-//            ContactCheckIcon()
-//        } else {
-//            Spacer(modifier = Modifier.size(22.dp))
-//        }
+        if (isSelected) {
+            ContactCheckIcon()
+        } else {
+            Spacer(modifier = Modifier.size(22.dp))
+        }
 
     }
 
@@ -209,7 +223,7 @@ fun ImportContactInfo(
     ) {
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = color, fontSize = 22.sp)){
+                withStyle(style = SpanStyle(color = Color.Gray,fontSize = 22.sp)){
                     append(contactName.substring(0,1))
                 }
                 append(contactName.substring(1))
@@ -230,7 +244,7 @@ fun ImportContactInfo(
 @Preview(showSystemUi = false)
 @Composable
 fun ImportContactScreenPreview() {
-    ImportListItemRow(contact = ContactModel("","Faraz Sheikh","7796224997",false,"","","","","",""), index = 0)
+    ImportListItemRow(contact = ContactModel("","Faraz Sheikh","7796224997",false,"","","","","",""), isSelected = true)
 //    val navController = rememberNavController()
 //    ImportContactScreen(navController = navController)
 }

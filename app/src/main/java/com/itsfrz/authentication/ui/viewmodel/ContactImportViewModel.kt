@@ -76,6 +76,11 @@ class ContactImportViewModel(private var contactProviderRepository: ContactProvi
     val isProgress: State<Boolean> = _isProgress
 
 
+    private val _selectedContactList = mutableStateOf<ArrayList<ContactModel>>(arrayListOf())
+
+
+
+
     init {
         intializeList()
     }
@@ -95,4 +100,6 @@ class ContactImportViewModel(private var contactProviderRepository: ContactProvi
             ContactLog.errorLog("ERROR", "intializeList: $e")
         }
     }
+
+    public fun addContact(contactModel: ContactModel) = _selectedContactList.value.add(contactModel)
 }

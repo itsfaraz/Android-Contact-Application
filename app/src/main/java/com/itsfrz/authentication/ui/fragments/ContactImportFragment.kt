@@ -64,7 +64,8 @@ class ContactImportFragment : Fragment(), ContactListener {
                 ImportContactScreen(
                     navController = findNavController(),
                     contactList = contactImportViewModel.contactList.value,
-                    progressBar = contactImportViewModel.isProgress.value
+                    progressBar = contactImportViewModel.isProgress.value,
+                    addContact = { contactModel -> contactImportViewModel.addContact(contactModel) }
                 )
             }
         }
