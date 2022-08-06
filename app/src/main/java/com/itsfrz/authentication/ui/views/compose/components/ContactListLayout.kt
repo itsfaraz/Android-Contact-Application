@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.utils.ColorGenerator
 import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100Light
@@ -126,6 +127,7 @@ fun ListItemRow(
     index : Int,
 ) {
     val contact = contactViewModel.getContacts().get(index)
+    val color = ColorGenerator.getRandomColor()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,7 +143,7 @@ fun ListItemRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ContactProfilePic(contactImage = contact.contactImage)
-        ContactInfo(contactName = contact.contactName)
+        ContactInfo(contactName = contact.contactName, color = color)
         if (contactViewModel.checkIndexIsInList(index)) {
             CheckIcon()
         } else {
@@ -170,23 +172,6 @@ fun CheckIconPreview() {
 }
 
 @Composable
-fun CardListRowItem(
-    @DrawableRes contactImage: Int,
-    contactName: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ContactProfilePic(contactImage = contactImage)
-        ContactInfo(contactName = contactName)
-    }
-}
-
-@Composable
 fun ContactProfilePic(
     @DrawableRes contactImage: Int
 ) {
@@ -203,6 +188,7 @@ fun ContactProfilePic(
 @Composable
 fun ContactInfo(
     contactName: String,
+    color: Color
 ) {
     Column(
         modifier = Modifier
@@ -212,7 +198,7 @@ fun ContactInfo(
         Text(
             text = contactName,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Gray,
+            color = color,
             fontSize = 18.sp
         )
     }

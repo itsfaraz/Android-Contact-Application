@@ -72,7 +72,7 @@ object ContactProvider : ContactProviderI {
                             contact.apply {
                                 this.contactId = contactId
                                 this.contactImage = ""
-//                                this.contactImage = contactPhotoUri
+                                this.contactImage = contactPhotoUri
                                 this.contactNumber = contactNumber
                                 this.hasContactImage = true
                                 this.contactName = contactName

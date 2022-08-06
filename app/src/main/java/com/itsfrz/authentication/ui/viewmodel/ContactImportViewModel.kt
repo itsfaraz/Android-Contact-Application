@@ -1,21 +1,12 @@
 package com.itsfrz.authentication.ui.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
-import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.data.utils.ContactLog
-import com.itsfrz.authentication.model.database.PreferenceRespository
-import com.itsfrz.authentication.model.database.room.AppDatabase
-import com.itsfrz.authentication.model.database.room.dao.ContactDao
-import com.itsfrz.authentication.provider.ContactProvider
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,41 +66,33 @@ import kotlinx.coroutines.withContext
 //
 //}
 
-class ContactImportViewModel(private var contactProviderRepository : ContactProviderRepository) : ViewModel(){
+class ContactImportViewModel(private var contactProviderRepository: ContactProviderRepository) :
+    ViewModel() {
 
-    private var contactList  = mutableStateOf<List<ContactModel>>(emptyList())
+    private val _contactList = mutableStateOf<List<ContactModel>>(listOf())
+    val contactList: State<List<ContactModel>> = _contactList
 
-    private var loaderState = mutableStateOf(true)
-
-    fun intiliazeProvider(context: Context){
-        contactProviderRepository = ContactProviderRepository(context,ContactProvider)
-    }
-
-
-    private fun intializeList(){
-       try {
-           viewModelScope.launch {
-               withContext(Dispatchers.IO){
-                   contactList.value = contactProviderRepository.getContactFromProvider("")
-                   ContactLog.debugLog("LIST","initializeList : ${contactList.value}")
-//                   withContext(Dispatchers.Main){
-//                       if (contactList.value.size > 0)
-//                           loaderState.value = false
-//                   }
-               }
-           }
-       }catch (e : Exception){
-           ContactLog.errorLog("ERROR","intializeList: $e")
-       }
-    }
+    private val _isProgress = mutableStateOf(true)
+    val isProgress: State<Boolean> = _isProgress
 
 
-
-    public fun getContactList() : List<ContactModel>{
+    init {
         intializeList()
-        return contactList.value
     }
-    public fun loaderVisibility() = loaderState.value
 
-
+    private fun intializeList() {
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _isProgress.value = true
+                    _contactList.value = contactProviderRepository.getContactFromProvider("")
+                    ContactLog.debugLog("LIST", "intializeList : ${_contactList.value}")
+                    _isProgress.value = false
+                }
+                ContactLog.debugLog("LIST", "initializeList : ${_contactList.value}")
+            }
+        } catch (e: Exception) {
+            ContactLog.errorLog("ERROR", "intializeList: $e")
+        }
+    }
 }
