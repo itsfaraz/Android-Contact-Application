@@ -8,21 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
-import com.itsfrz.authentication.ui.views.Screen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -38,7 +29,9 @@ fun HomeScreen(
                 isImportMenuItem = true,
                 isDeleteAllMenuItem = true,
                 isLogoutMenuItem = true,
-                isSearchBarMenuItem = false,
+                isSearchBarMenuItem = true,
+                showSearchBar = false,
+                toggleSearchBar = {},
                 isUserInfoMenuItem = true,
                 isSelectAllMenuItem = false,
                 iconClickEvent = {},
@@ -48,20 +41,17 @@ fun HomeScreen(
                 logoutClickEvent = {},
                 selectAllClickEvent = {},
                 getSearchQuery = {},
-                toggleSearch = {},
                 searchQuery = "",
                 totalContactsFound = 0
 
             )
         },
-    ){
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             ContactListLayout()
         }
     }
 }
-
-
 
 
 @Composable
@@ -76,10 +66,13 @@ fun SearchBar() {
         OutlinedTextField(
             modifier = Modifier.weight(1F),
             value = searchText, onValueChange = {
-            searchText = it
-        })
+                searchText = it
+            })
 
-        Icon(painter = painterResource(id = R.drawable.ui_search_icon), contentDescription = "Search Icon")
+        Icon(
+            painter = painterResource(id = R.drawable.ui_search_icon),
+            contentDescription = "Search Icon"
+        )
     }
 }
 

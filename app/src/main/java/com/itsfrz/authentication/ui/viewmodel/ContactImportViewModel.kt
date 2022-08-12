@@ -1,7 +1,9 @@
 package com.itsfrz.authentication.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
@@ -11,85 +13,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-//class ContactImportViewModel(application : Application) : AndroidViewModel(application){
-//
-//
-//    private val CPVM : String = "CPVM";
-//
-//    private var contactList  = MutableLiveData<List<ContactModel>>()
-//    private val contactProviderRepository : ContactProviderRepository
-//    private val contactModelRepository : ContactModelRepository
-//    private val preferenceRespository by lazy {
-//        PreferenceRespository(application.applicationContext)
-//    }
-//    private var username : String = ""
-//
-//    init {
-//
-//        Log.d(CPVM, ": INIT CALLED")
-//        contactProviderRepository = ContactProviderRepository(application.applicationContext,
-//            ContactProvider
-//        )
-//        val contactDao : ContactDao = AppDatabase.getDatabase(application.applicationContext).contactDao()
-//        contactModelRepository = ContactModelRepository(contactDao)
-//        fetchContactsFromProvider()
-//
-//
-//    }
-//
-//    public fun getContactList() : LiveData<List<ContactModel>>  {
-//        this.username = preferenceRespository.getCurrentUser()!!
-//        return contactList
-//    }
-//
-//    private fun fetchContactsFromProvider() {
-//        viewModelScope.launch {
-//            val response = liveData(Dispatchers.IO) {
-//                emit(contactProviderRepository.getContactFromProvider(username))
-//            }
-//            response?.let {
-//                contactList = it as MutableLiveData<List<ContactModel>>
-//            }
-//            Log.d(CPVM, "fetchContactsFromProvider: Contacts Found ${contactList}, ${username}")
-//
-//
-//
-//        }
-//
-//    }
-//
-//    fun insertContactsInDB(contactList : List<ContactModel>){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            contactModelRepository.insertAll(contactList)
-//        }
-//    }
-//
-//}
-
-class ContactImportViewModel(private var contactProviderRepository: ContactProviderRepository) :
-    ViewModel() {
+class ContactImportViewModel
+    (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
 
     private val _contactList = mutableStateOf<List<ContactModel>>(listOf())
-    val contactList: State<List<ContactModel>> = _contactList
+    var contactList: State<List<ContactModel>> = _contactList
+
+    private val _filteredList = mutableStateOf<List<ContactModel>>(listOf())
+    val filteredList: State<List<ContactModel>> = _filteredList
 
     private val _isProgress = mutableStateOf(true)
     val isProgress: State<Boolean> = _isProgress
 
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
 
     private val _selectedContactList = mutableStateOf<ArrayList<ContactModel>>(arrayListOf())
 
+    private val _showSearchBar = mutableStateOf(false)
+    val showSearchBar = _showSearchBar
 
-
-
-    init {
-        intializeList()
-    }
-
-    private fun intializeList() {
+    fun fetchContacts() {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    _isProgress.value = true
                     _contactList.value = contactProviderRepository.getContactFromProvider("")
                     ContactLog.debugLog("LIST", "intializeList : ${_contactList.value}")
                     _isProgress.value = false
@@ -102,4 +49,31 @@ class ContactImportViewModel(private var contactProviderRepository: ContactProvi
     }
 
     public fun addContact(contactModel: ContactModel) = _selectedContactList.value.add(contactModel)
+
+    fun toggleSearchBar(value: Boolean) {
+        _showSearchBar.value = value
+    }
+
+    fun searchRequest(query: String) {
+        _searchQuery.value = query
+        var filteredContactList = emptyList<ContactModel>()
+        if (query.isNotBlank()) {
+            if (query.get(0).isDigit() || query.get(0).equals("+")) {
+                filteredContactList =  _contactList.value.filter { contact ->
+                    val number = contact.contactNumber.toString()
+                    number.contains(query)
+                }
+            }
+            if (!query.get(0).isDigit()) {
+                filteredContactList  =  _contactList.value.filter { contact ->
+                    val name = contact.contactName.toString().lowercase()
+                    name.contains(query.lowercase())
+                }
+            }
+            _filteredList.value = filteredContactList
+            Log.d("FILTERED_LIST", "searchRequest: ${_filteredList.value}")
+        }
+
+    }
+
 }

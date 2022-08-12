@@ -45,96 +45,16 @@ import com.itsfrz.authentication.ui.views.compose.utils.Loader
 
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-fun ImportContactScreen(
-    navController: NavController,
-    contactList : List<ContactModel>,
-    progressBar : Boolean,
-    addContact : (contactModel : ContactModel) -> Unit
-) {
-    Scaffold(topBar = {
-        NavBarLayout(
-            navController = navController,
-            title = "Import Contact",
-            icon = Icons.Default.ArrowBack,
-            iconClickEvent = {
-                navController.navigateUp()
-            },
-            isActionMenuPresent = true,
-            isImportMenuItem = false,
-            isSearchBarMenuItem = true,
-            isUserInfoMenuItem = false,
-            isLogoutMenuItem = false,
-            isDeleteAllMenuItem = false,
-            isSelectAllMenuItem = true,
-            importClickEvent = {},
-            userInfoClickEvent = {},
-            deleteAllClickEvent = {},
-            logoutClickEvent = {},
-            selectAllClickEvent = {},
-            getSearchQuery = {},
-            toggleSearch = {},
-            searchQuery = "",
-            totalContactsFound = 0
-        )
-    }
-    ) {
-
-        ImportContact(
-            contactList,
-            progressBar,
-            addContact
-        )
-    }
-}
-
-
-@Composable
-fun ImportContact(
-    contactList : List<ContactModel>,
-    progressBar: Boolean,
-    addContact : (contactModel : ContactModel) -> Unit
-) {
-    if(!progressBar){
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            items(contactList.size) { index ->
-                var isItemSelected by remember {
-                    mutableStateOf(false)
-                }
-                val contact = contactList.get(index)
-                Column(
-                    modifier = Modifier.clickable {
-                        addContact(contactList.get(index))
-                        isItemSelected = true
-                    }
-                ) {
-                    ImportListItemRow(
-                        contact = contact,
-                        isSelected = isItemSelected
-                    )
-                }
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth(.96F)
-                        .padding(2.dp),
-                    color = Blue100,
-                    thickness = 0.3.dp
-                )
-            }
-        }
-    }else{
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Loader(loaderMessage = "Contact Syncing ...")
-        }
-    }
-}
+//@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+//@Composable
+//fun ImportContactScreen(
+//    navController: NavController,
+//    contactList : List<ContactModel>,
+//    progressBar : Boolean,
+//    addContact : (contactModel : ContactModel) -> Unit
+//) {
+//
+//}
 
 
 @Composable

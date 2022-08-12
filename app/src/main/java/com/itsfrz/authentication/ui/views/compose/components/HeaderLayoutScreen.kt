@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,17 +18,17 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -44,6 +45,7 @@ import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100Light
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue200
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -58,7 +60,8 @@ fun NavBarLayout(
     isLogoutMenuItem : Boolean = false,
     isSelectAllMenuItem : Boolean = false,
     isSearchBarMenuItem : Boolean = false,
-    toggleSearch : (toggle : Boolean) -> Unit,
+    toggleSearchBar : (showSearchBar : Boolean) -> Unit,
+    showSearchBar: Boolean,
     searchQuery : String = "",
     getSearchQuery : (query : String) -> Unit,
     totalContactsFound : Int = 0,
@@ -72,6 +75,8 @@ fun NavBarLayout(
     var showMenu by remember {
         mutableStateOf(false)
     }
+
+
 
     LazyColumn{
         item {
@@ -109,7 +114,11 @@ fun NavBarLayout(
                         contentDescription = "Search Icon",
                         tint = Color.White,
                         modifier = Modifier.clickable {
-                            toggleSearch(true)
+                            if (showSearchBar){
+                                toggleSearchBar(false)
+                            }else{
+                                toggleSearchBar(true)
+                            }
                         }
                     )
                 }
@@ -163,7 +172,7 @@ fun NavBarLayout(
 
 
             }
-            if (isSearchBarMenuItem){
+            if (showSearchBar){
 
                 Divider(
                     modifier = Modifier
@@ -177,6 +186,7 @@ fun NavBarLayout(
                     query = searchQuery,
                     onQueryChange = getSearchQuery,
                     counter = totalContactsFound,
+                    automaticKeyBoard = showSearchBar
                     )
             }
 
@@ -213,12 +223,29 @@ fun DropDownMenuItem(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomSearchBarLayout(
     query : String,
     onQueryChange : (newQuery : String) -> Unit,
-    counter : Int = 0
+    counter : Int = 0,
+    automaticKeyBoard : Boolean = false
 ) {
+
+    val showKeyboard = automaticKeyBoard
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    // LaunchedEffect prevents endless focus request
+    LaunchedEffect(focusRequester) {
+        if (showKeyboard) {
+            focusRequester.requestFocus()
+            delay(100)
+            keyboard?.show()
+        }
+    }
+
+
     Surface(
         elevation = 10.dp,
         modifier = Modifier
@@ -246,7 +273,8 @@ fun CustomSearchBarLayout(
             TextField(
                 modifier = Modifier
                     .fillMaxWidth(.9F)
-                    .padding(vertical = 2.dp,horizontal = 10.dp),
+                    .padding(vertical = 2.dp,horizontal = 10.dp)
+                    .focusRequester(focusRequester),
                 value = query,
                 onValueChange = {
                         onQueryChange(it)
@@ -260,6 +288,9 @@ fun CustomSearchBarLayout(
                     autoCorrect = true,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {keyboard?.hide()}
                 ),
                 placeholder = {
                     Text(text = "Search Contacts ...", color = Blue100)
@@ -282,7 +313,7 @@ fun CustomSearchBarLayout(
 @Preview
 @Composable
 fun CustomSearchBarLayoutPreview() {
-    CustomSearchBarLayout(query = "", onQueryChange = {}, counter = 0)
+    CustomSearchBarLayout(query = "", onQueryChange = {}, counter = 0,true)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -293,15 +324,15 @@ fun HeaderLayoutPreview() {
     NavBarLayout(
         navController = null,
         title = "Import Contact",
+        isSearchBarMenuItem = true,
+        showSearchBar = true,
+        toggleSearchBar = {},
         iconClickEvent = { /*TODO*/ },
         importClickEvent = { /*TODO*/ },
         userInfoClickEvent = { /*TODO*/ },
         deleteAllClickEvent = { /*TODO*/ },
         logoutClickEvent = { /*TODO*/ },
         selectAllClickEvent = { /*TODO*/ },
-        toggleSearch = {
-               false
-        },
         searchQuery = "",
         getSearchQuery = {},
         totalContactsFound = 0
