@@ -53,7 +53,40 @@ fun ImportContactScreen(
     progressBar : Boolean,
     addContact : (contactModel : ContactModel) -> Unit
 ) {
+    Scaffold(topBar = {
+        NavBarLayout(
+            navController = navController,
+            title = "Import Contact",
+            icon = Icons.Default.ArrowBack,
+            iconClickEvent = {
+                navController.navigateUp()
+            },
+            isActionMenuPresent = true,
+            isImportMenuItem = false,
+            isSearchBarMenuItem = true,
+            isUserInfoMenuItem = false,
+            isLogoutMenuItem = false,
+            isDeleteAllMenuItem = false,
+            isSelectAllMenuItem = true,
+            importClickEvent = {},
+            userInfoClickEvent = {},
+            deleteAllClickEvent = {},
+            logoutClickEvent = {},
+            selectAllClickEvent = {},
+            getSearchQuery = {},
+            toggleSearch = {},
+            searchQuery = "",
+            totalContactsFound = 0
+        )
+    }
+    ) {
 
+        ImportContact(
+            contactList,
+            progressBar,
+            addContact
+        )
+    }
 }
 
 
