@@ -58,7 +58,7 @@ fun PermissionScreen(
         )
         Button(
             colors = ButtonDefaults.buttonColors(Blue100),
-            onClick = { navController.navigate(R.id.authenticationFragment2) },
+            onClick = { navController.navigate(R.id.action_permissionFragment_to_authenticationGraph) },
             shape = RoundedCornerShape(20.dp),
         ) {
             Text(

@@ -53,37 +53,7 @@ fun ImportContactScreen(
     progressBar : Boolean,
     addContact : (contactModel : ContactModel) -> Unit
 ) {
-    Scaffold(topBar = {
-        NavBarLayout(
-            navController = navController,
-            title = "Import Contact",
-            icon = Icons.Default.ArrowBack,
-            iconClickEvent = {
-                navController.navigateUp()
-            },
-            isActionMenuPresent = true,
-            isImportMenuItem = false,
-            isSearchMenuItem = false,
-            isUserInfoMenuItem = false,
-            isLogoutMenuItem = false,
-            isDeleteAllMenuItem = false,
-            isSelectAllMenuItem = true,
-            importClickEvent = {},
-            searchClickEvent = {},
-            userInfoClickEvent = {},
-            deleteAllClickEvent = {},
-            logoutClickEvent = {},
-            selectAllClickEvent = {}
-        )
-    }
-    ) {
 
-        ImportContact(
-            contactList,
-            progressBar,
-            addContact
-        )
-    }
 }
 
 
@@ -99,17 +69,21 @@ fun ImportContact(
             verticalArrangement = Arrangement.Center
         ) {
             items(contactList.size) { index ->
-                var isItemSelected : Boolean = false
+                var isItemSelected by remember {
+                    mutableStateOf(false)
+                }
                 val contact = contactList.get(index)
-                ImportListItemRow(
-                    contact = contact,
-                    isSelected = isItemSelected,
-                    modifier = Modifier
-                        .clickable {
-                            isItemSelected = true
-                            addContact(contactList.get(index))
-                        }
+                Column(
+                    modifier = Modifier.clickable {
+                        addContact(contactList.get(index))
+                        isItemSelected = true
+                    }
+                ) {
+                    ImportListItemRow(
+                        contact = contact,
+                        isSelected = isItemSelected
                     )
+                }
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth(.96F)
@@ -235,7 +209,7 @@ fun ImportContactInfo(
         Text(
             text = contactNumber,
             fontWeight = FontWeight.Normal,
-            color = color,
+            color = Blue100,
             fontSize = 10.sp
         )
     }

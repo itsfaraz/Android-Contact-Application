@@ -38,16 +38,20 @@ fun HomeScreen(
                 isImportMenuItem = true,
                 isDeleteAllMenuItem = true,
                 isLogoutMenuItem = true,
-                isSearchMenuItem = true,
+                isSearchBarMenuItem = false,
                 isUserInfoMenuItem = true,
                 isSelectAllMenuItem = false,
                 iconClickEvent = {},
-                searchClickEvent = {},
                 importClickEvent = { navController.navigate(R.id.contactImportFragment) },
                 userInfoClickEvent = {},
                 deleteAllClickEvent = {},
                 logoutClickEvent = {},
-                selectAllClickEvent = {}
+                selectAllClickEvent = {},
+                getSearchQuery = {},
+                toggleSearch = {},
+                searchQuery = "",
+                totalContactsFound = 0
+
             )
         },
     ){
