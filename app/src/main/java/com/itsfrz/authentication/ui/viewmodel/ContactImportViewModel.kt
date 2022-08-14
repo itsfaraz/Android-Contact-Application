@@ -73,7 +73,6 @@ class ContactImportViewModel
             _filteredList.value = filteredContactList
             Log.d("FILTERED_LIST", "searchRequest: ${_filteredList.value}")
         }
-
     }
 
 }
