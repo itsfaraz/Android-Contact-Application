@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,16 +21,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.itsfrz.authentication.adapters.ContactAdapter
-import com.itsfrz.authentication.adapters.ContactListener
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
-import com.itsfrz.authentication.provider.ContactProvider
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.viewmodelfactory.ContactImportViewModelFactory
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
 import com.itsfrz.authentication.ui.views.compose.components.ImportListItemRow
 import com.itsfrz.authentication.ui.views.compose.components.NavBarLayout
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
@@ -49,7 +41,7 @@ class ContactImportFragment : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
-        val contactProviderRepository = ContactProviderRepository(requireContext(), ContactProvider)
+        val contactProviderRepository = ContactProviderRepository(requireContext())
         val contactImportViewModelFactory = ContactImportViewModelFactory(contactProviderRepository)
         contactImportViewModel = ViewModelProvider(
             this,

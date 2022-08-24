@@ -3,20 +3,21 @@ package com.itsfrz.authentication.ui.viewmodel
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.data.utils.ContactLog
+import com.itsfrz.support.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ContactImportViewModel
     (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
 
-    private val _contactList = mutableStateOf<List<ContactModel>>(listOf())
+
+
+    private val _contactList = mutableStateOf<ArrayList<ContactModel>>(arrayListOf())
     var contactList: State<List<ContactModel>> = _contactList
 
     private val _filteredList = mutableStateOf<List<ContactModel>>(listOf())
@@ -35,17 +36,42 @@ class ContactImportViewModel
 
     fun fetchContacts() {
         try {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    _contactList.value = contactProviderRepository.getContactFromProvider("")
+            viewModelScope.launch(Dispatchers.IO) {
+
+                    var contactList = contactProviderRepository.getContactFromProvider()
                     ContactLog.debugLog("LIST", "intializeList : ${_contactList.value}")
-                    _isProgress.value = false
-                }
+                    updateContacts(contactList)
+                _isProgress.value = false
                 ContactLog.debugLog("LIST", "initializeList : ${_contactList.value}")
             }
         } catch (e: Exception) {
             ContactLog.errorLog("ERROR", "intializeList: $e")
         }
+    }
+
+    private fun updateContacts(
+        contactList: List<Contact>
+    ) {
+        contactList.forEach {
+
+            var contactModel = ContactModel(
+                it.contactId,
+                it.contactName,
+                it.contactNumber,
+                getImageBoolean(it.contactThumbnailImage),
+                it.contactThumbnailImage,
+                it.contactAddress,
+                it.contactEmailId,
+                it.contactCountry,
+                it.contactPostalCode,
+                ""
+            )
+            _contactList.value.add(contactModel)
+        }
+    }
+
+    private fun getImageBoolean(contactThumbnailImage: String): Boolean {
+        return contactThumbnailImage.isNotBlank() && contactThumbnailImage.isNotEmpty()
     }
 
     public fun addContact(contactModel: ContactModel) = _selectedContactList.value.add(contactModel)
