@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.SignUpViewModel
 import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
@@ -103,7 +104,11 @@ fun SignUpScreen(
                 .padding(horizontal = 40.dp),
             onClick = {
                 signUpEvent(username, email, password)
-                navController.navigate(R.id.loginFragment)
+                navController.navigate(
+                    resId = R.id.loginFragment,
+                    args = null,
+                    navOptions = Helper.navOptions
+                )
             },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
@@ -75,7 +76,11 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(R.id.contactFragment) },
+            onClick = { navController.navigate(
+                resId = R.id.contactFragment,
+                args = null,
+                navOptions = Helper.navOptions
+            ) },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(

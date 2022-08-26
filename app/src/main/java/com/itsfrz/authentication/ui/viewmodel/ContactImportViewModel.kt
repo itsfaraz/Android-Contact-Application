@@ -2,6 +2,7 @@ package com.itsfrz.authentication.ui.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,8 +18,8 @@ class ContactImportViewModel
 
 
 
-    private val _contactList = mutableStateOf<ArrayList<ContactModel>>(arrayListOf())
-    var contactList: State<List<ContactModel>> = _contactList
+    private val _contactList = mutableStateListOf<ContactModel>()
+    var contactList: List<ContactModel> = _contactList
 
     private val _filteredList = mutableStateOf<List<ContactModel>>(listOf())
     val filteredList: State<List<ContactModel>> = _filteredList
@@ -39,10 +40,10 @@ class ContactImportViewModel
             viewModelScope.launch(Dispatchers.IO) {
 
                     var contactList = contactProviderRepository.getContactFromProvider()
-                    ContactLog.debugLog("LIST", "intializeList : ${_contactList.value}")
+                    ContactLog.debugLog("LIST", "intializeList : ${_contactList}")
                     updateContacts(contactList)
                 _isProgress.value = false
-                ContactLog.debugLog("LIST", "initializeList : ${_contactList.value}")
+                ContactLog.debugLog("LIST", "initializeList : ${_contactList}")
             }
         } catch (e: Exception) {
             ContactLog.errorLog("ERROR", "intializeList: $e")
@@ -66,7 +67,7 @@ class ContactImportViewModel
                 it.contactPostalCode,
                 ""
             )
-            _contactList.value.add(contactModel)
+            _contactList.add(contactModel)
         }
     }
 
@@ -85,13 +86,13 @@ class ContactImportViewModel
         var filteredContactList = emptyList<ContactModel>()
         if (query.isNotBlank()) {
             if (query.get(0).isDigit() || query.get(0).equals("+")) {
-                filteredContactList =  _contactList.value.filter { contact ->
+                filteredContactList =  _contactList.filter { contact ->
                     val number = contact.contactNumber.toString()
                     number.contains(query)
                 }
             }
             if (!query.get(0).isDigit()) {
-                filteredContactList  =  _contactList.value.filter { contact ->
+                filteredContactList  =  _contactList.filter { contact ->
                     val name = contact.contactName.toString().lowercase()
                     name.contains(query.lowercase())
                 }

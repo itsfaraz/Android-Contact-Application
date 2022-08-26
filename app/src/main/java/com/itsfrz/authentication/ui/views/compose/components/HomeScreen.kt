@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.utils.Helper
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -35,7 +36,11 @@ fun HomeScreen(
                 isUserInfoMenuItem = true,
                 isSelectAllMenuItem = false,
                 iconClickEvent = {},
-                importClickEvent = { navController.navigate(R.id.contactImportFragment) },
+                importClickEvent = { navController.navigate(
+                    resId = R.id.contactImportFragment,
+                    args = null,
+                    navOptions = Helper.navOptions
+                ) },
                 userInfoClickEvent = {},
                 deleteAllClickEvent = {},
                 logoutClickEvent = {},
@@ -75,9 +80,3 @@ fun SearchBar() {
         )
     }
 }
-
-//@Preview
-//@Composable
-//fun SearchBarPreview() {
-//    SearchBar()
-//}

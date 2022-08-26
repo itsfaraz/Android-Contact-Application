@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.ui.fragments.AuthenticationFragment
+import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.*
 
@@ -58,7 +59,13 @@ fun PermissionScreen(
         )
         Button(
             colors = ButtonDefaults.buttonColors(Blue100),
-            onClick = { navController.navigate(R.id.action_permissionFragment_to_auth_graph) },
+            onClick = {
+                            navController.navigate(
+                                resId = R.id.action_permissionFragment_to_auth_graph,
+                                args = null,
+                                navOptions = Helper.navOptions
+                            )
+                      },
             shape = RoundedCornerShape(20.dp),
         ) {
             Text(

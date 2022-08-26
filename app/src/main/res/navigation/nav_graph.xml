@@ -24,6 +24,7 @@
         android:id="@+id/contactImportFragment"
         android:name="com.itsfrz.authentication.ui.fragments.ContactImportFragment"
         android:label="fragment_contact_import" />
+
     <include app:graph="@navigation/auth_graph" />
 
 

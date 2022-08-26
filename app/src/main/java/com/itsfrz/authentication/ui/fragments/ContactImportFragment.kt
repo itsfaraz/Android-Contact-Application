@@ -58,7 +58,7 @@ class ContactImportFragment : Fragment(){
             setContent {
                 val searchBar = contactImportViewModel.showSearchBar.value
                 val searchQuery = contactImportViewModel.searchQuery.value
-                var contactList = if(searchQuery.isEmpty()) contactImportViewModel.contactList.value else contactImportViewModel.filteredList.value
+                var contactList = if(searchQuery.isEmpty()) contactImportViewModel.contactList else contactImportViewModel.filteredList.value
                 Scaffold(topBar = {
                     NavBarLayout(
                         navController = navController,

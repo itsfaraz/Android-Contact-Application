@@ -10,22 +10,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.ui.views.Screen
+import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 
 @Composable
 fun AuthenticationScreen(
-    navController : NavController
+    navController: NavController
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Spacer(modifier = Modifier.height(100.dp))
         ApplicationLogo()
         Spacer(modifier = Modifier.height(50.dp))
@@ -40,7 +39,13 @@ fun AuthenticationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(R.id.signUpFragment) },
+            onClick = {
+                navController.navigate(
+                    resId = R.id.signUpFragment,
+                    args = null,
+                    navOptions = Helper.navOptions
+                )
+            },
             colors = ButtonDefaults.buttonColors(Blue100)
         ) {
             Text(
@@ -56,7 +61,13 @@ fun AuthenticationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            onClick = { navController.navigate(R.id.loginFragment) },
+            onClick = {
+                navController.navigate(
+                    resId = R.id.loginFragment,
+                    args = null,
+                    navOptions = Helper.navOptions
+                )
+            },
             border = BorderStroke(width = 1.dp, color = Blue100)
         ) {
             Text(
@@ -71,27 +82,25 @@ fun AuthenticationScreen(
 }
 
 
-
-
 @Composable
 fun ApplicationLogo() {
-   Column(
-       horizontalAlignment = Alignment.CenterHorizontally
-   ) {
-       Icon(
-           painter = painterResource(id = R.drawable.contact_logo),
-           contentDescription = "Application Logo",
-           modifier = Modifier.size(120.dp),
-           tint = Blue100
-       )
-       Spacer(modifier = Modifier.height(10.dp))
-       Text(
-           text = "Connect",
-           fontSize = MaterialTheme.typography.h6.fontSize,
-           fontWeight = FontWeight.ExtraBold,
-           color = Color.DarkGray
-       )
-   }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.contact_logo),
+            contentDescription = "Application Logo",
+            modifier = Modifier.size(120.dp),
+            tint = Blue100
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Connect",
+            fontSize = MaterialTheme.typography.h6.fontSize,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.DarkGray
+        )
+    }
 }
 
 //@Preview(showSystemUi = true, showBackground = true)
