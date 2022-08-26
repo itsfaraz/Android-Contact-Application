@@ -17,9 +17,9 @@ class ContactImportViewModel
     (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
 
 
-
     private val _contactList = mutableStateListOf<ContactModel>()
     var contactList: List<ContactModel> = _contactList
+
 
     private val _filteredList = mutableStateOf<List<ContactModel>>(listOf())
     val filteredList: State<List<ContactModel>> = _filteredList
@@ -30,18 +30,35 @@ class ContactImportViewModel
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
 
-    private val _selectedContactList = mutableStateOf<ArrayList<ContactModel>>(arrayListOf())
+    private val _selectedContactList = mutableStateListOf<Int>()
+
+    val operationQueue = mutableStateOf(false)
 
     private val _showSearchBar = mutableStateOf(false)
     val showSearchBar = _showSearchBar
+
+    private val _isAllSelected = mutableStateOf(false)
+
+
+    private val _rotationState = mutableStateOf(false)
+    val rotationState = _rotationState
+
+//    private val _contactsToBeImport : List<ContactModel>
+//        get() {
+//            val contacts = arrayListOf<ContactModel>()
+//            _selectedContactList.forEach {
+//                val contact = _contactList.get()
+//                contacts.add()
+//            }
+//        }
 
     fun fetchContacts() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
 
-                    var contactList = contactProviderRepository.getContactFromProvider()
-                    ContactLog.debugLog("LIST", "intializeList : ${_contactList}")
-                    updateContacts(contactList)
+                var contactList = contactProviderRepository.getContactFromProvider()
+                ContactLog.debugLog("LIST", "intializeList : ${_contactList}")
+                updateContacts(contactList)
                 _isProgress.value = false
                 ContactLog.debugLog("LIST", "initializeList : ${_contactList}")
             }
@@ -75,7 +92,6 @@ class ContactImportViewModel
         return contactThumbnailImage.isNotBlank() && contactThumbnailImage.isNotEmpty()
     }
 
-    public fun addContact(contactModel: ContactModel) = _selectedContactList.value.add(contactModel)
 
     fun toggleSearchBar(value: Boolean) {
         _showSearchBar.value = value
@@ -86,13 +102,13 @@ class ContactImportViewModel
         var filteredContactList = emptyList<ContactModel>()
         if (query.isNotBlank()) {
             if (query.get(0).isDigit() || query.get(0).equals("+")) {
-                filteredContactList =  _contactList.filter { contact ->
+                filteredContactList = _contactList.filter { contact ->
                     val number = contact.contactNumber.toString()
                     number.contains(query)
                 }
             }
             if (!query.get(0).isDigit()) {
-                filteredContactList  =  _contactList.filter { contact ->
+                filteredContactList = _contactList.filter { contact ->
                     val name = contact.contactName.toString().lowercase()
                     name.contains(query.lowercase())
                 }
@@ -100,6 +116,40 @@ class ContactImportViewModel
             _filteredList.value = filteredContactList
             Log.d("FILTERED_LIST", "searchRequest: ${_filteredList.value}")
         }
+    }
+
+    fun addSelectedContact(index: Int) {
+        if (_selectedContactList.contains(index)) {
+            _selectedContactList.remove(index)
+        } else _selectedContactList.add(index)
+        operationQueueUpdate()
+        handleRotationState()
+    }
+
+    fun checkIsPresent(index: Int): Boolean = _selectedContactList.contains(index)
+
+    fun addAllSelectedContact() {
+        if (!_isAllSelected.value) {
+            _selectedContactList.addAll(0.._contactList.lastIndex)
+            _isAllSelected.value = true
+        } else {
+            _selectedContactList.clear()
+            _isAllSelected.value = false
+        }
+        operationQueueUpdate()
+        handleRotationState()
+    }
+
+    private fun operationQueueUpdate() {
+        operationQueue.value = _selectedContactList.size > 0
+    }
+
+    private fun handleRotationState(){
+        if (_selectedContactList.size > 0){
+            _rotationState.value = true
+        }
+        if (_selectedContactList.size == 0)
+            _rotationState.value = false
     }
 
 }

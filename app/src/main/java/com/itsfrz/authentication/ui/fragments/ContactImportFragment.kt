@@ -5,16 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -31,9 +41,7 @@ import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.utils.Loader
 
 
-class ContactImportFragment : Fragment(){
-
-
+class ContactImportFragment : Fragment() {
 
 
     private lateinit var contactImportViewModel: ContactImportViewModel
@@ -58,7 +66,19 @@ class ContactImportFragment : Fragment(){
             setContent {
                 val searchBar = contactImportViewModel.showSearchBar.value
                 val searchQuery = contactImportViewModel.searchQuery.value
-                var contactList = if(searchQuery.isEmpty()) contactImportViewModel.contactList else contactImportViewModel.filteredList.value
+                var contactList =
+                    if (searchQuery.isEmpty()) contactImportViewModel.contactList else contactImportViewModel.filteredList.value
+                val operationQueue = contactImportViewModel.operationQueue
+                val rotationState = contactImportViewModel.rotationState
+
+
+                val rotateClockWise : Float by animateFloatAsState(
+                    targetValue = if (rotationState.value) 360F else 0F,
+                    animationSpec = tween(
+                        durationMillis = 220,
+                        easing = FastOutLinearInEasing
+                    )
+                )
                 Scaffold(topBar = {
                     NavBarLayout(
                         navController = navController,
@@ -70,68 +90,88 @@ class ContactImportFragment : Fragment(){
                         isActionMenuPresent = true,
                         isImportMenuItem = false,
                         isSearchBarMenuItem = true,
-                        toggleSearchBar = { toggle -> contactImportViewModel.toggleSearchBar(toggle)},
+                        toggleSearchBar = { toggle -> contactImportViewModel.toggleSearchBar(toggle) },
                         showSearchBar = searchBar,
                         isUserInfoMenuItem = false,
                         isLogoutMenuItem = false,
                         isDeleteAllMenuItem = false,
-                        isSelectAllMenuItem = false,
+                        isSelectAllMenuItem = true,
                         importClickEvent = {},
                         userInfoClickEvent = {},
                         deleteAllClickEvent = {},
                         logoutClickEvent = {},
-                        selectAllClickEvent = {},
+                        selectAllClickEvent = {
+                            contactImportViewModel.addAllSelectedContact()
+                        },
                         getSearchQuery = { query -> contactImportViewModel.searchRequest(query) },
                         searchQuery = searchQuery,
                         totalContactsFound = 0
                     )
                 }) {
-
-                    ImportContact(contactList = contactList)
-
-                }
-
-            }
-        }
-    }
-
-    @Composable
-    fun ImportContact(
-        contactList: List<ContactModel>,
-    ) {
-        if (!contactImportViewModel.isProgress.value) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                items(contactList.size) { index ->
-                    val contact: ContactModel = contactList.get(index)
-                    Column(
-                        modifier = Modifier.clickable {
-                        }
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        ImportListItemRow(
-                            modifier = Modifier,
-                            contact,
-                            false
-                        )
+                        if (!contactImportViewModel.isProgress.value) {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                items(contactList.size) { index ->
+                                    val contact: ContactModel = contactList.get(index)
+                                    Box(
+                                        modifier = Modifier
+                                            .clickable {
+                                                contactImportViewModel.addSelectedContact(index)
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        ImportListItemRow(
+                                            contact = contact,
+                                            isSelected = contactImportViewModel.checkIsPresent(index)
+                                        )
+                                    }
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth(.96F)
+                                            .padding(2.dp),
+                                        color = Blue100,
+                                        thickness = 0.3.dp
+                                    )
+                                }
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Loader(loaderMessage = "Contact Syncing ...")
+                            }
+                        }
+                        FloatingActionButton(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .rotate(rotateClockWise)
+                                .align(Alignment.BottomEnd)
+                                .padding(20.dp),
+                            backgroundColor = Blue100
+                        ) {
+                            if (operationQueue.value) {
+                                Icon(
+                                    imageVector = Icons.Default.CheckCircle,
+                                    contentDescription = "Check Out Contacts",
+                                    tint = Color.White
+                                )
+                            } else Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Insert Contact",
+                                tint = Color.White
+                            )
+                        }
                     }
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth(.96F)
-                            .padding(2.dp),
-                        color = Blue100,
-                        thickness = 0.3.dp
-                    )
                 }
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Loader(loaderMessage = "Contact Syncing ...")
             }
         }
     }

@@ -61,20 +61,13 @@ import com.itsfrz.authentication.ui.views.compose.utils.Loader
 fun ImportListItemRow(
     modifier: Modifier = Modifier,
     contact: ContactModel,
-    isSelected : Boolean,
+    isSelected : Boolean = false,
 ) {
     val color : Color = ColorGenerator.getRandomColor()
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-//                        contactViewModel.addIndexInList(index)
-                    }
-                )
-            },
+            .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
