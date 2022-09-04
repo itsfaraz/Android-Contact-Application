@@ -1,15 +1,12 @@
 package com.itsfrz.authentication.ui.views.compose.components
 
 
-import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -20,12 +17,10 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -39,9 +34,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.ui.views.Screen
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100Light
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue200
@@ -50,27 +43,27 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun NavBarLayout(
-    navController : NavController?,
-    title : String,
-    icon : ImageVector = Icons.Default.Home,
-    isActionMenuPresent : Boolean = false,
-    isImportMenuItem : Boolean = false,
-    isUserInfoMenuItem : Boolean = false,
-    isDeleteAllMenuItem : Boolean = false,
-    isLogoutMenuItem : Boolean = false,
-    isSelectAllMenuItem : Boolean = false,
-    isSearchBarMenuItem : Boolean = false,
-    toggleSearchBar : (showSearchBar : Boolean) -> Unit,
+    navController: NavController?,
+    title: String,
+    icon: ImageVector = Icons.Default.Home,
+    isActionMenuPresent: Boolean = false,
+    isImportMenuItem: Boolean = false,
+    isUserInfoMenuItem: Boolean = false,
+    isDeleteAllMenuItem: Boolean = false,
+    isLogoutMenuItem: Boolean = false,
+    isSelectAllMenuItem: Boolean = false,
+    isSearchBarMenuItem: Boolean = false,
+    toggleSearchBar: (showSearchBar: Boolean) -> Unit,
     showSearchBar: Boolean,
-    searchQuery : String = "",
-    getSearchQuery : (query : String) -> Unit,
-    totalContactsFound : Int = 0,
-    iconClickEvent : () -> Unit,
-    importClickEvent : () -> Unit,
-    userInfoClickEvent : () -> Unit,
-    deleteAllClickEvent : () -> Unit,
-    logoutClickEvent : () -> Unit,
-    selectAllClickEvent : () -> Unit
+    searchQuery: String = "",
+    getSearchQuery: (query: String) -> Unit,
+    totalContactsFound: Int = 0,
+    iconClickEvent: () -> Unit,
+    importClickEvent: () -> Unit,
+    userInfoClickEvent: () -> Unit,
+    deleteAllClickEvent: () -> Unit,
+    logoutClickEvent: () -> Unit,
+    selectAllClickEvent: () -> Unit
 ) {
     var showMenu by remember {
         mutableStateOf(false)
@@ -78,7 +71,7 @@ fun NavBarLayout(
 
 
 
-    LazyColumn{
+    LazyColumn {
         item {
             Row(
                 modifier = Modifier
@@ -107,23 +100,23 @@ fun NavBarLayout(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp
                 )
-                if (isSearchBarMenuItem){
+                if (isSearchBarMenuItem) {
 
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon",
                         tint = Color.White,
                         modifier = Modifier.clickable {
-                            if (showSearchBar){
+                            if (showSearchBar) {
                                 toggleSearchBar(false)
-                            }else{
+                            } else {
                                 toggleSearchBar(true)
                             }
                         }
                     )
                 }
 
-                if(isActionMenuPresent) {
+                if (isActionMenuPresent) {
                     IconButton(onClick = {
                         showMenu = true
                     }) {
@@ -134,36 +127,65 @@ fun NavBarLayout(
                         )
                     }
 
-                    if (showMenu){
+                    if (showMenu) {
                         DropdownMenu(
                             offset = DpOffset(x = (-60).dp, y = (0).dp),
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false },
                         ) {
-                            if (isImportMenuItem){
-                                DropdownMenuItem(onClick = { importClickEvent.invoke() }) {
-                                    DropDownMenuItem(menuOptionIcon = R.drawable.ui_import_icon, menuOptionText = "Import")
+                            if (isImportMenuItem) {
+                                DropdownMenuItem(onClick = {
+                                    importClickEvent.invoke()
+                                    showMenu = false
+                                }) {
+                                    DropDownMenuItem(
+                                        menuOptionIcon = R.drawable.ui_import_icon,
+                                        menuOptionText = "Import"
+                                    )
                                 }
                             }
-                            if (isUserInfoMenuItem)
-                            {
-                                DropdownMenuItem(onClick = { userInfoClickEvent.invoke() }) {
-                                    DropDownMenuItem(menuOptionIcon = R.drawable.ui_userinfo_icon, menuOptionText = "User Info")
+                            if (isUserInfoMenuItem) {
+                                DropdownMenuItem(onClick = {
+                                    userInfoClickEvent.invoke()
+                                    showMenu = false
+                                }) {
+                                    DropDownMenuItem(
+                                        menuOptionIcon = R.drawable.ui_userinfo_icon,
+                                        menuOptionText = "User Info"
+                                    )
                                 }
                             }
-                            if(isDeleteAllMenuItem){
-                                DropdownMenuItem(onClick = { deleteAllClickEvent.invoke() }) {
-                                    DropDownMenuItem(menuOptionIcon = R.drawable.ui_deleteall_icon, menuOptionText = "Delete All")
+                            if (isDeleteAllMenuItem) {
+                                DropdownMenuItem(onClick = {
+                                    deleteAllClickEvent.invoke()
+                                    showMenu = false
+                                }) {
+                                    DropDownMenuItem(
+                                        menuOptionIcon = R.drawable.ui_deleteall_icon,
+                                        menuOptionText = "Delete All"
+                                    )
                                 }
                             }
-                            if (isLogoutMenuItem){
-                                DropdownMenuItem(onClick = { logoutClickEvent.invoke() }) {
-                                    DropDownMenuItem(menuOptionIcon = R.drawable.ui_logout_icon, menuOptionText = "Logout")
+                            if (isLogoutMenuItem) {
+                                DropdownMenuItem(onClick = {
+                                    logoutClickEvent.invoke()
+                                    showMenu = false
+                                }) {
+                                    DropDownMenuItem(
+                                        menuOptionIcon = R.drawable.ui_logout_icon,
+                                        menuOptionText = "Logout"
+                                    )
                                 }
                             }
-                            if (isSelectAllMenuItem){
-                                DropdownMenuItem(onClick = { selectAllClickEvent.invoke() }) {
-                                    DropDownMenuItem(menuOptionIcon = R.drawable.ui_select_all_icon, menuOptionText = "Select All")
+                            if (isSelectAllMenuItem) {
+                                DropdownMenuItem(onClick = {
+                                    selectAllClickEvent.invoke()
+                                    showMenu = false
+                                }) {
+                                    DropDownMenuItem(
+                                        menuOptionIcon = R.drawable.ui_select_all_icon,
+                                        menuOptionText = "Select All"
+                                    )
                                 }
                             }
                         }
@@ -172,7 +194,7 @@ fun NavBarLayout(
 
 
             }
-            if (showSearchBar){
+            if (showSearchBar) {
 
                 Divider(
                     modifier = Modifier
@@ -187,7 +209,7 @@ fun NavBarLayout(
                     onQueryChange = getSearchQuery,
                     counter = totalContactsFound,
                     automaticKeyBoard = showSearchBar
-                    )
+                )
             }
 
 
@@ -204,8 +226,8 @@ fun NavBarLayout(
 
 @Composable
 fun DropDownMenuItem(
-    @DrawableRes menuOptionIcon : Int,
-    menuOptionText : String
+    @DrawableRes menuOptionIcon: Int,
+    menuOptionText: String
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -219,17 +241,17 @@ fun DropDownMenuItem(
             text = menuOptionText,
             color = Blue100,
             modifier = Modifier.padding(horizontal = 20.dp)
-            )
+        )
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomSearchBarLayout(
-    query : String,
-    onQueryChange : (newQuery : String) -> Unit,
-    counter : Int = 0,
-    automaticKeyBoard : Boolean = false
+    query: String,
+    onQueryChange: (newQuery: String) -> Unit,
+    counter: Int = 0,
+    automaticKeyBoard: Boolean = false
 ) {
 
     val showKeyboard = automaticKeyBoard
@@ -260,7 +282,7 @@ fun CustomSearchBarLayout(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
 
-            if (counter > 0){
+            if (counter > 0) {
                 Text(
                     modifier = Modifier
                         .wrapContentWidth()
@@ -273,11 +295,11 @@ fun CustomSearchBarLayout(
             TextField(
                 modifier = Modifier
                     .fillMaxWidth(.9F)
-                    .padding(vertical = 2.dp,horizontal = 10.dp)
+                    .padding(vertical = 2.dp, horizontal = 10.dp)
                     .focusRequester(focusRequester),
                 value = query,
                 onValueChange = {
-                        onQueryChange(it)
+                    onQueryChange(it)
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Blue100,
@@ -290,7 +312,7 @@ fun CustomSearchBarLayout(
                     imeAction = ImeAction.Search
                 ),
                 keyboardActions = KeyboardActions(
-                    onSearch = {keyboard?.hide()}
+                    onSearch = { keyboard?.hide() }
                 ),
                 placeholder = {
                     Text(text = "Search Contacts ...", color = Blue100)
@@ -313,7 +335,7 @@ fun CustomSearchBarLayout(
 @Preview
 @Composable
 fun CustomSearchBarLayoutPreview() {
-    CustomSearchBarLayout(query = "", onQueryChange = {}, counter = 0,true)
+    CustomSearchBarLayout(query = "", onQueryChange = {}, counter = 0, true)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -326,6 +348,12 @@ fun HeaderLayoutPreview() {
         title = "Import Contact",
         isSearchBarMenuItem = true,
         showSearchBar = true,
+        isActionMenuPresent = true,
+        isImportMenuItem = true,
+        isUserInfoMenuItem = true,
+        isDeleteAllMenuItem = true,
+        isLogoutMenuItem = true,
+        isSelectAllMenuItem = true,
         toggleSearchBar = {},
         iconClickEvent = { /*TODO*/ },
         importClickEvent = { /*TODO*/ },
