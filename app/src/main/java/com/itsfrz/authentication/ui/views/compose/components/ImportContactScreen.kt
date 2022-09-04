@@ -63,7 +63,9 @@ fun ImportListItemRow(
     contact: ContactModel,
     isSelected : Boolean = false,
 ) {
-    val color : Color = ColorGenerator.getRandomColor()
+    var color by remember {
+        mutableStateOf(ColorGenerator.getRandomColor())
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
