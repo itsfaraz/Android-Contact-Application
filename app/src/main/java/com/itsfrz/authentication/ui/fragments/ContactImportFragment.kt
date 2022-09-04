@@ -75,8 +75,8 @@ class ContactImportFragment : Fragment() {
                 val rotateClockWise : Float by animateFloatAsState(
                     targetValue = if (rotationState.value) 360F else 0F,
                     animationSpec = tween(
-                        durationMillis = 220,
-                        easing = FastOutLinearInEasing
+                        durationMillis = 250,
+                        easing = LinearOutSlowInEasing
                     )
                 )
                 Scaffold(topBar = {
@@ -148,27 +148,29 @@ class ContactImportFragment : Fragment() {
                                 Loader(loaderMessage = "Contact Syncing ...")
                             }
                         }
-                        FloatingActionButton(
-                            onClick = {
+                        if(!contactImportViewModel.isProgress.value){
+                            FloatingActionButton(
+                                onClick = {
 
-                            },
-                            modifier = Modifier
-                                .rotate(rotateClockWise)
-                                .align(Alignment.BottomEnd)
-                                .padding(20.dp),
-                            backgroundColor = Blue100
-                        ) {
-                            if (operationQueue.value) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = "Check Out Contacts",
+                                },
+                                modifier = Modifier
+                                    .rotate(rotateClockWise)
+                                    .align(Alignment.BottomEnd)
+                                    .padding(20.dp),
+                                backgroundColor = Blue100
+                            ) {
+                                if (operationQueue.value) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = "Check Out Contacts",
+                                        tint = Color.White
+                                    )
+                                } else Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Insert Contact",
                                     tint = Color.White
                                 )
-                            } else Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Insert Contact",
-                                tint = Color.White
-                            )
+                            }
                         }
                     }
                 }
