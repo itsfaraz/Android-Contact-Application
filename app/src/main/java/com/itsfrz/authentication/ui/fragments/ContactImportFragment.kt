@@ -115,9 +115,12 @@ class ContactImportFragment : Fragment() {
                             LazyColumn(
                                 modifier = Modifier.fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
+                                verticalArrangement = Arrangement.Top
                             ) {
-                                items(contactList.size) { index ->
+                                items(
+                                    contactList.size,
+
+                                ) { index ->
                                     val contact: ContactModel = contactList.get(index)
                                     Box(
                                         modifier = Modifier
