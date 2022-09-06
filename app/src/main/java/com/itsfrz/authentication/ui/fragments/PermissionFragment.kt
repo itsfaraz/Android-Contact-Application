@@ -1,34 +1,62 @@
 package com.itsfrz.authentication.ui.fragments
 
+import android.Manifest
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
-import com.itsfrz.authentication.model.database.PreferenceRespository
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.ui.utils.Helper
+import com.itsfrz.authentication.ui.viewmodel.PermissionViewModel
+import com.itsfrz.authentication.ui.views.Permission
 import com.itsfrz.authentication.ui.views.compose.components.PermissionScreen
 
 class PermissionFragment : Fragment() {
 
+    private lateinit var permissionViewModel: PermissionViewModel
+    private val READ_CONTACT_RQ = 103
+    private lateinit var permission : Permission
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        permissionViewModel = ViewModelProvider(
+            this
+        ).get(PermissionViewModel::class.java)
+
+        permission = Permission()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-           setContent {
-               PermissionScreen(navController = findNavController())
-           }
+            setContent {
+                val isPermissionGranted = permissionViewModel.permissionState
+                PermissionScreen(
+                    isPermissionGranted.value,
+                    permissionScreenButton = {
+                        if (!isPermissionGranted.value) {
+                            val permissionResult = permission.requestRunTimePermission(
+                                requireActivity(),
+                                arrayOf(Manifest.permission.READ_CONTACTS),
+                                READ_CONTACT_RQ,
+                            )
+                            isPermissionGranted.value = permissionResult
+                        } else {
+                            findNavController().navigate(
+                                resId = R.id.action_permissionFragment_to_auth_graph,
+                                args = null,
+                                navOptions = Helper.navOptions
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
-
-
-
-
 }

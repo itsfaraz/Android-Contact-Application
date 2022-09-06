@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -25,8 +25,18 @@ import com.itsfrz.authentication.ui.views.compose.ui.theme.*
 
 @Composable
 fun PermissionScreen(
-    navController: NavController
+    isPermissionGranted : Boolean = false,
+    permissionScreenButton : () -> Unit
 ) {
+
+
+    var permissionCardIcon = R.drawable.permission_unlock_icon
+    var permissionButtonText = "Authentication"
+    if (!isPermissionGranted) {
+        permissionCardIcon = R.drawable.permission_lock_icon
+        permissionButtonText = "Allow Permission"
+    }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -40,7 +50,7 @@ fun PermissionScreen(
                 backgroundColor = Blue100
             ) {
                 UpperLayout(
-                    permissionCardIcon = R.drawable.permission_lock_icon,
+                    permissionCardIcon = permissionCardIcon,
                     permissionCardBackgroundColor = Color.White,
                     permissionIconColor = Blue100,
                     lowerCardColor = Blue100UltraTrans,
@@ -52,24 +62,19 @@ fun PermissionScreen(
             modifier = Modifier
                 .height(40.dp)
         )
-        PermissionInfo()
+        PermissionInfo(
+        )
         Spacer(
             modifier = Modifier
                 .height(40.dp)
         )
         Button(
             colors = ButtonDefaults.buttonColors(Blue100),
-            onClick = {
-                            navController.navigate(
-                                resId = R.id.action_permissionFragment_to_auth_graph,
-                                args = null,
-                                navOptions = Helper.navOptions
-                            )
-                      },
+            onClick = { permissionScreenButton.invoke() },
             shape = RoundedCornerShape(20.dp),
         ) {
             Text(
-                text = "Allow Permission",
+                text = permissionButtonText,
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 6.dp)
@@ -156,7 +161,8 @@ fun StylishCard(
 }
 
 @Composable
-fun PermissionInfo() {
+fun PermissionInfo(
+) {
     Column(
         horizontalAlignment = Alignment.Start
     ) {
@@ -165,7 +171,7 @@ fun PermissionInfo() {
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontFamily = MaterialTheme.typography.h3.fontFamily,
             textAlign = TextAlign.Justify,
-            color = Color.LightGray
+            color = Blue100
         )
         Text(
             modifier = Modifier.fillMaxWidth(.6f),
@@ -174,6 +180,11 @@ fun PermissionInfo() {
             text = "Please allow permission in order to perform further task, App will not manipulate your data without your actions."
         )
     }
+}
+
+@Composable
+fun PermissionDialog() {
+
 }
 
 //@Preview(showBackground = true, showSystemUi = true)
