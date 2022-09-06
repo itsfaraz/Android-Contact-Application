@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Authentication" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/app_color_primary</item>
+        <item name="colorPrimary">#536DFF</item>
         <item name="colorPrimaryVariant">#0B6DBB</item>
         <item name="colorOnPrimary">@color/app_color_primary</item>
         <!-- Secondary brand color. -->
