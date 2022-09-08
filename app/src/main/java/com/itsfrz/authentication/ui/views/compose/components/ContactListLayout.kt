@@ -44,8 +44,14 @@ fun ContactListLayout() {
 
 
     val contactViewModel = ContactViewModel()
-    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-        items(contactViewModel.getContacts().size) { index ->
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        items(
+            count = contactViewModel.listOfDemoContacts.size,
+            key = { index: Int -> contactViewModel.listOfDemoContacts[index].hashCode()+index}
+        ) { index ->
 
             val dismissState = rememberDismissState(
                 confirmStateChange = {
@@ -54,7 +60,9 @@ fun ContactListLayout() {
                             contactViewModel.removeContact(index)
                         }
                         DismissValue.DismissedToEnd -> {
-                            contactViewModel.removeContact(index)
+                            contactViewModel.addContact(
+                                ContactViewModel.Contact(R.drawable.profile,"Demo ${index+1}")
+                            )
                         }
                     }
                     true
@@ -63,6 +71,7 @@ fun ContactListLayout() {
             SwipeToDismiss(
                 modifier = Modifier,
                 state = dismissState,
+                dismissThresholds = {FractionalThreshold(0.1F)},
                 directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
                 background = {
                     val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
