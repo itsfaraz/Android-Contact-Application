@@ -41,6 +41,7 @@ import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue200
 import kotlinx.coroutines.delay
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NavBarLayout(
     navController: NavController?,
@@ -69,7 +70,9 @@ fun NavBarLayout(
         mutableStateOf(false)
     }
 
-
+    val keyBoard = LocalSoftwareKeyboardController.current
+    if (!showSearchBar)
+        keyBoard?.hide()
 
     LazyColumn {
         item {
@@ -251,7 +254,7 @@ fun CustomSearchBarLayout(
     query: String,
     onQueryChange: (newQuery: String) -> Unit,
     counter: Int = 0,
-    automaticKeyBoard: Boolean = false
+    automaticKeyBoard: Boolean = false,
 ) {
 
     val showKeyboard = automaticKeyBoard
@@ -265,6 +268,7 @@ fun CustomSearchBarLayout(
             delay(100)
             keyboard?.show()
         }
+
     }
 
 
