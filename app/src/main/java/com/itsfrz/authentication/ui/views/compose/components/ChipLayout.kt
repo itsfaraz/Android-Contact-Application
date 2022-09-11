@@ -66,7 +66,8 @@ fun Chip(
     ) {
         Row(
             modifier = Modifier
-                .wrapContentWidth(),
+                .wrapContentWidth()
+                .padding(horizontal = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (!contactModel.hasContactImage){
