@@ -16,5 +16,7 @@ class ContactProviderRepository(val context: Context) {
 
     suspend fun deleteContactInProvider(contact: Contact) : Boolean = ContactProvider.deleteContact(context, contact)
 
+    suspend fun deleteContactsInProvider(contacts: List<Contact>) : Boolean = ContactProvider.deleteContactList(context, contacts)
+
 
 }

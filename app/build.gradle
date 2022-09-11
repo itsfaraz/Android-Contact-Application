@@ -96,7 +96,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    def easy_contact = '1.0.1'
+    def easy_contact = '1.0.2'
     implementation "com.github.ItsFRZ:Easy-Contacts:$easy_contact"
 
 

@@ -36,10 +36,7 @@ import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
 import com.itsfrz.authentication.ui.viewmodelfactory.ContactImportViewModelFactory
-import com.itsfrz.authentication.ui.views.compose.components.ChipLayout
-import com.itsfrz.authentication.ui.views.compose.components.ImportListItemRow
-import com.itsfrz.authentication.ui.views.compose.components.ListItemRow
-import com.itsfrz.authentication.ui.views.compose.components.NavBarLayout
+import com.itsfrz.authentication.ui.views.compose.components.*
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.DangerRed100
 import com.itsfrz.authentication.ui.views.compose.utils.Loader
@@ -77,6 +74,7 @@ class ContactImportFragment : Fragment() {
                 val rotationState = contactImportViewModel.rotationState
                 val showEmptyListMessage = contactImportViewModel.showEmptyListMessage.value
                 val selectedContacts = contactImportViewModel.selectedContacts.reversed()
+                val dialogBoxState = contactImportViewModel.alertDialogState.value
 
                 val rotateClockWise: Float by animateFloatAsState(
                     targetValue = if (rotationState.value) 360F else 0F,
@@ -104,7 +102,9 @@ class ContactImportFragment : Fragment() {
                         isSelectAllMenuItem = true,
                         importClickEvent = {},
                         userInfoClickEvent = {},
-                        deleteSelectedClickEvent = {},
+                        deleteSelectedClickEvent = {
+                            contactImportViewModel.toggleAlertDialog()
+                        },
                         logoutClickEvent = {},
                         selectAllClickEvent = {
                               contactImportViewModel.selectAllContacts()
@@ -116,6 +116,7 @@ class ContactImportFragment : Fragment() {
                 }) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
                         if (!contactImportViewModel.isProgress.value) {
                            Column(
@@ -206,7 +207,7 @@ class ContactImportFragment : Fragment() {
                                                    }
                                                },
                                                dismissContent = {
-                                                   val contact: ContactModel = contactList.get(index)
+                                                   val contact: ContactModel = contactList[index]
                                                    Box(
                                                        modifier = Modifier
                                                            .clickable {
@@ -265,6 +266,25 @@ class ContactImportFragment : Fragment() {
                                     tint = Color.White
                                 )
                             }
+                        }
+
+                        if (dialogBoxState){
+                            AlertBox(
+                                title = "Delete",
+                                content = "Are you sure, You want to delete selected contact ?",
+                                buttonOneText = "Just Kidding",
+                                buttonTwoText = "Yup",
+                                buttonClickResponse = { response ->
+                                    if(response)
+                                    {
+                                        contactImportViewModel.deleteContactsSelection()
+                                    }
+                                    contactImportViewModel.toggleAlertDialog()
+                                },
+                                onCloseEvent = {
+                                    contactImportViewModel.toggleAlertDialog()
+                                }
+                            )
                         }
                     }
                 }

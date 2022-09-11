@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
@@ -18,10 +17,10 @@ import kotlinx.coroutines.launch
 class ContactImportViewModel
     (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
 
-    private val _contactList = mutableStateListOf<ContactModel>()
+    private var _contactList = mutableStateListOf<ContactModel>()
     var contactList: List<ContactModel> = _contactList
 
-    private val _filteredList = mutableStateOf<List<ContactModel>>(listOf())
+    private var _filteredList = mutableStateOf<List<ContactModel>>(listOf())
     val filteredList: State<List<ContactModel>> = _filteredList
 
     private val _isProgress = mutableStateOf(true)
@@ -43,21 +42,27 @@ class ContactImportViewModel
     private val _showEmptyListMessage = mutableStateOf(false)
     val showEmptyListMessage: State<Boolean> = _showEmptyListMessage
 
-    private val _selectedContacts = mutableStateListOf<ContactModel>()
-    val selectedContacts : List<ContactModel> = _selectedContacts
+    private var _selectedContacts = mutableStateListOf<ContactModel>()
+    val selectedContacts: List<ContactModel> = _selectedContacts
 
-    fun selectAllContacts(){
-        if (_selectedContacts.isEmpty()){
+    private val _alertDialogState = mutableStateOf(false)
+    val alertDialogState: State<Boolean> = _alertDialogState
+
+    fun toggleAlertDialog() {
+        _alertDialogState.value = !_alertDialogState.value
+    }
+
+    fun selectAllContacts() {
+        if (_selectedContacts.isEmpty()) {
             contactList.forEach {
                 addContactSelection(it)
             }
-        }
-        else if (_selectedContacts.size < _contactList.size && _selectedContacts.isNotEmpty()) {
+        } else if (_selectedContacts.size < _contactList.size && _selectedContacts.isNotEmpty()) {
             _selectedContacts.clear()
             contactList.forEach {
                 addContactSelection(it)
             }
-        }else
+        } else
             _selectedContacts.clear()
 
         operationQueue.value = _selectedContacts.isNotEmpty()
@@ -67,8 +72,8 @@ class ContactImportViewModel
 
     fun addContactSelection(
         contactModel: ContactModel
-    ){
-        if(!_selectedContacts.contains(contactModel)){
+    ) {
+        if (!_selectedContacts.contains(contactModel)) {
             _selectedContacts.add(contactModel)
         }
 
@@ -77,11 +82,23 @@ class ContactImportViewModel
     }
 
     fun removeContactSelection(
-        index : Int
-    ){
+        index: Int
+    ) {
         _selectedContacts.removeAt(index)
         operationQueue.value = _selectedContacts.isNotEmpty()
         rotationState.value = _selectedContacts.isNotEmpty()
+    }
+
+    fun deleteContactsSelection() {
+        val deletionObjects = arrayListOf<Contact>()
+        if (_selectedContacts.isNotEmpty()) {
+            _selectedContacts.forEach { contactModel ->
+                deletionObjects.add(ContactModelMapper.transformContactModelToContact(contactModel))
+            }
+            deleteBatchContacts(deletionObjects)
+        }
+        _rotationState.value = _selectedContacts.isEmpty()
+        operationQueue.value = _selectedContacts.isEmpty()
     }
 
     fun fetchContacts() {
@@ -149,27 +166,39 @@ class ContactImportViewModel
 
 
     public fun deleteContact(index: Int) {
-//        Case 1 Delete from filtered list
-        var deleteObject: ContactModel? = null
-        if (_filteredList.value.isNotEmpty()) {
-            deleteObject = _filteredList.value.get(index)
-            val newList = arrayListOf<ContactModel>()
-            _filteredList.value.forEach {
-                if (_filteredList.value[index] != it)
-                    newList.add(it)
-            }
-            _filteredList.value = newList
-        }
-        if (deleteObject == null)
-            deleteObject = _contactList[index]
-        //        Case 2 Delete from contact list
+        val deleteObject = _contactList[index]
+        deleteContact(deleteObject)
+    }
 
+
+    private fun deleteBatchContacts(contacts : List<Contact>){
         viewModelScope.launch(Dispatchers.IO) {
-            val result = contactProviderRepository.deleteContactInProvider(ContactModelMapper.transformContactModelToContact(deleteObject))
+            _isProgress.value = true
+            val result = contactProviderRepository.deleteContactsInProvider(contacts)
+            Log.d("DELETE_CONTACT_LIST", "deleteBatchContacts: Result :: ${result}")
+            contacts.forEach { contact ->
+                val deleteContact = ContactModelMapper.transformContactToContactModel(contact)
+                _selectedContacts.remove(deleteContact)
+                _contactList.remove(deleteContact)
+                _filteredList.value = emptyList()
+            }
+
+            _isProgress.value = false
+
+        }
+    }
+
+    private fun deleteContact(deleteObject: ContactModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = contactProviderRepository.deleteContactInProvider(
+                ContactModelMapper.transformContactModelToContact(deleteObject)
+            )
             _contactList.remove(deleteObject)
             if (result)
-                Log.d("CONTACT_DELETE", "deleteContact: ${deleteObject.contactName} is deleted successfully")
+                Log.d(
+                    "CONTACT_DELETE",
+                    "deleteContact: ${deleteObject.contactName} is deleted successfully"
+                )
         }
-
     }
 }
