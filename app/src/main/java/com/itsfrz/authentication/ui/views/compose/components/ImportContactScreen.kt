@@ -61,7 +61,6 @@ import com.itsfrz.authentication.ui.views.compose.utils.Loader
 fun ImportListItemRow(
     modifier: Modifier = Modifier,
     contact: ContactModel,
-    isSelected : Boolean = false,
 ) {
     var color by remember {
         mutableStateOf(ColorGenerator.getRandomColor())
@@ -75,25 +74,8 @@ fun ImportListItemRow(
     ) {
         ImportContactProfilePic(contactImage = contact.contactImage, isContactImage = contact.hasContactImage,color = color)
         ImportContactInfo(contactName = contact.contactName,contactNumber = contact.contactNumber,color = color)
-        if (isSelected) {
-            ContactCheckIcon()
-        } else {
-            Spacer(modifier = Modifier.size(22.dp))
-        }
-
     }
 
-}
-
-@Composable
-fun ContactCheckIcon() {
-    Icon(
-        modifier = Modifier
-            .size(22.dp),
-        imageVector = Icons.Default.Check,
-        contentDescription = "Item Checked",
-        tint = Blue100,
-    )
 }
 
 @Composable
@@ -166,7 +148,7 @@ fun ImportContactInfo(
 @Preview(showSystemUi = false)
 @Composable
 fun ImportContactScreenPreview() {
-    ImportListItemRow(contact = ContactModel("","Faraz Sheikh","7796224997",false,"","","","","",""), isSelected = true)
+    ImportListItemRow(contact = ContactModel("","Faraz Sheikh","7796224997",false,"","","","","",""))
 //    val navController = rememberNavController()
 //    ImportContactScreen(navController = navController)
 }

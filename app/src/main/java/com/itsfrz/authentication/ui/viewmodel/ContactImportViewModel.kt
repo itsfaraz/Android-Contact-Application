@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
@@ -17,7 +18,6 @@ import kotlinx.coroutines.launch
 class ContactImportViewModel
     (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
 
-
     private val _contactList = mutableStateListOf<ContactModel>()
     var contactList: List<ContactModel> = _contactList
 
@@ -30,14 +30,12 @@ class ContactImportViewModel
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
 
-    private val _selectedContactList = mutableStateListOf<Int>()
 
     val operationQueue = mutableStateOf(false)
 
     private val _showSearchBar = mutableStateOf(false)
     val showSearchBar = _showSearchBar
 
-    private val _isAllSelected = mutableStateOf(false)
 
     private val _rotationState = mutableStateOf(false)
     val rotationState = _rotationState
@@ -45,14 +43,46 @@ class ContactImportViewModel
     private val _showEmptyListMessage = mutableStateOf(false)
     val showEmptyListMessage: State<Boolean> = _showEmptyListMessage
 
-    private val _contactsToBeImport: List<ContactModel>
-        get() {
-            val contacts = arrayListOf<ContactModel>()
-            _selectedContactList.forEach { index ->
-                contacts.add(_contactList[index])
+    private val _selectedContacts = mutableStateListOf<ContactModel>()
+    val selectedContacts : List<ContactModel> = _selectedContacts
+
+    fun selectAllContacts(){
+        if (_selectedContacts.isEmpty()){
+            contactList.forEach {
+                addContactSelection(it)
             }
-            return contacts
         }
+        else if (_selectedContacts.size < _contactList.size && _selectedContacts.isNotEmpty()) {
+            _selectedContacts.clear()
+            contactList.forEach {
+                addContactSelection(it)
+            }
+        }else
+            _selectedContacts.clear()
+
+        operationQueue.value = _selectedContacts.isNotEmpty()
+        rotationState.value = _selectedContacts.isNotEmpty()
+
+    }
+
+    fun addContactSelection(
+        contactModel: ContactModel
+    ){
+        if(!_selectedContacts.contains(contactModel)){
+            _selectedContacts.add(contactModel)
+        }
+
+        operationQueue.value = _selectedContacts.isNotEmpty()
+        rotationState.value = _selectedContacts.isNotEmpty()
+    }
+
+    fun removeContactSelection(
+        index : Int
+    ){
+        _selectedContacts.removeAt(index)
+        operationQueue.value = _selectedContacts.isNotEmpty()
+        rotationState.value = _selectedContacts.isNotEmpty()
+    }
 
     fun fetchContacts() {
         try {
@@ -105,41 +135,8 @@ class ContactImportViewModel
             _showEmptyListMessage.value = _filteredList.value.isEmpty()
         } else {
             _filteredList.value = emptyList<ContactModel>()
+            _showEmptyListMessage.value = false
         }
-    }
-
-    fun addSelectedContact(index: Int) {
-        if (_selectedContactList.contains(index)) {
-            _selectedContactList.remove(index)
-        } else _selectedContactList.add(index)
-        operationQueueUpdate()
-        handleRotationState()
-    }
-
-    fun checkIsPresent(index: Int): Boolean = _selectedContactList.contains(index)
-
-    fun addAllSelectedContact() {
-        if (!_isAllSelected.value) {
-            _selectedContactList.addAll(0.._contactList.lastIndex)
-            _isAllSelected.value = true
-        } else {
-            _selectedContactList.clear()
-            _isAllSelected.value = false
-        }
-        operationQueueUpdate()
-        handleRotationState()
-    }
-
-    private fun operationQueueUpdate() {
-        operationQueue.value = _selectedContactList.size > 0
-    }
-
-    private fun handleRotationState() {
-        if (_selectedContactList.size > 0) {
-            _rotationState.value = true
-        }
-        if (_selectedContactList.size == 0)
-            _rotationState.value = false
     }
 
     public fun updateContact(index: Int) {

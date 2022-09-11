@@ -28,7 +28,7 @@ fun HomeScreen(
                 title = "Home",
                 isActionMenuPresent = true,
                 isImportMenuItem = true,
-                isDeleteAllMenuItem = true,
+                isDeleteSelectedMenuItem =  true,
                 isLogoutMenuItem = true,
                 isSearchBarMenuItem = true,
                 showSearchBar = false,
@@ -42,7 +42,7 @@ fun HomeScreen(
                     navOptions = Helper.navOptions
                 ) },
                 userInfoClickEvent = {},
-                deleteAllClickEvent = {},
+                deleteSelectedClickEvent = {},
                 logoutClickEvent = {},
                 selectAllClickEvent = {},
                 getSearchQuery = {},

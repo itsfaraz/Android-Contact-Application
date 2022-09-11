@@ -2,7 +2,6 @@ package com.itsfrz.authentication.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +36,7 @@ import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
 import com.itsfrz.authentication.ui.viewmodelfactory.ContactImportViewModelFactory
+import com.itsfrz.authentication.ui.views.compose.components.ChipLayout
 import com.itsfrz.authentication.ui.views.compose.components.ImportListItemRow
 import com.itsfrz.authentication.ui.views.compose.components.ListItemRow
 import com.itsfrz.authentication.ui.views.compose.components.NavBarLayout
@@ -76,7 +76,7 @@ class ContactImportFragment : Fragment() {
                 val operationQueue = contactImportViewModel.operationQueue
                 val rotationState = contactImportViewModel.rotationState
                 val showEmptyListMessage = contactImportViewModel.showEmptyListMessage.value
-
+                val selectedContacts = contactImportViewModel.selectedContacts.reversed()
 
                 val rotateClockWise: Float by animateFloatAsState(
                     targetValue = if (rotationState.value) 360F else 0F,
@@ -100,14 +100,14 @@ class ContactImportFragment : Fragment() {
                         showSearchBar = searchBar,
                         isUserInfoMenuItem = false,
                         isLogoutMenuItem = false,
-                        isDeleteAllMenuItem = false,
+                        isDeleteSelectedMenuItem = contactImportViewModel.selectedContacts.isNotEmpty(),
                         isSelectAllMenuItem = true,
                         importClickEvent = {},
                         userInfoClickEvent = {},
-                        deleteAllClickEvent = {},
+                        deleteSelectedClickEvent = {},
                         logoutClickEvent = {},
                         selectAllClickEvent = {
-                            contactImportViewModel.addAllSelectedContact()
+                              contactImportViewModel.selectAllContacts()
                         },
                         getSearchQuery = { query -> contactImportViewModel.searchRequest(query) },
                         searchQuery = searchQuery,
@@ -118,103 +118,122 @@ class ContactImportFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         if (!contactImportViewModel.isProgress.value) {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = if (showEmptyListMessage) Arrangement.Center else Arrangement.Top
-                            ) {
-                                if (showEmptyListMessage){
-                                    item {
-                                        Text(
-                                            text = "Hmm, No Contacts Found :(",
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                }else{
-                                    items(
-                                        count = contactList.size,
-                                        key = { index: Int -> contactList[index].hashCode() + index }
-                                    ) { index ->
-                                        val dismissState = rememberDismissState(
-                                            confirmStateChange = {
-                                                if (it == DismissValue.DismissedToStart){
-                                                    contactImportViewModel.deleteContact(index)
-                                                }
-                                                if (it == DismissValue.DismissedToEnd){
-                                                    contactImportViewModel.updateContact(index)
-                                                }
-                                                true
-                                            }
-                                        )
-                                        SwipeToDismiss(
-                                            modifier = Modifier,
-                                            state = dismissState,
-                                            directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
-                                            dismissThresholds = {FractionalThreshold(0.2F)},
-                                            background = {
-                                                val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                                                val color by animateColorAsState(
-                                                    targetValue = when (dismissState.targetValue) {
-                                                        DismissValue.Default -> Color.LightGray
-                                                        DismissValue.DismissedToStart -> DangerRed100
-                                                        DismissValue.DismissedToEnd -> Blue100
-                                                    }
-                                                )
-                                                val icon = when (direction) {
-                                                    DismissDirection.EndToStart -> Icons.Default.Delete
-                                                    DismissDirection.StartToEnd -> Icons.Default.Done
-                                                }
-                                                val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8F else 1.2F)
+                           Column(
+                               modifier = Modifier
+                                   .fillMaxSize()
+                           ) {
+                               ChipLayout(contacts = selectedContacts, removeContact = { removeIndex ->
+                                   contactImportViewModel.removeContactSelection(removeIndex)
+                               })
+                               Divider(
+                                   modifier = Modifier
+                                       .fillMaxWidth()
+                                       .padding(vertical = 2.dp),
+                                   color = Blue100,
+                                   thickness = 0.3.dp
+                               )
+                               LazyColumn(
+                                   modifier = Modifier
+                                       .fillMaxSize()
+                                       .padding(top = 2.dp),
+                                   horizontalAlignment = Alignment.CenterHorizontally,
+                                   verticalArrangement = if (showEmptyListMessage) Arrangement.Center else Arrangement.Top
+                               ) {
+                                   if (showEmptyListMessage){
+                                       item {
+                                           Text(
+                                               text = "Hmm, No Result Found :(",
+                                               textAlign = TextAlign.Center
+                                           )
+                                       }
+                                   }else{
+                                       items(
+                                           count = contactList.size,
+                                           key = { index: Int -> contactList[index].hashCode() + index }
+                                       ) { index ->
+                                           val dismissState = rememberDismissState(
+                                               confirmStateChange = {
+                                                   if (it == DismissValue.DismissedToStart){
+                                                       contactImportViewModel.deleteContact(index)
+                                                   }
+                                                   if (it == DismissValue.DismissedToEnd){
+                                                       contactImportViewModel.updateContact(index)
+                                                   }
+                                                   true
+                                               }
+                                           )
+                                           SwipeToDismiss(
+                                               modifier = Modifier,
+                                               state = dismissState,
+                                               directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
+                                               dismissThresholds = {FractionalThreshold(0.2F)},
+                                               background = {
+                                                   val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                                                   val color by animateColorAsState(
+                                                       targetValue = when (dismissState.targetValue) {
+                                                           DismissValue.Default -> Color.LightGray
+                                                           DismissValue.DismissedToStart -> DangerRed100
+                                                           DismissValue.DismissedToEnd -> Blue100
+                                                       }
+                                                   )
+                                                   val icon = when (direction) {
+                                                       DismissDirection.EndToStart -> Icons.Default.Delete
+                                                       DismissDirection.StartToEnd -> Icons.Default.Done
+                                                   }
+                                                   val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8F else 1.2F)
 
-                                                val alignment = when(direction){
-                                                    DismissDirection.StartToEnd -> Alignment.CenterStart
-                                                    DismissDirection.EndToStart -> Alignment.CenterEnd
-                                                }
+                                                   val alignment = when(direction){
+                                                       DismissDirection.StartToEnd -> Alignment.CenterStart
+                                                       DismissDirection.EndToStart -> Alignment.CenterEnd
+                                                   }
 
-                                                Box(
-                                                    modifier = Modifier
-                                                        .fillMaxSize()
-                                                        .background(color)
-                                                        .padding(start = 12.dp, end = 12.dp),
-                                                    contentAlignment = alignment
-                                                )
-                                                {
-                                                    Row(
-                                                        modifier = Modifier.wrapContentWidth(),
-                                                        verticalAlignment = Alignment.CenterVertically
-                                                    ) {
-                                                        var operationText = if (direction == DismissDirection.EndToStart) " -- Delete" else " -- Update"
-                                                        Icon(imageVector = icon, contentDescription = "Icon", modifier = Modifier.scale(scale), tint = Color.White)
-                                                        Text(text = operationText, color = Color.White, fontSize = 12.sp)
-                                                    }
-                                                }
-                                            },
-                                            dismissContent = {
-                                                val contact: ContactModel = contactList.get(index)
-                                                Box(
-                                                    modifier = Modifier
-                                                        .clickable {
-                                                            contactImportViewModel.addSelectedContact(index)
-                                                        },
-                                                    contentAlignment = Alignment.Center
-                                                ) {
-                                                    ImportListItemRow(
-                                                        contact = contact,
-                                                        isSelected = contactImportViewModel.checkIsPresent(index)
-                                                    )
-                                                }
-                                            }
-                                        )
-                                        Divider(
-                                            modifier = Modifier
-                                                .fillMaxWidth(.96F)
-                                                .padding(2.dp),
-                                            color = Blue100,
-                                            thickness = 0.3.dp
-                                        )
-                                    }
-                                }
-                            }
+                                                   Box(
+                                                       modifier = Modifier
+                                                           .fillMaxSize()
+                                                           .background(color)
+                                                           .padding(start = 12.dp, end = 12.dp),
+                                                       contentAlignment = alignment
+                                                   )
+                                                   {
+                                                       Row(
+                                                           modifier = Modifier.wrapContentWidth(),
+                                                           verticalAlignment = Alignment.CenterVertically
+                                                       ) {
+                                                           var operationText = if (direction == DismissDirection.EndToStart) " -- Delete" else " -- Update"
+                                                           Icon(imageVector = icon, contentDescription = "Icon", modifier = Modifier.scale(scale), tint = Color.White)
+                                                           Text(text = operationText, color = Color.White, fontSize = 12.sp)
+                                                       }
+                                                   }
+                                               },
+                                               dismissContent = {
+                                                   val contact: ContactModel = contactList.get(index)
+                                                   Box(
+                                                       modifier = Modifier
+                                                           .clickable {
+                                                               contactImportViewModel.addContactSelection(contactList[index])
+                                                           },
+                                                       contentAlignment = Alignment.Center
+                                                   ) {
+                                                       ImportListItemRow(
+                                                           contact = contact
+                                                       )
+                                                   }
+                                               }
+                                           )
+                                           Divider(
+                                               modifier = Modifier
+                                                   .fillMaxWidth(.96F)
+                                                   .padding(2.dp),
+                                               color = Blue100,
+                                               thickness = 0.3.dp
+                                           )
+                                       }
+                                   }
+                               }
+                           }
+
+
+
                         } else {
                             Box(
                                 modifier = Modifier.fillMaxSize(),

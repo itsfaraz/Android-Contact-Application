@@ -50,7 +50,7 @@ fun NavBarLayout(
     isActionMenuPresent: Boolean = false,
     isImportMenuItem: Boolean = false,
     isUserInfoMenuItem: Boolean = false,
-    isDeleteAllMenuItem: Boolean = false,
+    isDeleteSelectedMenuItem: Boolean = false,
     isLogoutMenuItem: Boolean = false,
     isSelectAllMenuItem: Boolean = false,
     isSearchBarMenuItem: Boolean = false,
@@ -62,7 +62,7 @@ fun NavBarLayout(
     iconClickEvent: () -> Unit,
     importClickEvent: () -> Unit,
     userInfoClickEvent: () -> Unit,
-    deleteAllClickEvent: () -> Unit,
+    deleteSelectedClickEvent: () -> Unit,
     logoutClickEvent: () -> Unit,
     selectAllClickEvent: () -> Unit
 ) {
@@ -158,14 +158,14 @@ fun NavBarLayout(
                                     )
                                 }
                             }
-                            if (isDeleteAllMenuItem) {
+                            if (isDeleteSelectedMenuItem) {
                                 DropdownMenuItem(onClick = {
-                                    deleteAllClickEvent.invoke()
+                                    deleteSelectedClickEvent.invoke()
                                     showMenu = false
                                 }) {
                                     DropDownMenuItem(
                                         menuOptionIcon = R.drawable.ui_deleteall_icon,
-                                        menuOptionText = "Delete All"
+                                        menuOptionText = "Delete Selected"
                                     )
                                 }
                             }
@@ -355,14 +355,14 @@ fun HeaderLayoutPreview() {
         isActionMenuPresent = true,
         isImportMenuItem = true,
         isUserInfoMenuItem = true,
-        isDeleteAllMenuItem = true,
+        isDeleteSelectedMenuItem = true,
         isLogoutMenuItem = true,
         isSelectAllMenuItem = true,
         toggleSearchBar = {},
         iconClickEvent = { /*TODO*/ },
         importClickEvent = { /*TODO*/ },
         userInfoClickEvent = { /*TODO*/ },
-        deleteAllClickEvent = { /*TODO*/ },
+        deleteSelectedClickEvent = { /*TODO*/ },
         logoutClickEvent = { /*TODO*/ },
         selectAllClickEvent = { /*TODO*/ },
         searchQuery = "",

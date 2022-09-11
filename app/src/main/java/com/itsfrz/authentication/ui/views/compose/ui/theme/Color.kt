@@ -11,6 +11,7 @@ val WhiteDeem100 = Color(0xFFE2E5F7)
 val DangerRed100 = Color(0xFFFF2525)
 val DangerRed200 = Color(0xFFFE1111)
 val DangerRed300 = Color(0xFFFE0000)
+val BorderColor1 = Color(0xFFA3A3A3)
 
 
 
