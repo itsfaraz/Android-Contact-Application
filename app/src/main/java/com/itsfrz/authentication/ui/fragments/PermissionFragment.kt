@@ -18,8 +18,8 @@ import com.itsfrz.authentication.ui.views.compose.components.PermissionScreen
 class PermissionFragment : Fragment() {
 
     private lateinit var permissionViewModel: PermissionViewModel
-    private val READ_CONTACT_RQ = 103
-    private lateinit var permission : Permission
+
+    private lateinit var permission: Permission
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,14 @@ class PermissionFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+
+                val permissionStatus = permission.requestRunTimePermission(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.READ_CONTACTS),
+                    Helper.READ_CONTACT_RQ,
+                )
+                val isUserLoggedIn : Boolean = arguments?.getBoolean("isLoggedIn") ?: false
+
                 val isPermissionGranted = permissionViewModel.permissionState
                 PermissionScreen(
                     isPermissionGranted.value,
@@ -44,19 +52,29 @@ class PermissionFragment : Fragment() {
                             val permissionResult = permission.requestRunTimePermission(
                                 requireActivity(),
                                 arrayOf(Manifest.permission.READ_CONTACTS),
-                                READ_CONTACT_RQ,
+                                Helper.READ_CONTACT_RQ,
                             )
                             isPermissionGranted.value = permissionResult
                         } else {
-                            findNavController().navigate(
-                                resId = R.id.action_permissionFragment_to_auth_graph,
-                                args = null,
-                                navOptions = Helper.navOptions
-                            )
+                            if (isUserLoggedIn){
+                                    findNavController().navigate(
+                                        resId = R.id.contactFragment,
+                                        args = null,
+                                        navOptions = Helper.navOptions
+                                    )
+                            }else{
+                                findNavController().navigate(
+                                    resId = R.id.authenticationFragment,
+                                    args = null,
+                                    navOptions = Helper.navOptions
+                                )
+                            }
                         }
                     }
                 )
+
             }
         }
     }
+
 }

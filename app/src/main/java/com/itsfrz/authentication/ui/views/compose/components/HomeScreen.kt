@@ -16,67 +16,27 @@ import androidx.navigation.NavController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.ui.utils.Helper
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-fun HomeScreen(
-    navController: NavController
-) {
-    Scaffold(
-        topBar = {
-            NavBarLayout(
-                navController,
-                title = "Home",
-                isActionMenuPresent = true,
-                isImportMenuItem = true,
-                isDeleteSelectedMenuItem =  true,
-                isLogoutMenuItem = true,
-                isSearchBarMenuItem = true,
-                showSearchBar = false,
-                toggleSearchBar = {},
-                isUserInfoMenuItem = true,
-                isSelectAllMenuItem = false,
-                iconClickEvent = {},
-                importClickEvent = { navController.navigate(
-                    resId = R.id.contactImportFragment,
-                    args = null,
-                    navOptions = Helper.navOptions
-                ) },
-                userInfoClickEvent = {},
-                deleteSelectedClickEvent = {},
-                logoutClickEvent = {},
-                selectAllClickEvent = {},
-                getSearchQuery = {},
-                searchQuery = "",
-                totalContactsFound = 0
-
-            )
-        },
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            ContactListLayout()
-        }
-    }
-}
 
 
-@Composable
-fun SearchBar() {
-    var searchText by remember {
-        mutableStateOf("")
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            modifier = Modifier.weight(1F),
-            value = searchText, onValueChange = {
-                searchText = it
-            })
 
-        Icon(
-            painter = painterResource(id = R.drawable.ui_search_icon),
-            contentDescription = "Search Icon"
-        )
-    }
-}
+//@Composable
+//fun SearchBar() {
+//    var searchText by remember {
+//        mutableStateOf("")
+//    }
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        OutlinedTextField(
+//            modifier = Modifier.weight(1F),
+//            value = searchText, onValueChange = {
+//                searchText = it
+//            })
+//
+//        Icon(
+//            painter = painterResource(id = R.drawable.ui_search_icon),
+//            contentDescription = "Search Icon"
+//        )
+//    }
+//}

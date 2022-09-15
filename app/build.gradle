@@ -100,4 +100,9 @@ dependencies {
     implementation "com.github.ItsFRZ:Easy-Contacts:$easy_contact"
 
 
+    def data_store = '1.0.0'
+    implementation "androidx.datastore:datastore-preferences:$data_store"
+
+
+
 }

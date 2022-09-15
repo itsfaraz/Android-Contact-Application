@@ -1,21 +1,100 @@
 package com.itsfrz.authentication
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import com.itsfrz.authentication.data.repository.UserPreferenceRepository
+import com.itsfrz.authentication.ui.utils.Helper
+import com.itsfrz.authentication.ui.viewmodel.AuthenticationViewModel
+import com.itsfrz.authentication.ui.viewmodelfactory.AuthenticationViewModelFactory
+import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
+
+
+    private var permissionCheck: Boolean = false
+    private var isUserLoggedIn: Boolean = false
+    private var username : String = ""
+    private var loggedInDate : String = ""
+    private var sortingType : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val authViewModelFactory = AuthenticationViewModelFactory(UserPreferenceRepository(this))
+        val authViewModel =
+            ViewModelProvider(this, authViewModelFactory).get(AuthenticationViewModel::class.java)
+        runBlocking {
+            authViewModel.fetchLoggedInStatus()
+            delay(200)
+        }
+
+        permissionCheck = checkPermissionStatus()
+
+
+
+        isUserLoggedIn = authViewModel.isLogginSuccess.value
+        username = authViewModel.userName.value
+        sortingType = authViewModel.sortingOrder.value
+        loggedInDate = authViewModel.loggedInDate.value
+
+
+
+        val bundleArgs = Bundle()
+        bundleArgs.apply {
+            putBoolean("isLoggedIn", isUserLoggedIn)
+            putString("username",username)
+            putString("sortingType",sortingType)
+            putString("loggedInDate",loggedInDate)
+        }
+
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         val navController = navHostFragment.navController
+
+
+
+        if (permissionCheck && isUserLoggedIn) {
+            navController.navigate(
+                resId = R.id.contactFragment,
+                args = bundleArgs,
+                navOptions = Helper.navOptionsWithPopStack(
+                    destinationId = R.id.permissionFragment,
+                    true
+                )
+            )
+        } else if (!permissionCheck) {
+            navController.navigate(
+                resId = R.id.permissionFragment,
+                args = bundleArgs,
+                navOptions = Helper.navOptions
+            )
+        } else if (!isUserLoggedIn) {
+            navController.navigate(
+                resId = R.id.authenticationFragment,
+                args = null,
+                navOptions = Helper.navOptions
+            )
+        }
+
+
+    }
+
+    fun checkPermissionStatus(): Boolean {
+        val resultRead: Boolean =
+            this.checkCallingOrSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+        val resultWrite: Boolean =
+            this.checkCallingOrSelfPermission(Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED
+        return resultRead || resultWrite
 
     }
 }
+
 
 
 //class MainActivity : BaseActivity() , AuthenticationCommunicator {

@@ -43,90 +43,90 @@ import com.itsfrz.authentication.ui.views.compose.ui.theme.DangerRed100
 fun ContactListLayout() {
 
 
-    val contactViewModel = ContactViewModel()
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        items(
-            count = contactViewModel.listOfDemoContacts.size,
-            key = { index: Int -> contactViewModel.listOfDemoContacts[index].hashCode()+index}
-        ) { index ->
-
-            val dismissState = rememberDismissState(
-                confirmStateChange = {
-                    when (it) {
-                        DismissValue.DismissedToStart -> {
-                            contactViewModel.removeContact(index)
-                        }
-                        DismissValue.DismissedToEnd -> {
-                            contactViewModel.addContact(
-                                ContactViewModel.Contact(R.drawable.profile,"Demo ${index+1}")
-                            )
-                        }
-                    }
-                    true
-                }
-            )
-            SwipeToDismiss(
-                modifier = Modifier,
-                state = dismissState,
-                dismissThresholds = {FractionalThreshold(0.1F)},
-                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
-                background = {
-                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                    val color by animateColorAsState(
-                        targetValue = when (dismissState.targetValue) {
-                            DismissValue.Default -> Color.LightGray
-                            DismissValue.DismissedToStart -> DangerRed100
-                            DismissValue.DismissedToEnd -> Blue100
-                        }
-                    )
-                    val icon = when (direction) {
-                        DismissDirection.EndToStart -> Icons.Default.Delete
-                        DismissDirection.StartToEnd -> Icons.Default.Done
-                    }
-                    val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8F else 1.2F)
-
-                    val alignment = when(direction){
-                        DismissDirection.StartToEnd -> Alignment.CenterStart
-                        DismissDirection.EndToStart -> Alignment.CenterEnd
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(color)
-                            .padding(start = 12.dp, end = 12.dp),
-                        contentAlignment = alignment
-                    )
-                    {
-                      Row(
-                          modifier = Modifier.wrapContentWidth(),
-                          verticalAlignment = Alignment.CenterVertically
-                      ) {
-                          var operationText = if (direction == DismissDirection.EndToStart) " -- Delete" else " -- Update"
-                          Icon(imageVector = icon, contentDescription = "Icon", modifier = Modifier.scale(scale), tint = Color.White)
-                          Text(text = operationText, color = Color.White, fontSize = 12.sp)
-                      }
-                    }
-                },
-                dismissContent = {
-                    ListItemRow(contactViewModel = contactViewModel, index = index)
-
-                }
-            )
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth(.96F)
-                    .padding(2.dp),
-                color = Blue100,
-                thickness = .5.dp
-            )
-        }
-
-
-    }
+//
+//    LazyColumn(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Top
+//    ) {
+//        items(
+//            count = contactViewModel.listOfDemoContacts.size,
+//            key = { index: Int -> contactViewModel.listOfDemoContacts[index].hashCode()+index}
+//        ) { index ->
+//
+//            val dismissState = rememberDismissState(
+//                confirmStateChange = {
+//                    when (it) {
+//                        DismissValue.DismissedToStart -> {
+//                            contactViewModel.removeContact(index)
+//                        }
+//                        DismissValue.DismissedToEnd -> {
+//                            contactViewModel.addContact(
+//                                ContactViewModel.Contact(R.drawable.profile,"Demo ${index+1}")
+//                            )
+//                        }
+//                    }
+//                    true
+//                }
+//            )
+//            SwipeToDismiss(
+//                modifier = Modifier,
+//                state = dismissState,
+//                dismissThresholds = {FractionalThreshold(0.1F)},
+//                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
+//                background = {
+//                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+//                    val color by animateColorAsState(
+//                        targetValue = when (dismissState.targetValue) {
+//                            DismissValue.Default -> Color.LightGray
+//                            DismissValue.DismissedToStart -> DangerRed100
+//                            DismissValue.DismissedToEnd -> Blue100
+//                        }
+//                    )
+//                    val icon = when (direction) {
+//                        DismissDirection.EndToStart -> Icons.Default.Delete
+//                        DismissDirection.StartToEnd -> Icons.Default.Done
+//                    }
+//                    val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8F else 1.2F)
+//
+//                    val alignment = when(direction){
+//                        DismissDirection.StartToEnd -> Alignment.CenterStart
+//                        DismissDirection.EndToStart -> Alignment.CenterEnd
+//                    }
+//
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .background(color)
+//                            .padding(start = 12.dp, end = 12.dp),
+//                        contentAlignment = alignment
+//                    )
+//                    {
+//                      Row(
+//                          modifier = Modifier.wrapContentWidth(),
+//                          verticalAlignment = Alignment.CenterVertically
+//                      ) {
+//                          var operationText = if (direction == DismissDirection.EndToStart) " -- Delete" else " -- Update"
+//                          Icon(imageVector = icon, contentDescription = "Icon", modifier = Modifier.scale(scale), tint = Color.White)
+//                          Text(text = operationText, color = Color.White, fontSize = 12.sp)
+//                      }
+//                    }
+//                },
+//                dismissContent = {
+//                    ListItemRow(contactViewModel = contactViewModel, index = index)
+//
+//                }
+//            )
+//            Divider(
+//                modifier = Modifier
+//                    .fillMaxWidth(.96F)
+//                    .padding(2.dp),
+//                color = Blue100,
+//                thickness = .5.dp
+//            )
+//        }
+//
+//
+//    }
 }
 
 
@@ -135,43 +135,43 @@ fun ListItemRow(
     contactViewModel: ContactViewModel,
     index : Int,
 ) {
-    val contact = contactViewModel.getContacts().get(index)
-    val color = ColorGenerator.getRandomColor()
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-                        contactViewModel.addIndexInList(index)
-                    }
-                )
-            },
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ContactProfilePic(contactImage = contact.contactImage)
-        ContactInfo(contactName = contact.contactName, color = color)
-        if (contactViewModel.checkIndexIsInList(index)) {
-            CheckIcon()
-        } else {
-            Spacer(modifier = Modifier.size(22.dp))
-        }
-
-    }
+//    val contact = contactViewModel.getContacts().get(index)
+//    val color = ColorGenerator.getRandomColor()
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(10.dp)
+//            .pointerInput(Unit) {
+//                detectTapGestures(
+//                    onLongPress = {
+//                        contactViewModel.addIndexInList(index)
+//                    }
+//                )
+//            },
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        ContactProfilePic(contactImage = contact.contactImage)
+//        ContactInfo(contactName = contact.contactName, color = color)
+//        if (contactViewModel.checkIndexIsInList(index)) {
+//            CheckIcon()
+//        } else {
+//            Spacer(modifier = Modifier.size(22.dp))
+//        }
+//
+//    }
 
 }
 
 @Composable
 fun CheckIcon() {
-    Icon(
-        modifier = Modifier
-            .size(22.dp),
-        imageVector = Icons.Default.Check,
-        contentDescription = "Item Checked",
-        tint = Blue100,
-    )
+//    Icon(
+//        modifier = Modifier
+//            .size(22.dp),
+//        imageVector = Icons.Default.Check,
+//        contentDescription = "Item Checked",
+//        tint = Blue100,
+//    )
 }
 
 @Preview

@@ -8,13 +8,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.*
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.data.repository.ContactModelRepository
-import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.data.entities.ContactModel
-import com.itsfrz.authentication.model.database.PreferenceRespository
+import com.itsfrz.authentication.data.entities.UserPreferences
+import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 //
 //class ContactViewModel(application : Application) : AndroidViewModel(application){
 //
@@ -95,48 +94,16 @@ import kotlinx.coroutines.withContext
 //
 //}
 
-class ContactViewModel : ViewModel(){
+class ContactViewModel(val userPreferenceRepository: UserPreferenceRepository) : ViewModel(){
 
-    data class Contact(
-        val contactImage : Int,
-        val contactName : String
-    )
 
-    val listOfDemoContacts = mutableStateListOf<Contact>()
-    private val selectedItemIndex = mutableListOf<Int>()
-    val selectedItemList = mutableListOf<Contact>()
 
-    init {
-        listOfDemoContacts.addAll(
-            listOf(
-            Contact(R.drawable.profile,"Faraz Sheikh"),
-            Contact(R.drawable.profile,"Faisal Sheikh"),
-            Contact(R.drawable.profile,"Hasnain Sheikh"),
-            Contact(R.drawable.profile,"Deveesh Nantha"),
-            Contact(R.drawable.profile,"Robert Downey Jr"),
-            Contact(R.drawable.profile,"Chris Evans"),)
-        )
-
-//        selectedItemIndex.addAll(listOf(0,3,4))
-    }
-
-    fun getContacts() = listOfDemoContacts
-
-    fun addIndexInList(index: Int){
-        if (index !in selectedItemIndex){
-            selectedItemIndex.add(index)
+    fun logout(){
+        val userPreferences = UserPreferences("","","","",false)
+        viewModelScope.launch(Dispatchers.IO) {
+            userPreferenceRepository.saveUserPref(userPreferences)
         }
     }
 
-    fun checkIndexIsInList(index: Int) : Boolean = if (index in selectedItemIndex) true else false
 
-    fun getSelectedIndex() = selectedItemIndex
-
-    fun removeContact(index : Int){
-        listOfDemoContacts.removeAt(index)
-    }
-
-    fun addContact(contact: Contact){
-        listOfDemoContacts.add(contact)
-    }
 }

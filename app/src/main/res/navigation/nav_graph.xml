@@ -5,12 +5,43 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/permissionFragment">
     <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.SignUpFragment"
+        android:label="SignUpFragment">
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authenticationFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.AuthenticationFragment"
+        android:label="AuthenticationFragment">
+        <action
+            android:id="@+id/action_authenticationFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            />
+        <action
+            android:id="@+id/action_authenticationFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.LoginFragment"
+        android:label="LoginFragment">
+        <action
+            android:id="@+id/action_loginFragment_to_contactFragment"
+            app:destination="@+id/contactFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/permissionFragment"
         android:name="com.itsfrz.authentication.ui.fragments.PermissionFragment"
         android:label="fragment_permission" >
         <action
-            android:id="@+id/action_permissionFragment_to_auth_graph"
-            app:destination="@id/auth_graph" />
+            android:id="@+id/action_permissionFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment" />
+        <action
+            android:id="@+id/action_permissionFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactFragment"
@@ -24,8 +55,6 @@
         android:id="@+id/contactImportFragment"
         android:name="com.itsfrz.authentication.ui.fragments.ContactImportFragment"
         android:label="fragment_contact_import" />
-
-    <include app:graph="@navigation/auth_graph" />
 
 
 </navigation>
