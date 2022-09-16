@@ -84,7 +84,11 @@ class ContactImportViewModel
     fun removeContactSelection(
         index: Int
     ) {
-        _selectedContacts.removeAt(index)
+
+        val convertedIndex = ((_selectedContacts.size-index)-1);
+        ContactLog.debugLog("CHECK_INDEX", "removeContactSelection: Reversed List Index :- ${index}, Converted Index :- ${convertedIndex}, List Size :- ${_selectedContacts.size}")
+
+        _selectedContacts.removeAt(convertedIndex)
         operationQueue.value = _selectedContacts.isNotEmpty()
         rotationState.value = _selectedContacts.isNotEmpty()
     }
