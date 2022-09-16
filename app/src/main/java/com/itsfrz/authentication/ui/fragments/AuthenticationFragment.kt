@@ -10,13 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.repository.UserPreferenceRepository
-import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.AuthenticationViewModel
 import com.itsfrz.authentication.ui.viewmodel.CommonViewModel
-import com.itsfrz.authentication.ui.viewmodelfactory.AuthenticationViewModelFactory
+import com.itsfrz.authentication.ui.viewmodel.factory.AuthenticationViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.AuthenticationScreen
 
 

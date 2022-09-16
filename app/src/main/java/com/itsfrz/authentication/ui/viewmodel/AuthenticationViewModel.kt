@@ -28,7 +28,7 @@ class AuthenticationViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             userPreferenceRepository.getUserPref().collect { userPreference ->
                 _isLogginSuccess.value = userPreference.isLoggedIn
-                _userName.value = userPreference.loggedInDate
+                _userName.value = userPreference.username
                 _loggedInDate.value = userPreference.loggedInDate
                 _sortingOrder.value = userPreference.contactSortingType
             }

@@ -129,6 +129,7 @@
         <entry key="../../../../layout/compose-model-1662992497631.xml" value="0.18055555555555555" />
         <entry key="../../../../layout/compose-model-1663249190730.xml" value="0.335" />
         <entry key="../../../../layout/compose-model-1663249775437.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1663327004088.xml" value="0.17314814814814813" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_button_layout.xml" value="0.134" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_input_layout.xml" value="0.1825" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/cicular_imageview_holder.xml" value="0.1395" />
@@ -198,8 +199,10 @@
         <entry key="app/src/main/res/drawable/user_info_24.xml" value="0.123" />
         <entry key="app/src/main/res/drawable/work.xml" value="0.123" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/add_contact_layout.xml" value="0.1105072463768116" />
         <entry key="app/src/main/res/layout/fragment_authentication.xml" value="0.18704710144927536" />
         <entry key="app/src/main/res/layout/fragment_contact.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/layout/fragment_contact_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_landing.xml" value="0.16666666666666666" />
         <entry key="app/src/main/res/menu/item_menu.xml" value="0.2296875" />
       </map>

@@ -7,6 +7,8 @@ import com.itsfrz.support.Contact
 
 object ContactModelMapper{
 
+    var username : String = ""
+
     @Transaction
     fun transformContactToContactModel(contact : Contact) : ContactModel{
         return ContactModel(
@@ -19,7 +21,7 @@ object ContactModelMapper{
             contactEmailId = contact.contactEmailId,
             contactCountry = contact.contactCountry,
             contactPostCode = contact.contactPostalCode,
-            username = "",
+            username = username,
         )
     }
 

@@ -1,4 +1,4 @@
-package com.itsfrz.authentication.ui.viewmodelfactory
+package com.itsfrz.authentication.ui.viewmodel.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

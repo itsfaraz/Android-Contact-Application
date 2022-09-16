@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.repository.UserModelRepository
 import com.itsfrz.authentication.data.repository.UserPreferenceRepository
@@ -33,11 +32,10 @@ import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.utils.RegexValidation
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
-import com.itsfrz.authentication.ui.viewmodelfactory.LoginViewModelFactory
+import com.itsfrz.authentication.ui.viewmodel.factory.LoginViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.InputField
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.utils.Loader
-import kotlin.math.log
 
 class LoginFragment : Fragment() {
 

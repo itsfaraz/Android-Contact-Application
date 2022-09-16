@@ -174,44 +174,44 @@ fun CheckIcon() {
 //    )
 }
 
-@Preview
-@Composable
-fun CheckIconPreview() {
-    CheckIcon()
-}
-
-@Composable
-fun ContactProfilePic(
-    @DrawableRes contactImage: Int
-) {
-    Image(
-        modifier = Modifier
-            .border(width = 1.dp, color = Blue100, shape = CircleShape)
-            .clip(CircleShape)
-            .size(60.dp),
-        painter = painterResource(id = contactImage),
-        contentDescription = "Contact Image",
-    )
-}
-
-@Composable
-fun ContactInfo(
-    contactName: String,
-    color: Color
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(.9F)
-            .padding(horizontal = 15.dp)
-    ) {
-        Text(
-            text = contactName,
-            fontWeight = FontWeight.SemiBold,
-            color = color,
-            fontSize = 18.sp
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun CheckIconPreview() {
+//    CheckIcon()
+//}
+//
+//@Composable
+//fun ContactProfilePic(
+//    @DrawableRes contactImage: Int
+//) {
+//    Image(
+//        modifier = Modifier
+//            .border(width = 1.dp, color = Blue100, shape = CircleShape)
+//            .clip(CircleShape)
+//            .size(60.dp),
+//        painter = painterResource(id = contactImage),
+//        contentDescription = "Contact Image",
+//    )
+//}
+//
+//@Composable
+//fun ContactInfo(
+//    contactName: String,
+//    color: Color
+//) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth(.9F)
+//            .padding(horizontal = 15.dp)
+//    ) {
+//        Text(
+//            text = contactName,
+//            fontWeight = FontWeight.SemiBold,
+//            color = color,
+//            fontSize = 18.sp
+//        )
+//    }
+//}
 
 //@Preview(showSystemUi = true, showBackground = true)
 //@Composable

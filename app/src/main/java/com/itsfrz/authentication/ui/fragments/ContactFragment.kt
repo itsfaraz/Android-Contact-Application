@@ -12,13 +12,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.itsfrz.authentication.R
-import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
-import com.itsfrz.authentication.ui.viewmodelfactory.ContactViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.ContactListLayout
 import com.itsfrz.authentication.ui.views.compose.components.NavBarLayout
 

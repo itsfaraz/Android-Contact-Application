@@ -29,17 +29,19 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
+import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
-import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
-import com.itsfrz.authentication.ui.viewmodelfactory.ContactImportViewModelFactory
+import com.itsfrz.authentication.ui.viewmodel.factory.ContactImportViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.*
 import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
 import com.itsfrz.authentication.ui.views.compose.ui.theme.DangerRed100
 import com.itsfrz.authentication.ui.views.compose.utils.Loader
+import kotlin.properties.Delegates
 
 
 class ContactImportFragment : Fragment() {
@@ -47,15 +49,25 @@ class ContactImportFragment : Fragment() {
 
     private lateinit var contactImportViewModel: ContactImportViewModel
     private lateinit var navController: NavController
+    private lateinit var username : String
+    private lateinit var loggedInDate : String
+    private var isLoggedIn : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
         val contactProviderRepository = ContactProviderRepository(requireContext())
-        val contactImportViewModelFactory = ContactImportViewModelFactory(contactProviderRepository)
+        val contactDao = AppDatabase.getDatabase(requireContext()).contactDao()
+        val contactModelRepository = ContactModelRepository(contactDao)
+        val contactImportViewModelFactory = ContactImportViewModelFactory(contactProviderRepository,contactModelRepository)
         contactImportViewModel = ViewModelProvider(
             this,
             contactImportViewModelFactory
         ).get(ContactImportViewModel::class.java)
+
+        username = arguments?.getString("username") ?: ""
+        isLoggedIn = arguments?.getBoolean("isLoggedIn") ?: false
+        loggedInDate = arguments?.getString("loggedInDate") ?: ""
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -66,6 +78,7 @@ class ContactImportFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+
                 val searchBar = contactImportViewModel.showSearchBar.value
                 val searchQuery = contactImportViewModel.searchQuery.value
                 var contactList =
@@ -246,7 +259,12 @@ class ContactImportFragment : Fragment() {
                         if (!contactImportViewModel.isProgress.value) {
                             FloatingActionButton(
                                 onClick = {
+                                    if (operationQueue.value){
+                                        contactImportViewModel.importSelectedContacts()
+                                        findNavController().navigateUp()
+                                    }else{
 
+                                    }
                                 },
                                 modifier = Modifier
                                     .rotate(rotateClockWise)

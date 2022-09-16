@@ -8,14 +8,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.entities.mapper.ContactModelMapper
+import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.data.utils.ContactLog
 import com.itsfrz.support.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ContactImportViewModel
-    (private var contactProviderRepository: ContactProviderRepository) : ViewModel() {
+    (
+    private var contactProviderRepository: ContactProviderRepository,
+    private var contactModelRepository: ContactModelRepository
+    ) : ViewModel() {
 
     private var _contactList = mutableStateListOf<ContactModel>()
     var contactList: List<ContactModel> = _contactList
@@ -205,4 +210,12 @@ class ContactImportViewModel
                 )
         }
     }
+
+
+    fun importSelectedContacts(){
+        viewModelScope.launch{
+            contactModelRepository.insertAll(_selectedContacts)
+        }
+    }
+
 }

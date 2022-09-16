@@ -6,10 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import com.itsfrz.authentication.data.entities.mapper.ContactModelMapper
 import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.AuthenticationViewModel
-import com.itsfrz.authentication.ui.viewmodelfactory.AuthenticationViewModelFactory
+import com.itsfrz.authentication.ui.viewmodel.factory.AuthenticationViewModelFactory
 import kotlinx.coroutines.*
 
 
@@ -81,8 +82,11 @@ class MainActivity : AppCompatActivity() {
                 navOptions = Helper.navOptions
             )
         }
+        setUsername()
+    }
 
-
+    private fun setUsername() {
+        ContactModelMapper.username = username
     }
 
     fun checkPermissionStatus(): Boolean {
