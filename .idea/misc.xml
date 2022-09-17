@@ -130,6 +130,19 @@
         <entry key="../../../../layout/compose-model-1663249190730.xml" value="0.335" />
         <entry key="../../../../layout/compose-model-1663249775437.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1663327004088.xml" value="0.17314814814814813" />
+        <entry key="../../../../layout/compose-model-1663332692352.xml" value="2.0" />
+        <entry key="../../../../layout/compose-model-1663332871342.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1663333262825.xml" value="0.375" />
+        <entry key="../../../../layout/compose-model-1663334973023.xml" value="0.17314814814814813" />
+        <entry key="../../../../layout/compose-model-1663336001713.xml" value="0.375" />
+        <entry key="../../../../layout/compose-model-1663336573541.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1663402277175.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1663403449624.xml" value="1.0" />
+        <entry key="../../../../layout/compose-model-1663403459106.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1663405183447.xml" value="0.335" />
+        <entry key="../../../../layout/compose-model-1663405183452.xml" value="0.10458333333333333" />
+        <entry key="../../../../layout/compose-model-1663408725590.xml" value="0.55" />
+        <entry key="../../../../layout/compose-model-1663408861023.xml" value="0.25" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_button_layout.xml" value="0.134" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/authentication_input_layout.xml" value="0.1825" />
         <entry key="..\:/Development/Mobile/Authentication/app/src/main/res/drawable/cicular_imageview_holder.xml" value="0.1395" />
@@ -194,6 +207,7 @@
         <entry key="app/src/main/res/drawable/permission_lock_icon.xml" value="0.123" />
         <entry key="app/src/main/res/drawable/permission_unlock_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/smartphone.xml" value="0.123" />
+        <entry key="app/src/main/res/drawable/ui_add_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ui_deleted_icon.xml" value="0.123" />
         <entry key="app/src/main/res/drawable/ui_total_icon.xml" value="0.123" />
         <entry key="app/src/main/res/drawable/user_info_24.xml" value="0.123" />

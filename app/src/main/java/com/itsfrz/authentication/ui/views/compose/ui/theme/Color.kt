@@ -2,6 +2,7 @@ package com.itsfrz.authentication.ui.views.compose.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Blue50 = Color(0xFF6980FF)
 val Blue100 = Color(0xFF536DFF)
 val Blue100Trans = Color(0x8F536DFF)
 val Blue100Light = Color(0xFFD4DAFF)
@@ -12,7 +13,9 @@ val DangerRed100 = Color(0xFFFF2525)
 val DangerRed200 = Color(0xFFFE1111)
 val DangerRed300 = Color(0xFFFE0000)
 val BorderColor1 = Color(0xFFA3A3A3)
-
+val CandyGreen = Color(0xFF4CAF50)
+val CandyRed = Color(0xFFE14949)
+val CandyOrange = Color(0xFFFF7A50)
 
 
 

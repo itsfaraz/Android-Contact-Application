@@ -165,14 +165,6 @@ class ContactImportViewModel
         }
     }
 
-    public fun updateContact(index: Int) {
-        // For time being just add demo items
-        _contactList.add(
-            ContactModel("", "Demo ${(index + 100)}", "123456789", false, "", "", "", "", "", "")
-        )
-        Log.d("SWIPE", "updateContact: Update Contact $index")
-    }
-
 
     public fun deleteContact(index: Int) {
         val deleteObject = _contactList[index]

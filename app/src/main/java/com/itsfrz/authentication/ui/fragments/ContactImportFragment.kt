@@ -26,15 +26,18 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.entities.ContactModel
 import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.model.database.room.AppDatabase
+import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.viewmodel.factory.ContactImportViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.*
@@ -171,7 +174,15 @@ class ContactImportFragment : Fragment() {
                                                        contactImportViewModel.deleteContact(index)
                                                    }
                                                    if (it == DismissValue.DismissedToEnd){
-                                                       contactImportViewModel.updateContact(index)
+                                                       findNavController().navigateUp()
+                                                       findNavController().navigate(
+                                                           R.id.addContactFragment,
+                                                           args = bundleOf(
+                                                               "operationType" to "update",
+                                                               "contact" to contactList[index]
+                                                           ),
+                                                           navOptions = Helper.navOptions
+                                                       )
                                                    }
                                                    true
                                                }
@@ -263,6 +274,14 @@ class ContactImportFragment : Fragment() {
                                         contactImportViewModel.importSelectedContacts()
                                         findNavController().navigateUp()
                                     }else{
+                                        findNavController().navigateUp()
+                                        findNavController().navigate(
+                                            R.id.addContactFragment,
+                                            args = bundleOf(
+                                                "operationType" to "insert"
+                                            ),
+                                            navOptions = Helper.navOptions
+                                        )
 
                                     }
                                 },

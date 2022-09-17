@@ -1,120 +1,176 @@
 package com.itsfrz.authentication.ui.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.itsfrz.authentication.ui.views.activity.AuthenticationCommunicator
-import com.itsfrz.authentication.R
-import com.itsfrz.authentication.adapters.PhoneTypeArrayAdapter
-import com.itsfrz.authentication.data.PhoneTypes
+import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.ui.views.compose.components.AddUpdateField
+import com.itsfrz.authentication.ui.views.compose.components.ConnectExtraLayout
+import com.itsfrz.authentication.ui.views.compose.components.UserProfile
+import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
+import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue200
 
 class AddContactFragment : Fragment() {
 
+    private lateinit var operationType: String
+    private var contactModel: ContactModel? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        operationType = arguments?.getString("operationType") ?: ""
+        if (operationType == "update")
+            contactModel = arguments?.getParcelable("contact")
 
-    private lateinit var communicator: AuthenticationCommunicator
-    private val GALLERY_REQUEST_CODE = 0
 
-    private lateinit var personImageHolder : ImageView
-    private lateinit var personName: EditText
-    private lateinit var personEmailAddress: EditText
-    private lateinit var personAddress: EditText
-    private lateinit var personNumber: EditText
-    private lateinit var spinner: Spinner
-    private lateinit var addContactButton : Button
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        hideTaskBar()
-        val view = inflater.inflate(R.layout.add_contact_layout,container,false);
-        communicator = activity as AuthenticationCommunicator
-        initViews(view);
-        setupPhoneTypeSpinner()
-        openGallery()
-        onContactAddClick();
+        return ComposeView(requireContext()).apply {
+            setContent {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Blue100),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
+                {
+                   item{
+                       UserProfile(userImage = "") {
 
-        return view
-    }
+                       }
+                       Spacer(modifier = Modifier.height(10.dp))
+                       Text(
+                           modifier = Modifier.fillMaxWidth(75F),
+                           text = "Faraz Sheikh",
+                           textAlign = TextAlign.Center,
+                           color = Color.White,
+                           fontSize = 18.sp,
+                           fontWeight = FontWeight.Bold
 
-    private fun hideTaskBar() {
+                       )
+                       Spacer(modifier = Modifier.height(30.dp))
+                   }
+                   item{
+                       Box(
+                           modifier = Modifier
+                               .fillMaxWidth()
+                       ) {
+                           ConnectExtraLayout({})
+                           Card(
+                               modifier = Modifier
+                                   .padding(top = 110.dp)
+                                   .fillMaxSize(),
+                               shape = RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp),
+                               backgroundColor = Blue100,
+                               elevation = 15.dp
+                           ) {
 
-    }
+                               Column(
+                                   modifier = Modifier
+                                       .fillMaxSize(),
+                                   verticalArrangement = Arrangement.Top,
+                                   horizontalAlignment = Alignment.CenterHorizontally
+                               ) {
 
-    private fun onContactAddClick() {
-        addContactButton.setOnClickListener {
-            if(validateInput(personName, personAddress, personEmailAddress, personNumber)){
-                Toast.makeText(requireContext(), "Hello World", Toast.LENGTH_SHORT).show()
+                                   Spacer(modifier = Modifier.height(20.dp))
+                                   AddUpdateField(
+                                       value = "",
+                                       onValueChange = {},
+                                       labelText = "Contact Name"
+                                   )
+                                   Spacer(modifier = Modifier.height(20.dp))
+                                   AddUpdateField(
+                                       value = "",
+                                       onValueChange = {},
+                                       labelText = "Contact Number",
+                                       keyBoardOption = KeyboardOptions(
+                                           keyboardType = KeyboardType.Number,
+                                           imeAction = ImeAction.Done
+                                       )
+                                   )
+                                   Spacer(modifier = Modifier.height(20.dp))
+                                   AddUpdateField(
+                                       value = "",
+                                       onValueChange = {},
+                                       labelText = "Contact Address",
+                                       keyBoardOption = KeyboardOptions(
+                                           keyboardType = KeyboardType.Text,
+                                           imeAction = ImeAction.Done
+                                       )
+                                   )
+                                   Spacer(modifier = Modifier.height(20.dp))
+                                   AddUpdateField(
+                                       value = "",
+                                       onValueChange = {},
+                                       labelText = "Contact Email Address",
+                                       keyBoardOption = KeyboardOptions(
+                                           keyboardType = KeyboardType.Email,
+                                           imeAction = ImeAction.Done
+                                       )
+                                   )
+                                   Spacer(modifier = Modifier.height(20.dp))
+                                   Button(
+                                       modifier = Modifier
+                                           .fillMaxWidth(.75F),
+                                       onClick = {
+
+                                       },
+                                       shape = RoundedCornerShape(12.dp),
+                                       colors = ButtonDefaults.buttonColors(
+                                           backgroundColor = Blue200
+                                       )
+                                   ) {
+                                       Text(
+                                           modifier = Modifier.fillMaxWidth(),
+                                           text = "Save",
+                                           fontSize = 14.sp,
+                                           fontWeight = FontWeight.SemiBold,
+                                           textAlign = TextAlign.Center,
+                                           color = Color.White
+                                       )
+                                   }
+                                   Spacer(modifier = Modifier.height(60.dp))
+
+                               }
+
+
+                           }
+                       }
+                   }
+
+                    Toast.makeText(
+                        requireContext(),
+                        "From Contact Import :: Operation Type ${operationType}${contactModel?.toString() ?: ""}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
-    }
-
-    private fun initViews(view : View) {
-        personImageHolder = view.findViewById(R.id.personContactImage)
-        personName = view.findViewById(R.id.personName)
-        personNumber = view.findViewById(R.id.personPhoneNumber)
-        personEmailAddress = view.findViewById(R.id.personEmailAddress)
-        personAddress = view.findViewById(R.id.personAddress)
-        spinner = view.findViewById(R.id.phoneTypeSpinner)
-        addContactButton = view.findViewById(R.id.addNewContactButton)
-    }
-
-
-    private fun validateInput(personName: EditText, personAddress: EditText, personEmailAddress: EditText, personNumber: EditText): Boolean {
-        val personNameString : String = personName.text.toString().trim()
-        val personAddressString : String = personAddress.text.toString().trim()
-        val personEmailAddressString : String = personEmailAddress.text.toString().trim()
-        val personNumberString : String = personNumber.text.toString().trim()
-
-        if (personNameString.length <= 2){
-            personName.setError("Person Name should be in 3 or more character")
-            return false
-        }
-        if (personAddressString.length <= 9){
-            personAddress.setError("Person Address should be in 10 or more character")
-            return false
-        }
-        if (personEmailAddressString.length <= 5){
-            personEmailAddress.setError("Person Email should be in 6 or more character")
-            return false
-        }
-
-        if (personNumberString.length <= 9){
-            personNumber.setError("Person Numder should be 10 or more character")
-            return false
-        }
-        return true
-    }
-
-    private fun openGallery() {
-        personImageHolder.setOnClickListener {
-            val iGallery = Intent(Intent.ACTION_PICK)
-            iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(iGallery,GALLERY_REQUEST_CODE)
-        }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK){
-            if (requestCode == GALLERY_REQUEST_CODE){
-                personImageHolder.setImageURI(data?.data)
-            }
-
-
-        }
-    }
-
-    private fun setupPhoneTypeSpinner() {
-        val phoneTypeAdapter = PhoneTypeArrayAdapter(requireContext(), PhoneTypes.phoneTypeList!!)
-        spinner.adapter = phoneTypeAdapter
     }
 }
