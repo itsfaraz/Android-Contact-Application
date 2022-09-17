@@ -97,7 +97,6 @@ import kotlinx.coroutines.launch
 class ContactViewModel(val userPreferenceRepository: UserPreferenceRepository) : ViewModel(){
 
 
-
     fun logout(){
         val userPreferences = UserPreferences("","","","",false)
         viewModelScope.launch(Dispatchers.IO) {

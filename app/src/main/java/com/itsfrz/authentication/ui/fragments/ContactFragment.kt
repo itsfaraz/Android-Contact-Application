@@ -12,10 +12,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.itsfrz.authentication.R
+import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.ContactViewModel
+import com.itsfrz.authentication.ui.viewmodel.factory.ContactViewModelFactory
 import com.itsfrz.authentication.ui.views.compose.components.ContactListLayout
 import com.itsfrz.authentication.ui.views.compose.components.NavBarLayout
 
@@ -26,6 +29,9 @@ class ContactFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val userPreferenceRepository = UserPreferenceRepository(requireContext())
+        val contactViewModelFactory = ContactViewModelFactory(userPreferenceRepository)
+        contactViewModel = ViewModelProvider(this,contactViewModelFactory).get(ContactViewModel::class.java)
     }
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -60,7 +66,12 @@ class ContactFragment : Fragment() {
                             userInfoClickEvent = {},
                             deleteSelectedClickEvent = {},
                             logoutClickEvent = {
-
+                                    findNavController().navigate(
+                                        resId = R.id.authenticationFragment,
+                                        args = null,
+                                        navOptions = Helper.navOptionsWithPopStack(R.id.contactFragment,true)
+                                    )
+                                contactViewModel.logout()
                             },
                             selectAllClickEvent = {},
                             getSearchQuery = {},
