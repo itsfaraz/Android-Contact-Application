@@ -1,38 +1,55 @@
 package com.itsfrz.authentication.ui.viewmodel
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.itsfrz.authentication.data.entities.UserPreferences
 import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AuthenticationViewModel(
     private val userPreferenceRepository: UserPreferenceRepository
 ) : ViewModel() {
+    private val  AVM_DEBUG = "AVM_DEBUG"
 
-    private val _isLogginSuccess = mutableStateOf(false)
-    val isLogginSuccess: State<Boolean> = _isLogginSuccess
+    private val _userPreference = mutableStateOf<UserPreferences>(UserPreferences())
+    val userPreferences  : State<UserPreferences> = _userPreference
 
-    private val _userName = mutableStateOf("")
-    val userName = _userName
+    private val _username = mutableStateOf("")
+    val username : MutableState<String> = _username
 
-    private val _loggedInDate = mutableStateOf("")
-    val loggedInDate = _loggedInDate
+    private val _isLoggedIn = mutableStateOf(false)
+    val isLoggedIn : MutableState<Boolean> = _isLoggedIn
 
-    private val _sortingOrder = mutableStateOf("")
-    val sortingOrder = _sortingOrder
+    private val _isProgressBar = mutableStateOf(true)
+    val isProgressBar : MutableState<Boolean> = _isProgressBar
 
-    fun fetchLoggedInStatus() {
-        viewModelScope.launch(Dispatchers.IO) {
-            userPreferenceRepository.getUserPref().collect { userPreference ->
-                _isLogginSuccess.value = userPreference.isLoggedIn
-                _userName.value = userPreference.username
-                _loggedInDate.value = userPreference.loggedInDate
-                _sortingOrder.value = userPreference.contactSortingType
+
+
+    fun checkLoggedInStatus() {
+        _isProgressBar.value = true
+        try {
+            runBlocking {
+                viewModelScope.launch(Dispatchers.IO){
+                    _userPreference.value = userPreferenceRepository.getUserPreference()
+                    _username.value = _userPreference.value.username
+                    _isLoggedIn.value = _userPreference.value.isLoggedIn
+                    _isProgressBar.value = false
+                }
             }
+
+        }catch (e : Exception){
+            Log.d(AVM_DEBUG, "checkLoggedInStatus: $e")
+        }finally {
+            _isProgressBar.value = false
         }
     }
+
 
 }

@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.itsfrz.authentication.data.entities.UserPreferences
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 
@@ -36,7 +37,9 @@ class UserPreferenceRepository(private val context: Context) {
         }
     }
 
-    fun getUserPref(): Flow<UserPreferences> = context.datastore.data.map { userPref ->
+    suspend fun getUserPreference() : UserPreferences = getUserPref().first()
+
+    private fun getUserPref(): Flow<UserPreferences> = context.datastore.data.map { userPref ->
         UserPreferences(
             username = userPref[USER_NAME] ?: "",
             loggedInDate = userPref[LOGGED_IN_DATE] ?: "",
@@ -44,6 +47,14 @@ class UserPreferenceRepository(private val context: Context) {
             appTheme = userPref[APP_COLOR_THEME] ?: "",
             isLoggedIn = userPref[IS_LOGGED_IN] ?: false
         )
+    }
+
+    suspend fun clearData() = context.datastore.edit {
+        it[USER_NAME] = ""
+        it[LOGGED_IN_DATE] = ""
+        it[APP_COLOR_THEME] = ""
+        it[CONTACT_SORTING] = ""
+        it[IS_LOGGED_IN] = false
     }
 
 }

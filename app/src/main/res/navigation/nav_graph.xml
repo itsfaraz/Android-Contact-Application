@@ -39,9 +39,6 @@
         <action
             android:id="@+id/action_permissionFragment_to_authenticationFragment"
             app:destination="@id/authenticationFragment" />
-        <action
-            android:id="@+id/action_permissionFragment_to_contactFragment"
-            app:destination="@id/contactFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactFragment"
@@ -50,11 +47,18 @@
         <action
             android:id="@+id/action_contactFragment_to_contactImportFragment"
             app:destination="@id/contactImportFragment" />
+        <action
+            android:id="@+id/action_contactFragment_to_addContactFragment"
+            app:destination="@id/addContactFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactImportFragment"
         android:name="com.itsfrz.authentication.ui.fragments.ContactImportFragment"
         android:label="fragment_contact_import" />
+    <fragment
+        android:id="@+id/addContactFragment"
+        android:name="com.itsfrz.authentication.ui.fragments.AddContactFragment"
+        android:label="AddContactFragment" />
 
 
 </navigation>

@@ -10,67 +10,7 @@ import com.itsfrz.authentication.data.entities.UserPreferences
 import com.itsfrz.authentication.data.repository.UserModelRepository
 import com.itsfrz.authentication.data.repository.UserPreferenceRepository
 import com.itsfrz.authentication.ui.utils.RegexValidation
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
-//class LoginViewModel(application: Application) : AndroidViewModel(application) {
-
-
-//    private val LVM : String = "LVM"
-//
-//    private val userModelRepository : UserModelRepository
-//    private val preferenceRespository by lazy {
-//        PreferenceRespository(application.applicationContext)
-//    }
-//
-//
-//    init {
-//
-//        val userDao = AppDatabase.getDatabase(application.applicationContext).userDao()
-//        userModelRepository = UserModelRepository(userDao)
-//
-//    }
-//
-//    public  fun loginUser(username: String,password: String) : Boolean {
-//        var user : UserModel? = null
-//
-//        if (validateInputs(username, password)){
-//
-//            runBlocking {
-//                user = async { userModelRepository.loginUser(username,password) }.await()
-//            }
-//        }
-//
-//        val responseUserName : String = user?.username ?: ""
-//        if (username.equals(responseUserName))
-//            return true
-//        return false
-//    }
-//
-//
-//
-//    public fun validateInputs(username: String, password: String): Boolean {
-//        if (username.length <= 0)
-//        {
-//            return false
-//        }
-//
-//        if (password.length <= 0)
-//        {
-//            return false
-//        }
-//        return true
-//    }
-//
-//
-//    public fun persistMyPreferences(username: String) {
-//        preferenceRespository.setCurrentUser(username)
-//        preferenceRespository.setLoggedIn(true)
-//        preferenceRespository.setLoggedInDate(Calendar.getInstance().time.toString())
-//    }
-
-//}
+import kotlinx.coroutines.*
 
 class LoginViewModel(
     private val userPreferenceRepository: UserPreferenceRepository,
@@ -103,6 +43,13 @@ class LoginViewModel(
     private val _isProgressBar = mutableStateOf(false)
     val isProgressBar: State<Boolean> = _isProgressBar
 
+
+    private val _userPreference = mutableStateOf(UserPreferences())
+    val userPreference: State<UserPreferences> = _userPreference
+
+    private val _checkCredentials = mutableStateOf(false)
+    val checkCredentials: State<Boolean> = _checkCredentials
+
     private val isLoginSuccess = mutableStateOf(false)
 
     fun setUserName(username: String) {
@@ -115,39 +62,39 @@ class LoginViewModel(
         _hasPasswordError.value = !regexValidation.validatePassword(password)
     }
 
-    fun login(): Boolean {
+    fun login(){
         if (!hasUsernameError.value && !hasPasswordError.value) {
             _isProgressBar.value = true
-            val userModel: UserModel?
-            runBlocking {
-               userModel = async {
-                    userModelRepository.loginUser(
-                        username.value,
-                        password.value
-                    )
-                }.await()
-            }
-            userModel?.let {
-                if (it.username == username.value && it.password == password.value) {
-                    isLoginSuccess.value = true
-                    viewModelScope.launch {
-                        userPreferenceRepository.saveUserPref(
-                            UserPreferences(
-                                username = _username.value,
-                                loggedInDate = System.currentTimeMillis().toString(),
-                                contactSortingType = "ASC",
-                                isLoggedIn = true,
-                                appTheme = "DEFAULT"
-                            )
+            val job = viewModelScope.launch(Dispatchers.IO){
+                val userModel: UserModel? = userModelRepository.loginUser(
+                    username.value,
+                    password.value
+                )
+                userModel?.let {
+                    if (it.username == username.value && it.password == password.value) {
+                        _userPreference.value =  UserPreferences(
+                            username = _username.value,
+                            loggedInDate = System.currentTimeMillis().toString(),
+                            contactSortingType = "ASC",
+                            isLoggedIn = true,
+                            appTheme = "DEFAULT"
                         )
+                        async(Dispatchers.IO) {  saveUserPref() }.await()
+                        isLoginSuccess.value = true
+                        _checkCredentials.value = true
+                        Log.d("Login", "login: Inside CHECK ${isLoginSuccess}")
                     }
-                    Log.d("Login", "login: Inside CHECK ${isLoginSuccess}")
                 }
             }
+            runBlocking { job.join() }
             _isProgressBar.value = false
-
         }
-        return isLoginSuccess.value
+    }
+
+    private suspend fun saveUserPref() {
+        userPreferenceRepository.saveUserPref(
+            _userPreference.value
+        )
     }
 
 

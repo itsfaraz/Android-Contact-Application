@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -33,9 +34,10 @@ import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.utils.RegexValidation
 import com.itsfrz.authentication.ui.viewmodel.LoginViewModel
 import com.itsfrz.authentication.ui.viewmodel.factory.LoginViewModelFactory
-import com.itsfrz.authentication.ui.views.compose.components.InputField
-import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
-import com.itsfrz.authentication.ui.views.compose.utils.Loader
+import com.itsfrz.authentication.ui.Permission
+import com.itsfrz.authentication.ui.compose.components.InputField
+import com.itsfrz.authentication.ui.compose.ui.theme.Blue100
+import com.itsfrz.authentication.ui.compose.utils.Loader
 
 class LoginFragment : Fragment() {
 
@@ -77,6 +79,7 @@ class LoginFragment : Fragment() {
                 val usernameErrorMessage = loginViewModel.usernameErrorMessage.value
                 val passswordErrorMessage = loginViewModel.passwordErrorMessage.value
                 val isProgressBar = loginViewModel.isProgressBar.value
+                val userPreferences = loginViewModel.userPreference.value
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -124,14 +127,21 @@ class LoginFragment : Fragment() {
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp),
                             onClick = {
-                                val response = loginViewModel.login()
+                                loginViewModel.login()
+                                val response = loginViewModel.checkCredentials.value
                                 Log.d("LoginFrag", "onCreateView: $response")
                                 if (response) {
-                                    findNavController().navigate(
-                                        resId = R.id.contactFragment,
-                                        args = null,
-                                        navOptions = Helper.navOptions
-                                    )
+                                    if (Permission().checkReadPermission(requireContext())){
+                                        findNavController().navigate(
+                                            resId = R.id.contactFragment,
+                                            args = bundleOf(
+                                                Helper.USER_PREF to loginViewModel.userPreference.value
+                                            ),
+                                            navOptions = Helper.navOptions
+                                        )
+                                    }else{
+                                        Toast.makeText(requireContext(), "Permission Is Not Granted\nAllow Contact Permissions From Settings", Toast.LENGTH_LONG).show()
+                                    }
                                 }else{
                                     Toast.makeText(requireContext(), "Invalid Credentials, Try again or Signup", Toast.LENGTH_SHORT).show()
                                 }                            },

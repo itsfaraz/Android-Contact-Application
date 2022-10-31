@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.data.entities.UserPreferences
 import com.itsfrz.authentication.data.entities.mapper.ContactModelMapper
 import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
@@ -18,12 +19,12 @@ import kotlinx.coroutines.withContext
 
 class ContactImportViewModel
     (
-    private var contactProviderRepository: ContactProviderRepository,
-    private var contactModelRepository: ContactModelRepository
+    private val contactProviderRepository: ContactProviderRepository,
+    private val contactModelRepository: ContactModelRepository
     ) : ViewModel() {
 
     private var _contactList = mutableStateListOf<ContactModel>()
-    var contactList: List<ContactModel> = _contactList
+    val contactList: List<ContactModel> = _contactList
 
     private var _filteredList = mutableStateOf<List<ContactModel>>(listOf())
     val filteredList: State<List<ContactModel>> = _filteredList
@@ -52,6 +53,23 @@ class ContactImportViewModel
 
     private val _alertDialogState = mutableStateOf(false)
     val alertDialogState: State<Boolean> = _alertDialogState
+
+    private val _username = mutableStateOf("")
+    val username: State<String> = _username
+
+    private val _loggedInDate = mutableStateOf("")
+    val loggedInDate: State<String> = _loggedInDate
+
+    private val _isLoggedIn = mutableStateOf(false)
+    val isLoggedIn: State<Boolean> = _isLoggedIn
+
+
+    fun setupUserPreference(userPreference: UserPreferences) {
+        _username.value = userPreference.username
+        _loggedInDate.value = userPreference.loggedInDate
+        _isLoggedIn.value = userPreference.isLoggedIn
+    }
+
 
     fun toggleAlertDialog() {
         _alertDialogState.value = !_alertDialogState.value
@@ -206,7 +224,15 @@ class ContactImportViewModel
 
     fun importSelectedContacts(){
         viewModelScope.launch{
-            contactModelRepository.insertAll(_selectedContacts)
+            val userSelectedContact = arrayListOf<ContactModel>()
+            _selectedContacts.forEach {
+                userSelectedContact.add(
+                    it.copy(
+                        username = _username.value
+                    )
+                )
+            }
+            contactModelRepository.insertAll(userSelectedContact)
         }
     }
 

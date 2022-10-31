@@ -35,9 +35,9 @@ import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.utils.RegexValidation
 import com.itsfrz.authentication.ui.viewmodel.SignUpViewModel
 import com.itsfrz.authentication.ui.viewmodel.factory.SignUpViewModelFactory
-import com.itsfrz.authentication.ui.views.compose.components.InputField
-import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
-import com.itsfrz.authentication.ui.views.compose.utils.Loader
+import com.itsfrz.authentication.ui.compose.components.InputField
+import com.itsfrz.authentication.ui.compose.ui.theme.Blue100
+import com.itsfrz.authentication.ui.compose.utils.Loader
 
 class SignUpFragment : Fragment() {
 

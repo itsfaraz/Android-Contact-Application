@@ -6,7 +6,7 @@ import com.itsfrz.authentication.data.entities.ContactModel
 
 class ContactModelRepository(val contactDao : ContactDao) {
 
-    fun allContacts(username : String) : LiveData<List<ContactModel>> = contactDao.getContact(username)
+    fun allContacts(username : String) : List<ContactModel> = contactDao.getContact(username)
 
     suspend fun deleteContact(contactModel: ContactModel) = contactDao.deleteContact(contactModel)
 

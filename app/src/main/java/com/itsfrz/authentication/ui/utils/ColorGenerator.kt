@@ -1,7 +1,7 @@
 package com.itsfrz.authentication.ui.utils
 
 import androidx.compose.ui.graphics.Color
-import com.itsfrz.authentication.ui.views.compose.ui.theme.*
+import com.itsfrz.authentication.ui.compose.ui.theme.*
 
 object ColorGenerator {
     private val colors = listOf<Color>(

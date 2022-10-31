@@ -34,27 +34,30 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.itsfrz.authentication.R
 import com.itsfrz.authentication.data.entities.ContactModel
+import com.itsfrz.authentication.data.entities.UserPreferences
 import com.itsfrz.authentication.data.repository.ContactModelRepository
 import com.itsfrz.authentication.data.repository.ContactProviderRepository
 import com.itsfrz.authentication.model.database.room.AppDatabase
 import com.itsfrz.authentication.ui.utils.Helper
 import com.itsfrz.authentication.ui.viewmodel.ContactImportViewModel
 import com.itsfrz.authentication.ui.viewmodel.factory.ContactImportViewModelFactory
-import com.itsfrz.authentication.ui.views.compose.components.*
-import com.itsfrz.authentication.ui.views.compose.ui.theme.Blue100
-import com.itsfrz.authentication.ui.views.compose.ui.theme.DangerRed100
-import com.itsfrz.authentication.ui.views.compose.utils.Loader
-import kotlin.properties.Delegates
+import com.itsfrz.authentication.ui.compose.components.*
+import com.itsfrz.authentication.ui.compose.enums.ContactOperation
+import com.itsfrz.authentication.ui.compose.ui.theme.Blue100
+import com.itsfrz.authentication.ui.compose.ui.theme.DangerRed100
+import com.itsfrz.authentication.ui.compose.utils.Loader
 
 
 class ContactImportFragment : Fragment() {
 
 
-    private lateinit var contactImportViewModel: ContactImportViewModel
+    private lateinit var viewmodel: ContactImportViewModel
     private lateinit var navController: NavController
-    private lateinit var username : String
-    private lateinit var loggedInDate : String
+    private var username : String = ""
+    private var loggedInDate : String = ""
     private var isLoggedIn : Boolean = false
+
+    private var userPreferences: UserPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +66,19 @@ class ContactImportFragment : Fragment() {
         val contactDao = AppDatabase.getDatabase(requireContext()).contactDao()
         val contactModelRepository = ContactModelRepository(contactDao)
         val contactImportViewModelFactory = ContactImportViewModelFactory(contactProviderRepository,contactModelRepository)
-        contactImportViewModel = ViewModelProvider(
+        viewmodel = ViewModelProvider(
             this,
             contactImportViewModelFactory
         ).get(ContactImportViewModel::class.java)
 
-        username = arguments?.getString("username") ?: ""
-        isLoggedIn = arguments?.getBoolean("isLoggedIn") ?: false
-        loggedInDate = arguments?.getString("loggedInDate") ?: ""
+        userPreferences = arguments?.getParcelable(Helper.USER_PREF)
+        userPreferences?.let {
+            viewmodel.setupUserPreference(it)
+        }
+
+
     }
+
 
     @OptIn(ExperimentalMaterialApi::class)
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -82,15 +89,15 @@ class ContactImportFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
 
-                val searchBar = contactImportViewModel.showSearchBar.value
-                val searchQuery = contactImportViewModel.searchQuery.value
+                val searchBar = viewmodel.showSearchBar.value
+                val searchQuery = viewmodel.searchQuery.value
                 var contactList =
-                    if (searchQuery.isEmpty()) contactImportViewModel.contactList  else contactImportViewModel.filteredList.value
-                val operationQueue = contactImportViewModel.operationQueue
-                val rotationState = contactImportViewModel.rotationState
-                val showEmptyListMessage = contactImportViewModel.showEmptyListMessage.value
-                val selectedContacts = contactImportViewModel.selectedContacts.reversed()
-                val dialogBoxState = contactImportViewModel.alertDialogState.value
+                    if (searchQuery.isEmpty()) viewmodel.contactList  else viewmodel.filteredList.value
+                val operationQueue = viewmodel.operationQueue
+                val rotationState = viewmodel.rotationState
+                val showEmptyListMessage = viewmodel.showEmptyListMessage.value
+                val selectedContacts = viewmodel.selectedContacts.reversed()
+                val dialogBoxState = viewmodel.alertDialogState.value
 
                 val rotateClockWise: Float by animateFloatAsState(
                     targetValue = if (rotationState.value) 360F else 0F,
@@ -110,37 +117,37 @@ class ContactImportFragment : Fragment() {
                         isActionMenuPresent = true,
                         isImportMenuItem = false,
                         isSearchBarMenuItem = true,
-                        toggleSearchBar = { toggle -> contactImportViewModel.toggleSearchBar(toggle)},
+                        toggleSearchBar = { toggle -> viewmodel.toggleSearchBar(toggle)},
                         showSearchBar = searchBar,
                         isUserInfoMenuItem = false,
                         isLogoutMenuItem = false,
-                        isDeleteSelectedMenuItem = contactImportViewModel.selectedContacts.isNotEmpty(),
+                        isDeleteSelectedMenuItem = viewmodel.selectedContacts.isNotEmpty(),
                         isSelectAllMenuItem = true,
                         importClickEvent = {},
                         userInfoClickEvent = {},
                         deleteSelectedClickEvent = {
-                            contactImportViewModel.toggleAlertDialog()
+                            viewmodel.toggleAlertDialog()
                         },
                         logoutClickEvent = {},
                         selectAllClickEvent = {
-                              contactImportViewModel.selectAllContacts()
+                              viewmodel.selectAllContacts()
                         },
-                        getSearchQuery = { query -> contactImportViewModel.searchRequest(query) },
+                        getSearchQuery = { query -> viewmodel.searchRequest(query) },
                         searchQuery = searchQuery,
-                        totalContactsFound = 0
+                        totalContactsFound = contactList.size
                     )
                 }) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (!contactImportViewModel.isProgress.value) {
+                        if (!viewmodel.isProgress.value) {
                            Column(
                                modifier = Modifier
                                    .fillMaxSize()
                            ) {
                                ChipLayout(contacts = selectedContacts, removeContact = { removeIndex ->
-                                   contactImportViewModel.removeContactSelection(removeIndex)
+                                   viewmodel.removeContactSelection(removeIndex)
                                })
                                Divider(
                                    modifier = Modifier
@@ -171,14 +178,14 @@ class ContactImportFragment : Fragment() {
                                            val dismissState = rememberDismissState(
                                                confirmStateChange = {
                                                    if (it == DismissValue.DismissedToStart){
-                                                       contactImportViewModel.deleteContact(index)
+                                                       viewmodel.deleteContact(index)
                                                    }
                                                    if (it == DismissValue.DismissedToEnd){
                                                        findNavController().navigateUp()
                                                        findNavController().navigate(
                                                            R.id.addContactFragment,
                                                            args = bundleOf(
-                                                               "operationType" to "update",
+                                                               "operation" to ContactOperation.CONTACT_IMPORT_UPDATE.name,
                                                                "contact" to contactList[index]
                                                            ),
                                                            navOptions = Helper.navOptions
@@ -191,12 +198,12 @@ class ContactImportFragment : Fragment() {
                                                modifier = Modifier,
                                                state = dismissState,
                                                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
-                                               dismissThresholds = {FractionalThreshold(0.2F)},
+                                               dismissThresholds = {FractionalThreshold(0.4F)},
                                                background = {
                                                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
                                                    val color by animateColorAsState(
                                                        targetValue = when (dismissState.targetValue) {
-                                                           DismissValue.Default -> Color.LightGray
+                                                           DismissValue.Default -> Color.Transparent
                                                            DismissValue.DismissedToStart -> DangerRed100
                                                            DismissValue.DismissedToEnd -> Blue100
                                                        }
@@ -235,7 +242,7 @@ class ContactImportFragment : Fragment() {
                                                    Box(
                                                        modifier = Modifier
                                                            .clickable {
-                                                               contactImportViewModel.addContactSelection(contactList[index])
+                                                               viewmodel.addContactSelection(contactList[index])
                                                            },
                                                        contentAlignment = Alignment.Center
                                                    ) {
@@ -267,18 +274,18 @@ class ContactImportFragment : Fragment() {
                                 Loader(loaderMessage = "Contact Syncing ...")
                             }
                         }
-                        if (!contactImportViewModel.isProgress.value) {
+                        if (!viewmodel.isProgress.value) {
                             FloatingActionButton(
                                 onClick = {
                                     if (operationQueue.value){
-                                        contactImportViewModel.importSelectedContacts()
+                                        viewmodel.importSelectedContacts()
                                         findNavController().navigateUp()
                                     }else{
                                         findNavController().navigateUp()
                                         findNavController().navigate(
                                             R.id.addContactFragment,
                                             args = bundleOf(
-                                                "operationType" to "insert"
+                                                "operation" to ContactOperation.CONTACT_IMPORT_ADD.name
                                             ),
                                             navOptions = Helper.navOptions
                                         )
@@ -314,12 +321,12 @@ class ContactImportFragment : Fragment() {
                                 buttonClickResponse = { response ->
                                     if(response)
                                     {
-                                        contactImportViewModel.deleteContactsSelection()
+                                        viewmodel.deleteContactsSelection()
                                     }
-                                    contactImportViewModel.toggleAlertDialog()
+                                    viewmodel.toggleAlertDialog()
                                 },
                                 onCloseEvent = {
-                                    contactImportViewModel.toggleAlertDialog()
+                                    viewmodel.toggleAlertDialog()
                                 }
                             )
                         }
@@ -331,7 +338,7 @@ class ContactImportFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        contactImportViewModel.fetchContacts()
+        viewmodel.fetchContacts()
     }
 
 }

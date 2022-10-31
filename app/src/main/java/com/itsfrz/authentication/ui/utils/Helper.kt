@@ -7,7 +7,9 @@ import com.itsfrz.authentication.R
 object Helper {
 
 
+    const val USER_PREF = "USER_PREF"
     const val READ_CONTACT_RQ = 103
+    const val WRITE_CONTACT_RQ = 104
 
     val navOptions =
         NavOptions.Builder()

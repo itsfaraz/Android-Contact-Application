@@ -7,7 +7,13 @@ import com.itsfrz.support.Contact
 
 object ContactModelMapper{
 
-    var username : String = ""
+    private var username : String = ""
+
+    @Transaction
+    fun transformWithUserContactToContactModel(contact: Contact,username : String) : ContactModel{
+        this.username = username
+        return transformContactToContactModel(contact)
+    }
 
     @Transaction
     fun transformContactToContactModel(contact : Contact) : ContactModel{
